@@ -1,3 +1,10 @@
+postgresql-common (200+deb10u5) buster; urgency=medium
+
+  * pg_virtualenv: Write temporary password file before chowning the file.
+    (Closes: #933569)
+
+ -- Christoph Berg <myon@debian.org>  Fri, 14 Aug 2020 14:54:15 +0200
+
 postgresql-common (200+deb10u4) buster; urgency=medium
 
   * t/170_extensions.t: Don't drop plpgsql before testing extensions.
