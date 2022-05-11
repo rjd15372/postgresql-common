@@ -66,8 +66,6 @@ CONFIGURE_FLAGS = \
   CFLAGS='$(CFLAGS)' \
   LDFLAGS='$(LDFLAGS)'
 
-PG_TEST_EXTRA='ssl'
-
 ifeq ($(call version_ge,9.4),y)
   CONFIGURE_FLAGS += --enable-tap-tests
 endif
@@ -92,13 +90,6 @@ ifeq ($(call version_ge,11),y)
     LLVM_VERSION = 0.invalid # mute dpkg error on empty version fields in debian/control
   endif
   TEMP_CONFIG = TEMP_CONFIG=$(AUX_MK_DIR)/test-with-jit.conf
-endif
-
-# PostgreSQL 12's extra ssl test fails with OpenSSL 3 on Ubuntu jammy
-ifeq ($(MAJOR_VER),12)
-  ifneq ($(filter jammy,$(DEB_BUILD_PROFILES)),)
-    PG_TEST_EXTRA=''
-  endif
 endif
 
 ifeq ($(call version_ge,14),y)
@@ -235,7 +226,7 @@ ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
 	unset LANG LC_CTYPE MAKELEVEL; ulimit -c unlimited; \
 	if ! make -C build check-world \
 	  $(TEMP_CONFIG) \
-	  PG_TEST_EXTRA=$(PG_TEST_EXTRA) \
+	  PG_TEST_EXTRA='ssl' \
 	  PROVE_FLAGS="--verbose"; \
 	then \
 	    for l in `find build -name 'regression.*' -o -name '*.log' -o -name '*_log_*' | perl -we 'print map { "$$_\n"; } sort { (stat $$a)[9] <=> (stat $$b)[9] } map { chomp; $$_; } <>' | tail -n 10`; do \
