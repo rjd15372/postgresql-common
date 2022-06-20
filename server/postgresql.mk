@@ -223,9 +223,11 @@ ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
 	# when tests fail, print newest log files
 	# initdb doesn't like LANG and LC_ALL to contradict, unset LANG and LC_CTYPE here
 	# temp-install wants to be invoked from a top-level make, unset MAKELEVEL here
+	# tell pg_upgrade to create its sockets in /tmp to avoid too long paths
 	unset LANG LC_CTYPE MAKELEVEL; ulimit -c unlimited; \
 	if ! make -C build check-world \
 	  $(TEMP_CONFIG) \
+	  PGSOCKETDIR="/tmp" \
 	  PG_TEST_EXTRA='ssl' \
 	  PROVE_FLAGS="--verbose"; \
 	then \
