@@ -2,8 +2,9 @@ postgresql-common (200+deb10u5) buster; urgency=medium
 
   * pg_virtualenv: Write temporary password file before chowning the file.
     (Closes: #933569)
+  * t/135_pg_virtualenv.t: Import test from master.
 
- -- Christoph Berg <myon@debian.org>  Fri, 14 Aug 2020 14:54:15 +0200
+ -- Christoph Berg <myon@debian.org>  Wed, 22 Jun 2022 13:11:44 +0200
 
 postgresql-common (200+deb10u4) buster; urgency=medium
 
