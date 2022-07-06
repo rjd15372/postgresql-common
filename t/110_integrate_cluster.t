@@ -5,10 +5,11 @@ use strict;
 use lib 't';
 use TestLib;
 use File::Temp qw/tempdir/;
+use Time::HiRes qw(usleep);
 
 my $version = $MAJORS[-1];
 
-use Test::More tests => 32;
+use Test::More tests => 34;
 use PgCommon;
 
 delete $ENV{'LANG'};
@@ -26,6 +27,8 @@ for my $o ('postgres', 'nobody') {
     chown $oid, 0, $cdir or die "Could not chown $cdir to $oid: $!";
     like_program_out $o, "$PgCommon::binroot$version/bin/initdb $cdir/$o", 
 	0, qr/Success/, "creating raw initdb cluster for user $o";
+    is next_free_port, 5432, "next free port is 5432";
+    usleep $delay;
     like_program_out 0, "pg_createcluster $version $o -d $cdir/$o", 0, 
 	qr/Configuring already existing cluster/i, "integrating $o cluster";
     like_program_out 0, "pg_lsclusters", 0,
