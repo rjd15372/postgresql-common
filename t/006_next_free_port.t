@@ -10,6 +10,8 @@ use TestLib;
 
 use Test::More tests => 5;
 
+$ENV{DEBUG_NEXT_FREE_PORT} = 1;
+
 # test next_free_port(). We are intentionally using nc as an external tool,
 # using perl would replicate what next_free_port is doing, and that would
 # be a pointless test.

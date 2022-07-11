@@ -10,6 +10,8 @@ my @versions = ($MAJORS[-1]);
 use Test::More tests => 29;
 use PgCommon;
 
+$ENV{DEBUG_NEXT_FREE_PORT} = 1;
+
 # get_cluster_databases here and indirectly in run-upgrade-scripts is
 # incompatible with eatmydata, remove it from the environment
 if ($ENV{LD_PRELOAD} and $ENV{LD_PRELOAD} =~ /eatmydata/) {

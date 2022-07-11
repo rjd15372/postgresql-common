@@ -1088,40 +1088,55 @@ sub cluster_exists {
 
 sub next_free_port {
     # create list of already used ports
-    my @ports;
+    my %ports;
     for my $v (get_versions) {
 	for my $c (get_version_clusters $v) {
-	    push @ports, get_cluster_port ($v, $c);
+            $ports{ get_cluster_port ($v, $c) } = 1;
 	}
     }
 
     my $port;
     for ($port = $defaultport; $port < 65536; ++$port) {
-	next if grep { $_ == $port } @ports;
+        # port in use by existing cluster
+        if (exists $ports{$port}) {
+            print "next_free_port: port $port in use on by existing cluster\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
+            next;
+        }
 
-        # check if port is already in use
-	my ($have_ip4, $res4, $have_ip6, $res6);
-	if (socket (SOCK, PF_INET, SOCK_STREAM, getprotobyname('tcp'))) { # IPv4
+        # IPv4 port in use
+        my ($have_ip4, $have_ip6);
+        if (socket (SOCK, PF_INET, SOCK_STREAM, getprotobyname('tcp'))) {
 	    $have_ip4 = 1;
-	    $res4 = bind (SOCK, sockaddr_in($port, INADDR_ANY));
+            my $res4 = bind (SOCK, sockaddr_in($port, INADDR_ANY));
+            close SOCK;
+            unless ($res4) {
+                print "next_free_port: port $port in use on IPv4\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
+                next;
+            }
 	}
-	$have_ip6 = 0;
-	no strict; # avoid compilation errors with Perl < 5.14
-	if (exists $Socket::{"IN6ADDR_ANY"}) { # IPv6
+
+        # IPv6 port in use
+        if (exists $Socket::{"IN6ADDR_ANY"}) {
 	    if (socket (SOCK, PF_INET6, SOCK_STREAM, getprotobyname('tcp'))) {
 		$have_ip6 = 1;
-		$res6 = bind (SOCK, sockaddr_in6($port, Socket::IN6ADDR_ANY));
+                my $res6 = bind (SOCK, sockaddr_in6($port, Socket::IN6ADDR_ANY));
+                close SOCK;
+                unless ($res6) {
+                    print "next_free_port: port $port in use on IPv6\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
+                    next;
+                }
 	    }
 	}
-	use strict;
+
 	unless ($have_ip4 or $have_ip6) {
 	    # require at least one protocol to work (PostgreSQL needs it anyway
 	    # for the stats collector)
             die "could not create socket: $!";
 	}
+
         close SOCK;
 	# return port if it is available on all supported protocols
-	return $port if ($have_ip4 ? $res4 : 1) and ($have_ip6 ? $res6 : 1);
+        return $port;
     }
 
     die "no free port found";

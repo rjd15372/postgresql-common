@@ -12,6 +12,8 @@ my $version = $MAJORS[-1];
 use Test::More tests => 34;
 use PgCommon;
 
+$ENV{DEBUG_NEXT_FREE_PORT} = 1;
+
 delete $ENV{'LANG'};
 delete $ENV{'LANGUAGE'};
 $ENV{'LC_ALL'} = 'C';
