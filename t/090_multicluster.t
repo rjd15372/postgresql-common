@@ -17,6 +17,7 @@ bind (SOCK, sockaddr_in(5433, INADDR_ANY)) || die "bind: $! ";
 is ((system "pg_createcluster $MAJORS[0] old -- -A trust >/dev/null"), 0, "pg_createcluster $MAJORS[0] old");
 is ((system "pg_createcluster $MAJORS[-1] new1 -- -A trust >/dev/null"), 0, "pg_createcluster $MAJORS[-1] new1");
 is ((system "pg_createcluster $MAJORS[-1] new2 -p 5440 -- -A trust >/dev/null"), 0, "pg_createcluster $MAJORS[-1] new2");
+close SOCK;
 
 my $old = "$MAJORS[0]/old";
 my $new1 = "$MAJORS[-1]/new1";
