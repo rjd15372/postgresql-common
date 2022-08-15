@@ -16,6 +16,9 @@
 
 set -eu
 
+binroot="/usr/lib/postgresql/"
+#redhat#binroot="/usr/pgsql-"
+
 if [ -z "${2:-}" ]; then
     echo "Syntax: $0 /path/to/wal/%f %p" >&2
     exit 1
@@ -52,7 +55,7 @@ elif [ -f "$file.gz.partial" ] || [ -f "$file.lz4.partial" ]; then
 
     # expand file to original size
     version=$(cat PG_VERSION) || exit 129
-    wal_file_size=$(LC_ALL=C "/usr/lib/postgresql/$version/bin/pg_controldata" . | awk '/^Bytes per WAL segment:/ { print $5 }') || exit 129
+    wal_file_size=$(LC_ALL=C "$binroot$version/bin/pg_controldata" . | awk '/^Bytes per WAL segment:/ { print $5 }') || exit 129
     [ "$wal_file_size" -gt 0 ] || exit 129
     truncate --size="$wal_file_size" "$path" || exit 129
 
