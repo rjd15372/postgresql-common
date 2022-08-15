@@ -35,7 +35,7 @@ foreach my $v (@MAJORS) {
     program_ok $pg_uid, "createdb -E SQL_ASCII -T template0 mydb";
     program_ok $pg_uid, "psql -c 'alter database mydb set search_path=public'";
     program_ok $pg_uid, "psql -c 'create table foo (t text)' mydb";
-    program_ok $pg_uid, "psql -c \"insert into foo values ('important data')\" mydb";
+    program_ok $pg_uid, "psql -c \"insert into foo values ('data from backup')\" mydb";
     program_ok $pg_uid, "psql -c 'CREATE USER myuser'";
     program_ok $pg_uid, "psql -c 'alter role myuser set search_path=public, myschema'";
     SKIP: { # in PG 10, ARID is part of globals.sql which we try to restore before databases.sql
@@ -79,6 +79,11 @@ foreach my $v (@MAJORS) {
                 exec "pg_backupcluster $v main receivewal";
             }
         }
+        my $wal = "000000010000000000000001";
+        $wal .= ".gz" if ($v >= 10);
+        $wal .= ".partial";
+        usleep($delay);
+        ok_dir "$dir/wal", [$wal], "$dir/wal contains $wal";
     }
     if ($systemd) {
         program_ok 0, "systemctl start pg_basebackup\@$v-main";
@@ -96,13 +101,14 @@ foreach my $v (@MAJORS) {
     like_program_out 0, "pg_backupcluster $v main list", 0, qr/$dump.*$basebackup/s;
 
     note "more database changes";
-    program_ok $pg_uid, "psql -c \"insert into foo values ('some other data')\" mydb";
-    program_ok $pg_uid, "psql -c \"insert into foo values ('yet more data')\" mydb";
+    program_ok $pg_uid, "psql -c \"insert into foo values ('data later deleted')\" mydb";
+    program_ok $pg_uid, "psql -c \"insert into foo values ('data from archive')\" mydb";
     my $timestamp = `su -c "psql -XAtc 'select now()'" postgres`;
     ok $timestamp, "retrieve recovery timestamp";
-    program_ok $pg_uid, "psql -c \"delete from foo where t = 'some other data'\" mydb";
+    program_ok $pg_uid, "psql -c \"delete from foo where t = 'data later deleted'\" mydb";
     usleep($delay);
     if ($v >= 9.5) {
+        # since we are stopping pg_receivewal before postgresql, this implicitly tests restoring from .partial WAL files as well
         if ($systemd) {
             program_ok 0, "systemctl stop pg_receivewal\@$v-main";
         } else {
@@ -122,7 +128,7 @@ postgres=CTc/postgres
 template1\|postgres\|UTF8\|en_US.UTF-8\|en_US.UTF-8\|(\|libc\|)?=c/postgres
 postgres=CTc/postgres\n%;
         is_program_out $pg_uid, "psql -XAtc 'show work_mem'", 0, "11MB\n";
-        is_program_out $pg_uid, "psql -XAtc 'select * from foo' mydb", 0, "important data\n";
+        is_program_out $pg_uid, "psql -XAtc 'select * from foo' mydb", 0, "data from backup\n";
         is_program_out $pg_uid, "psql -XAtc \"select analyze_count from pg_stat_user_tables where relname = 'foo'\" mydb", 0,
             ($v >= 9.4 ? "3\n" : "1\n"); # --analyze-in-stages does 3 passes
         SKIP: {
@@ -138,13 +144,13 @@ myuser||search_path=public, myschema
         program_ok 0, "pg_dropcluster $v main --stop";
         program_ok 0, "pg_restorecluster $v main $basebackup --start --archive --port 5430";
         like_program_out 0, "pg_lsclusters -h", 0, qr/$v main 5430 online postgres .var.lib.postgresql.$v.main/;
-        is_program_out $pg_uid, "psql -XAtc 'select * from foo order by t' mydb", 0, "important data\nyet more data\n";
+        is_program_out $pg_uid, "psql -XAtc 'select * from foo order by t' mydb", 0, "data from archive\ndata from backup\n";
 
         note "restore $basebackup with PITR";
         program_ok 0, "pg_dropcluster $v main --stop";
         program_ok 0, "pg_restorecluster $v main $basebackup --start --pitr '$timestamp'";
         like_program_out 0, "pg_lsclusters -h", 0, qr/$v main 5432 online postgres .var.lib.postgresql.$v.main/;
-        is_program_out $pg_uid, "psql -XAtc 'select * from foo order by t' mydb", 0, "important data\nsome other data\nyet more data\n";
+        is_program_out $pg_uid, "psql -XAtc 'select * from foo order by t' mydb", 0, "data from archive\ndata from backup\ndata later deleted\n";
     }
 
     program_ok 0, "pg_dropcluster $v main --stop";
