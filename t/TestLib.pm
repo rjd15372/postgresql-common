@@ -128,7 +128,8 @@ sub pidof {
 
 # Return an reference to an array of all entries but . and .. of the given directory.
 sub dircontent {
-    opendir D, $_[0] or die "opendir: $!";
+    my $dir = $_[0];
+    opendir D, $dir or return ["opendir $dir: $!"];
     my @e = grep { $_ ne '.' && $_ ne '..' } readdir (D);
     closedir D;
     return \@e;
