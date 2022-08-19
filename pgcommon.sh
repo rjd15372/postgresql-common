@@ -34,27 +34,3 @@ get_release() {
     fi
 }
 
-# install locales
-# Arguments: locale charset [...]
-locale_gen ()
-{
-    get_release
-    case $DISTRO in
-        redhat|centos)
-            return 0 # not yet implemented
-            ;;
-    esac
-
-    local run
-    while [ "${2:-}" ]; do
-        if ! grep -q "^$1 $2\$" /etc/locale.gen; then
-            echo "$1 $2" >> /etc/locale.gen
-            run=1
-        fi
-        shift 2
-    done
-    [ "${run:-}" ] && locale-gen
-
-    return 0
-}
-
