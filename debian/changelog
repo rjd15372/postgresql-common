@@ -3,7 +3,10 @@ postgresql-common (243) UNRELEASED; urgency=medium
   * pg_backupcluster: Enable gzip compression with pg_receivewal.
   * next_free_port: Restructure to add debug logging.
   * t/TestLib.pm check_clean: Use ss from iproute2 instead of netstat.
-  * pgcommon.sh: Drop locale_gen and test-depend on locales-all.
+  * debian/supported-versions: Don't look at the OS release, we'll just ship
+    the matching file in that release.
+  * Test-depend on locales-all.
+  * pgcommon.sh: Remove, dropping get_release and locale_gen.
 
  -- Christoph Berg <myon@debian.org>  Mon, 15 Aug 2022 11:12:42 +0200
 

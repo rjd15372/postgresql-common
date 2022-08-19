@@ -57,14 +57,11 @@ if [ "$(id -u)" != 0 ]; then
     exit 1
 fi
 
-# use the local pgcommon.sh (either in the build tree or /usr/share/postgresql-common)
-. ./pgcommon.sh
-get_release
-
 # install packages for versions specified by -v
 # needs network for apt, so run before unshare
 if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
-    case $DISTRO in
+    . /etc/os-release
+    case $ID in
         debian|ubuntu)
             for v in $PG_VERSIONS; do
                 case $v in 8.*|9.*|10|11)
@@ -101,6 +98,10 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
                 nmap-ncat \
                 perl-Test-Simple perl-Time-HiRes \
                 gcc
+        ;;
+        *)
+            echo "Unknown distribution ID $ID in /etc/os-release"
+            exit 1
         ;;
     esac
 fi
