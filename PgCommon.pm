@@ -1108,9 +1108,10 @@ sub next_free_port {
         if (socket (SOCK, PF_INET, SOCK_STREAM, getprotobyname('tcp'))) {
 	    $have_ip4 = 1;
             my $res4 = bind (SOCK, sockaddr_in($port, INADDR_ANY));
+            my $err = $!;
             close SOCK;
             unless ($res4) {
-                print "next_free_port: port $port in use on IPv4\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
+                print "next_free_port: port $port in use on IPv4: $err\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
                 next;
             }
 	}
@@ -1120,9 +1121,10 @@ sub next_free_port {
 	    if (socket (SOCK, PF_INET6, SOCK_STREAM, getprotobyname('tcp'))) {
 		$have_ip6 = 1;
                 my $res6 = bind (SOCK, sockaddr_in6($port, Socket::IN6ADDR_ANY));
+                my $err = $!;
                 close SOCK;
                 unless ($res6) {
-                    print "next_free_port: port $port in use on IPv6\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
+                    print "next_free_port: port $port in use on IPv6: $err\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
                     next;
                 }
 	    }
