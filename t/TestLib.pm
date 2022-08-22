@@ -256,8 +256,14 @@ sub check_clean {
     # complain about missing directories
     ok_dir '/var/log/postgresql', [], "No files in /var/log/postgresql left behind";
 
-    is_program_out 0, "ss --no-header -ap 'sport >= 5432 and sport <= 5439'", 0, '',
-	'PostgreSQL TCP ports are closed';
+    # prefer ss over netstat (until all debian/tests/control files in postgresql-* have been updated)
+    unless (-x '/bin/netstat' and not -x '/bin/ss') {
+        is_program_out 0, "ss --no-header -ap 'sport >= 5432 and sport <= 5439'", 0, '',
+            'PostgreSQL TCP ports are closed';
+    } else {
+        is_program_out 0, 'netstat -avptn 2>/dev/null | grep ":543[2-9]\\b.*LISTEN"', 1, '',
+            'PostgreSQL TCP ports are closed';
+    }
 }
 
 1;
