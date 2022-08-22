@@ -16,7 +16,8 @@ Build-Depends:
 Package: postgresql-common
 Architecture: all
 Multi-Arch: foreign
-Pre-Depends: ${misc:Pre-Depends}
+Pre-Depends:
+ ${misc:Pre-Depends},
 Depends:
  adduser,
  debconf (>= 0.5.00) | debconf-2.0,
@@ -176,8 +177,8 @@ Depends:
  libpq-dev,
  postgresql-common (= ${source:Version}),
  postgresql-server-dev-all,
- ${postgresql-all-depends},
  ${misc:Depends},
+ ${postgresql-all-depends},
 Description: metapackage depending on all PostgreSQL server packages
  This metapackage depends on all PostgreSQL server packages, in all
  supported versions (excluding documentation and debug symbols). It
