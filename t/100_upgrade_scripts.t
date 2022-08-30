@@ -7,7 +7,7 @@ use TestLib;
 
 my @versions = ($MAJORS[-1]);
 
-use Test::More tests => 29;
+use Test::More tests => 30;
 use PgCommon;
 
 $ENV{DEBUG_NEXT_FREE_PORT} = 1;
@@ -45,6 +45,7 @@ my %test_sql_scripts = (
 
 # create clusters
 foreach my $v (@versions) {
+    is next_free_port, 5432, "next_free_port is 5432";
     is ((system "pg_createcluster $v main --start >/dev/null"), 0, "pg_createcluster $v main");
     like_program_out 'postgres', 'pg_lsclusters -h', 0, qr/$v\s*main.*5432.*online/, 'cluster was created';
     is_program_out 'postgres', "createdb --cluster $v/main db1", 0, ($v < 8.3 ? "CREATE DATABASE\n" : '');
