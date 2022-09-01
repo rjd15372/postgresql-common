@@ -9,6 +9,7 @@ postgresql-common (243) UNRELEASED; urgency=medium
   * pgcommon.sh: Remove, dropping get_release and locale_gen.
   * postgresql.service: Improve comment explaining the relation to
     postgresql@.service.
+  * testsuite: Run all tests even when one is failing.
 
  -- Christoph Berg <myon@debian.org>  Mon, 15 Aug 2022 11:12:42 +0200
 

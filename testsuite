@@ -3,7 +3,7 @@
 # Run integration tests (on the installed packages).
 #
 # (C) 2005-2012 Martin Pitt <mpitt@debian.org>
-# (C) 2012-2021 Christoph Berg <myon@debian.org>
+# (C) 2012-2022 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -194,14 +194,23 @@ for U in $PG_UMASKS; do
     for T; do
         TBASE=${T##*/}
         [ "${FROM:-}" ] && [ "${TBASE%%_*}" -lt "${FROM:-}" ] && continue
-        echo "=== Running test $TBASE ... ==="
+        echo "### PostgreSQL test $TBASE ###"
         perl -I. $T || {
             EXIT=$?
+            FAILED_TESTS="${FAILED_TESTS:-} $T"
             if [ "${FAILURE:-}" ]; then
                 echo "*** $TBASE failed with status $EXIT, dropping you into a shell in the testbed ***"
                 ${SHELL:-/bin/sh}
             fi
-            exit $EXIT
         }
+        echo "### End test $TBASE ###"
+        echo
     done
 done
+
+if [ "${FAILED_TESTS:-}" ]; then
+    echo "Failed tests: $FAILED_TESTS"
+    echo
+fi
+
+exit ${EXIT:-0}
