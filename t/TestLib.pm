@@ -17,7 +17,7 @@ package TestLib;
 use strict;
 use Exporter;
 use Test::More;
-use PgCommon qw/get_versions change_ugid/;
+use PgCommon qw/get_versions change_ugid next_free_port/;
 
 our $VERSION = 1.00;
 our @ISA = ('Exporter');
@@ -258,12 +258,13 @@ sub check_clean {
 
     # prefer ss over netstat (until all debian/tests/control files in postgresql-* have been updated)
     unless (-x '/bin/netstat' and not -x '/bin/ss') {
-        is_program_out 0, "ss --no-header -tlp 'sport >= 5432 and sport <= 5439'", 0, '',
+        is `ss --no-header -tlp 'sport >= 5432 and sport <= 5439'`, '',
             'PostgreSQL TCP ports are closed';
     } else {
-        is_program_out 0, 'netstat -avptn 2>/dev/null | grep ":543[2-9]\\b.*LISTEN"', 1, '',
+        is `netstat -avptn 2>/dev/null | grep ":543[2-9]\\b.*LISTEN"`, '',
             'PostgreSQL TCP ports are closed';
     }
+    is next_free_port(), 5432, "Next free port is 5432";
 }
 
 1;
