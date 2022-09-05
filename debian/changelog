@@ -1,7 +1,8 @@
 postgresql-common (243) UNRELEASED; urgency=medium
 
   * pg_backupcluster: Enable gzip compression with pg_receivewal.
-  * next_free_port: Restructure to add debug logging; set SO_REUSEADDR.
+  * next_free_port: Restructure to add debug logging; set SO_REUSEADDR;
+    listen() on sockets created.
   * t/TestLib.pm check_clean: Use ss from iproute2 instead of netstat.
   * debian/supported-versions: Don't look at the OS release, we'll just ship
     the matching file in that release.

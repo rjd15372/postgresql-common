@@ -1108,7 +1108,7 @@ sub next_free_port {
         if (socket (SOCK, PF_INET, SOCK_STREAM, getprotobyname('tcp'))) {
 	    $have_ip4 = 1;
             setsockopt(SOCK, Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1) or error "setsockopt: $!";
-            my $res4 = bind (SOCK, sockaddr_in($port, INADDR_ANY));
+            my $res4 = bind (SOCK, sockaddr_in($port, INADDR_ANY)) and listen (SOCK, 0);
             my $err = $!;
             close SOCK;
             unless ($res4) {
@@ -1122,7 +1122,7 @@ sub next_free_port {
 	    if (socket (SOCK, PF_INET6, SOCK_STREAM, getprotobyname('tcp'))) {
 		$have_ip6 = 1;
                 setsockopt(SOCK, Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1) or error "setsockopt: $!";
-                my $res6 = bind (SOCK, sockaddr_in6($port, Socket::IN6ADDR_ANY));
+                my $res6 = bind (SOCK, sockaddr_in6($port, Socket::IN6ADDR_ANY)) and listen (SOCK, 0);
                 my $err = $!;
                 close SOCK;
                 unless ($res6) {
