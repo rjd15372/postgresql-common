@@ -11,6 +11,7 @@ use Test::More tests => 125;
 
 # create fake socket at 5433 to verify that this port is skipped
 socket (SOCK, PF_INET, SOCK_STREAM, getprotobyname('tcp')) or die "socket: $!";
+setsockopt(SOCK, Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1) or error "setsockopt: $!";
 bind (SOCK, sockaddr_in(5433, INADDR_ANY)) || die "bind: $! ";
 
 # create clusters

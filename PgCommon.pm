@@ -5,7 +5,7 @@ PgCommon - Common functions for the postgresql-common framework
 =head1 COPYRIGHT AND LICENSE
 
  (C) 2008-2009 Martin Pitt <mpitt@debian.org>
- (C) 2012-2021 Christoph Berg <myon@debian.org>
+ (C) 2012-2020 Christoph Berg <myon@debian.org>
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -1107,6 +1107,7 @@ sub next_free_port {
         my ($have_ip4, $have_ip6);
         if (socket (SOCK, PF_INET, SOCK_STREAM, getprotobyname('tcp'))) {
 	    $have_ip4 = 1;
+            setsockopt(SOCK, Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1) or error "setsockopt: $!";
             my $res4 = bind (SOCK, sockaddr_in($port, INADDR_ANY));
             my $err = $!;
             close SOCK;
@@ -1120,6 +1121,7 @@ sub next_free_port {
         if (exists $Socket::{"IN6ADDR_ANY"}) {
 	    if (socket (SOCK, PF_INET6, SOCK_STREAM, getprotobyname('tcp'))) {
 		$have_ip6 = 1;
+                setsockopt(SOCK, Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1) or error "setsockopt: $!";
                 my $res6 = bind (SOCK, sockaddr_in6($port, Socket::IN6ADDR_ANY));
                 my $err = $!;
                 close SOCK;
