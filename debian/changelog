@@ -11,6 +11,8 @@ postgresql-common (243) UNRELEASED; urgency=medium
   * postgresql.service: Improve comment explaining the relation to
     postgresql@.service.
   * testsuite: Run all tests even when one is failing.
+  * pg_wrapper: If the cluster version is older than 9.2, consider psql only
+    up to version 14 instead of the newest version.
 
  -- Christoph Berg <myon@debian.org>  Mon, 15 Aug 2022 11:12:42 +0200
 

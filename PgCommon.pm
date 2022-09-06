@@ -961,12 +961,13 @@ sub validate_cluster_owner($) {
 
  Return an array of all available versions (by binaries and postgresql.conf files)
 
- Arguments: binary to scan for (optional, defaults to postgres)
+ Arguments: binary to scan for (optional, defaults to postgres), maximum acceptable version (optional)
 
 =cut
 
 sub get_versions {
     my $program = shift // 'postgres';
+    my $max_version = shift;
     my %versions = ();
 
     # enumerate psql versions from /usr/lib/postgresql/* (or /usr/pgsql-*)
@@ -978,8 +979,10 @@ sub get_versions {
             next if $entry eq '.' || $entry eq '..';
             my $pfx = '';
             #redhat# $pfx = "pgsql-";
-            ($entry) = $entry =~ /^$pfx(\d+\.?\d+)$/; # untaint
-            $versions{$entry} = 1 if $entry and get_program_path ($program, $entry);
+            my $version;
+            ($version) = $entry =~ /^$pfx(\d+\.?\d+)$/; # untaint
+            next if ($max_version and $version > $max_version);
+            $versions{$entry} = 1 if $version and get_program_path ($program, $version);
         }
         closedir D;
     }
@@ -991,6 +994,7 @@ sub get_versions {
             next if $v eq '.' || $v eq '..';
             ($v) = $v =~ /^(\d+\.?\d+)$/; # untaint
             next unless ($v);
+            next if ($max_version and $v > $max_version);
 
             if (opendir (C, "$confroot/$v")) {
                 my $c;
@@ -1014,13 +1018,14 @@ sub get_versions {
 
  Return the newest available version
 
- Arguments: binary to scan for (optional)
+ Arguments: binary to scan for (optional), maximum acceptable version (optional)
 
 =cut
 
 sub get_newest_version {
-    my $program = shift // undef;
-    my @versions = get_versions($program);
+    my $program = shift;
+    my $max_version = shift;
+    my @versions = get_versions($program, $max_version);
     return undef unless (@versions);
     return $versions[-1];
 }

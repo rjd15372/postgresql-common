@@ -110,7 +110,11 @@ unless ($version or $explicit_host or $explicit_port or $explicit_service) {
 # if we have no version yet, use the latest version. If we were called as psql,
 # pg_archivecleanup, or pg_isready, always use latest version
 if (not $version or $cmdname =~ /^(psql|pg_archivecleanup|pg_isready)$/) {
-    $version = get_newest_version($cmdname);
+    my $max_version;
+    if ($version and $version < 9.2) { # psql 15 only supports PG 9.2+
+        $max_version = 14;
+    }
+    $version = get_newest_version($cmdname, $max_version);
 }
 unless ($version) {
     error 'You must install at least one postgresql-client-<version> package';
@@ -231,6 +235,7 @@ variables and the program called will likely error out with a message like
 
 For B<psql>, B<pg_archivecleanup>, and B<pg_isready>, B<pg_wrapper> will always use the binary from
 the newest PostgreSQL version installed, as these are downwards compatible.
+If the cluster version is older than 9.2, the newest considered binary version is 14.
 
 Note that B<pg_wrapper> needs to be able to read the server config to get the
 port number to connect to. If a non-standard port is configured in a place that
