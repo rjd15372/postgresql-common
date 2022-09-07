@@ -56,10 +56,10 @@ default() {
             ;;
         *)
             echo "supported-versions: WARNING! Unknown distribution ID in /etc/os-release: $ID" >&2
-            if  echo $ID_LIKE | egrep  '(^| )ubuntu($| )' > /dev/null; then
+            if  echo $ID_LIKE | grep -E '(^| )ubuntu($| )' > /dev/null; then
                 echo "ubuntu found in ID_LIKE, treating as Ubuntu" >&2
                 ubuntu
-            elif echo $ID_LIKE | egrep  '(^| )debian($| )' > /dev/null; then
+            elif echo $ID_LIKE | grep -E '(^| )debian($| )' > /dev/null; then
                 echo "debian found in ID_LIKE, treating as Debian" >&2
                 debian
             else
