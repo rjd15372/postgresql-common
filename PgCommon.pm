@@ -1103,10 +1103,7 @@ sub next_free_port {
     my $port;
     for ($port = $defaultport; $port < 65536; ++$port) {
         # port in use by existing cluster
-        if (exists $ports{$port}) {
-            print "next_free_port: port $port in use on by existing cluster\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
-            next;
-        }
+        next if (exists $ports{$port});
 
         # IPv4 port in use
         my ($have_ip4, $have_ip6);
@@ -1116,10 +1113,7 @@ sub next_free_port {
             my $res4 = bind (SOCK, sockaddr_in($port, INADDR_ANY)) and listen (SOCK, 0);
             my $err = $!;
             close SOCK;
-            unless ($res4) {
-                print "next_free_port: port $port in use on IPv4: $err\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
-                next;
-            }
+            next unless ($res4);
 	}
 
         # IPv6 port in use
@@ -1130,10 +1124,7 @@ sub next_free_port {
                 my $res6 = bind (SOCK, sockaddr_in6($port, Socket::IN6ADDR_ANY)) and listen (SOCK, 0);
                 my $err = $!;
                 close SOCK;
-                unless ($res6) {
-                    print "next_free_port: port $port in use on IPv6: $err\n" if exists $ENV{DEBUG_NEXT_FREE_PORT};
-                    next;
-                }
+                next unless ($res6);
 	    }
 	}
 
