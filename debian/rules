@@ -1,9 +1,10 @@
 #!/usr/bin/make -f
 
-VERSION := $(shell dpkg-parsechangelog | awk '/^Version:/ { print $$2 }')
-ifneq ($(findstring bpo,$(VERSION)),)
+include /usr/share/dpkg/pkg-info.mk
+
+ifneq ($(findstring bpo,$(DEB_VERSION)),)
 	FLAVOR := debian-backports
-else ifneq ($(findstring pgdg,$(VERSION)),)
+else ifneq ($(findstring pgdg,$(DEB_VERSION)),)
 	FLAVOR := pgdg
 	# for apt.postgresql.org builds, pull in the repository key package
 	PGDG_DEPENDS := pgdg-keyring
