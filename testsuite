@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Run integration tests (on the installed packages).
 #
