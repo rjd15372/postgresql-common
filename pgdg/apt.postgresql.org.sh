@@ -21,8 +21,8 @@ PGDG="pgdg"
 # run "make" to update
 PG_BETA_VERSION="15"
 PG_DEVEL_VERSION="16"
-PG_REPOSITORY_DISTS="sid bookworm bullseye buster stretch jammy impish focal bionic xenial"
-PG_ARCHIVE_DISTS="sid bookworm bullseye buster stretch jessie wheezy squeeze lenny etch jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
+PG_REPOSITORY_DISTS="sid bookworm bullseye buster stretch kinetic jammy focal bionic"
+PG_ARCHIVE_DISTS="sid bookworm bullseye buster stretch jessie wheezy squeeze lenny etch kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
 
 while getopts "c:f:h:ipstv:y" opt ; do
     case $opt in
@@ -89,9 +89,9 @@ elif echo "$PG_ARCHIVE_DISTS" | grep -qw "$CODENAME"; then
 else # unknown distribution, verify on the web
 	DISTURL="https://${HOST:=apt.postgresql.org}/pub/repos/apt/dists/"
 	if [ -x /usr/bin/curl ]; then
-	    DISTHTML=$(curl -s $DISTURL)
+	    DISTHTML=$(curl -s $DISTURL || :)
 	elif [ -x /usr/bin/wget ]; then
-	    DISTHTML=$(wget --quiet -O - $DISTURL)
+	    DISTHTML=$(wget --quiet -O - $DISTURL || :)
 	fi
 	if [ "${DISTHTML:-}" ]; then
 	    if ! echo "$DISTHTML" | grep -q "$CODENAME-$PGDG"; then
