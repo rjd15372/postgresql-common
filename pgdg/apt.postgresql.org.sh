@@ -93,7 +93,7 @@ else # unknown distribution, verify on the web
 	elif [ -x /usr/bin/wget ]; then
 	    DISTHTML=$(wget --quiet -O - $DISTURL)
 	fi
-	if [ "$DISTHTML" ]; then
+	if [ "${DISTHTML:-}" ]; then
 	    if ! echo "$DISTHTML" | grep -q "$CODENAME-$PGDG"; then
 		cat <<EOF
 Your system is using the distribution codename $CODENAME, but $CODENAME-$PGDG
