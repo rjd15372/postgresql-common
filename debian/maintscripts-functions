@@ -227,7 +227,7 @@ postinst_check_catversion()
 	cat <<-EOF
 	Cluster $MAJOR_VER $cluster needs upgrading due to catalog version change:
 	  pg_renamecluster ${MAJOR_VER} ${cluster} ${cluster}.old
-	  pg_upgradecluster ${MAJOR_VER} ${cluster}.old --rename ${cluster} -m upgrade --old-bindir=${VARTMPDIR}/bin
+	  pg_upgradecluster ${MAJOR_VER} ${cluster}.old --rename ${cluster} -m upgrade -v ${MAJOR_VER} --old-bindir=${VARTMPDIR}/bin
 	  pg_dropcluster ${MAJOR_VER} ${cluster}.old
 	  rm -rf ${VARTMPDIR}
 	EOF
