@@ -2,6 +2,7 @@ postgresql-common (244) UNRELEASED; urgency=medium
 
   * debian/maintscripts-functions: Add -v to pg_upgradecluster template to
     stay on the same major version on catversion upgrades.
+  * pg_upgradecluster: Fix port handling when --rename is used.
 
  -- Christoph Berg <myon@debian.org>  Fri, 30 Sep 2022 14:08:58 +0200
 
