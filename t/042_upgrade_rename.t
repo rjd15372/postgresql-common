@@ -9,7 +9,10 @@ use PgCommon;
 use Test::More tests => 14 * @MAJORS;
 
 foreach my $v (@MAJORS) {
+  SKIP: {
+    skip "pg_upgrade not supported on $v", 14 if ($v < 9.2);
     note "PostgreSQL $v";
+
     program_ok 0, "pg_createcluster $v main --start", 0;
     program_ok 0, "pg_upgradecluster --old-bindir=$PgCommon::binroot$v/bin -v $v --rename upgr $v main", 0;
     like_program_out 0, "pg_lsclusters -h", 0, qr/$v main 5433 down.*\n$v upgr 5432 online/;
@@ -17,6 +20,7 @@ foreach my $v (@MAJORS) {
     program_ok 0, "pg_dropcluster $v main --stop", 0;
     program_ok 0, "pg_dropcluster $v upgr --stop", 0;
     check_clean;
+  }
 }
 
 # vim: filetype=perl
