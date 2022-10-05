@@ -1,5 +1,7 @@
 postgresql-common (244) UNRELEASED; urgency=medium
 
+  * dh_install{init,systemd}: Use --no-stop-on-upgrade and to not restart any
+    services on postgresql-common upgrades. (Closes: #1011067)
   * debian/maintscripts-functions: Add -v to pg_upgradecluster template to
     stay on the same major version on catversion upgrades.
   * pg_upgradecluster: Fix port handling when --rename is used.
