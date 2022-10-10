@@ -10,7 +10,7 @@ use Test::More tests => 15 * @MAJORS;
 
 foreach my $v (@MAJORS) {
   SKIP: {
-    skip "pg_upgrade not supported on $v", 14 if ($v < 9.2);
+    skip "pg_upgrade not supported on $v", 15 if ($v < 9.2);
     note "PostgreSQL $v";
 
     program_ok 0, "pg_createcluster $v main --start", 0;
