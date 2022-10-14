@@ -18,8 +18,8 @@ COMPONENTS="main"
 PGDG="pgdg"
 
 # variables imported from https://git.postgresql.org/gitweb/?p=pgapt.git;a=blob;f=pgapt.conf
-# run "make" to update
-PG_BETA_VERSION="15"
+# checked out in $HOME/apt.postgresql.org/; run "make" to update
+PG_BETA_VERSION=""
 PG_DEVEL_VERSION="16"
 PG_REPOSITORY_DISTS="sid bookworm bullseye buster stretch kinetic jammy focal bionic"
 PG_ARCHIVE_DISTS="sid bookworm bullseye buster stretch jessie wheezy squeeze lenny etch kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
