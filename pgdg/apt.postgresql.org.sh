@@ -125,7 +125,7 @@ if [ -z "${YES:-}" ]; then
 fi
 
 # beta version needs a different component
-if [ "${PGVERSION:-}" = "${PG_BETA_VERSION-none}" ]; then
+if [ "${PGVERSION:-}" = "${PG_BETA_VERSION:-none}" ]; then
     COMPONENTS="main $PGVERSION"
 fi
 
