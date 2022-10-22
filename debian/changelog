@@ -1,5 +1,9 @@
 postgresql-common (245) unstable; urgency=medium
 
+  [ Marco Nenciarini ]
+  * pgdg: fix unbound variable error with empty PGVERSION.
+
+  [ Christoph Berg ]
   * server/postgresql.mk: EXCLUDE_PACKAGES to skip building libs, used now for
     postgresql-14 in bookworm when postgresql-15 has already been uploaded.
   * server/postgresql.mk: Skip building -doc package when nodoc is selected.
