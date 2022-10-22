@@ -250,4 +250,9 @@ override_dh_installdeb-arch:
 
 override_dh_gencontrol:
 	# record catversion in .deb control file
-	dh_gencontrol -- -Vpostgresql:Catversion=$(CATVERSION) -Vllvm:Version=$(LLVM_VERSION) $(GENCONTROL_FLAGS)
+	dh_gencontrol $(EXCLUDE_PACKAGES) -- -Vpostgresql:Catversion=$(CATVERSION) -Vllvm:Version=$(LLVM_VERSION) $(GENCONTROL_FLAGS)
+
+ifneq ($(EXCLUDE_PACKAGES),)
+override_dh_builddeb:
+	dh_builddeb $(EXCLUDE_PACKAGES)
+endif

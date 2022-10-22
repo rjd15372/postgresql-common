@@ -1,3 +1,10 @@
+postgresql-common (245) unstable; urgency=medium
+
+  * server/postgresql.mk: EXCLUDE_PACKAGES to skip building libs, used now for
+    postgresql-14 in bookworm when postgresql-15 has already been uploaded.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 22 Oct 2022 14:46:03 +0200
+
 postgresql-common (244) unstable; urgency=medium
 
   * debian/supported-versions: Bump default version to 15.
