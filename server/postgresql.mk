@@ -141,8 +141,10 @@ override_dh_auto_configure:
 	# remove pre-built documentation
 	rm -fv doc/src/sgml/*-stamp
 
+ifeq ($(filter nodoc,$(DEB_BUILD_PROFILES)),)
 override_dh_auto_build-indep:
 	$(MAKE) -C build/doc all # build man + html
+endif
 
 override_dh_auto_build-arch:
 	# set MAKELEVEL to 0 to force building submake-generated-headers in src/Makefile.global(.in)
@@ -162,8 +164,10 @@ override_dh_auto_install-arch:
 	mkdir -p debian/postgresql-$(MAJOR_VER)/usr/share/doc/postgresql-$(MAJOR_VER)
 	mv debian/tmp/usr/share/doc/postgresql-doc-$(MAJOR_VER)/extension debian/postgresql-$(MAJOR_VER)/usr/share/doc/postgresql-$(MAJOR_VER)/examples
 
+ifeq ($(filter nodoc,$(DEB_BUILD_PROFILES)),)
 override_dh_auto_install-indep:
 	$(MAKE) -C build/doc install DESTDIR=$(CURDIR)/debian/tmp
+endif
 
 override_dh_makeshlibs:
 	dh_makeshlibs -Xusr/lib/postgresql/$(MAJOR_VER)
