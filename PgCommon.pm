@@ -5,7 +5,7 @@ PgCommon - Common functions for the postgresql-common framework
 =head1 COPYRIGHT AND LICENSE
 
  (C) 2008-2009 Martin Pitt <mpitt@debian.org>
- (C) 2012-2020 Christoph Berg <myon@debian.org>
+ (C) 2012-2022 Christoph Berg <myon@debian.org>
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -1318,7 +1318,7 @@ sub get_db_encoding {
     my ($version, $cluster, $db) = @_;
     my $port = get_cluster_port $version, $cluster;
     my $socketdir = get_cluster_socketdir $version, $cluster;
-    my $psql = get_program_path 'psql';
+    my $psql = get_program_path 'psql', $version;
     return undef unless ($port && $socketdir && $psql);
 
     # try to swich to cluster owner
@@ -1355,7 +1355,7 @@ sub get_db_locales {
     my ($version, $cluster, $db) = @_;
     my $port = get_cluster_port $version, $cluster;
     my $socketdir = get_cluster_socketdir $version, $cluster;
-    my $psql = get_program_path 'psql';
+    my $psql = get_program_path 'psql', $version;
     return undef unless ($port && $socketdir && $psql);
     my ($ctype, $collate);
 
@@ -1479,7 +1479,7 @@ sub get_cluster_databases {
     my ($version, $cluster) = @_;
     my $port = get_cluster_port $version, $cluster;
     my $socketdir = get_cluster_socketdir $version, $cluster;
-    my $psql = get_program_path 'psql';
+    my $psql = get_program_path 'psql', $version;
     return undef unless ($port && $socketdir && $psql);
 
     # try to swich to cluster owner
