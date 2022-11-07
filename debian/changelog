@@ -1,5 +1,6 @@
 postgresql-common (246) UNRELEASED; urgency=medium
 
+  * pg_wrapper: Select cluster based on port number as well.
   * t/020_create_sql_remove.t: Fix pgwrapper+psql version test on pre-9.2.
 
  -- Christoph Berg <myon@debian.org>  Sat, 05 Nov 2022 11:51:24 +0100
