@@ -80,10 +80,11 @@ foreach my $v (@MAJORS) {
                 exec "pg_backupcluster $v main receivewal 2>/dev/null";
             }
         }
+        program_ok $pg_uid, "psql -c 'create table poke_receivewal (t text)' mydb";
+        usleep($delay);
         my $wal = "000000010000000000000001";
         $wal .= ".gz" if ($v >= 10);
         $wal .= ".partial";
-        usleep($delay);
         ok_dir "$dir/wal", [$wal], "$dir/wal contains $wal";
     }
     if ($systemd) {
