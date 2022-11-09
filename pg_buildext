@@ -276,13 +276,15 @@ gencontrol() {
 
     perl -e \
         '$/ = ""; # read paragraphs
+        my $newest_pgversion = $ENV{PGVERSIONS} =~ s/.*\s//sr;
         while (<>) {
             chomp;
-            if (/PGVERSION/) {
+            if (/^Package: .*PGVERSION/) {
                 foreach my $version (split /\n/, $ENV{PGVERSIONS}) {
                     push @out, s/PGVERSION/$version/rg;
                 }
             } else {
+                s/PGVERSION/$newest_pgversion/g;
                 push @out, $_;
             }
         }

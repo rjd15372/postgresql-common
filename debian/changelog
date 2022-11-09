@@ -1,5 +1,7 @@
 postgresql-common (246) UNRELEASED; urgency=medium
 
+  * pg_buildext: If PGVERSION appears outside the package name only, fill in
+    the newest supported version.
   * pg_wrapper: Select cluster based on port number as well.
   * t/020_create_sql_remove.t: Fix pgwrapper+psql version test on pre-9.2.
 
