@@ -21,7 +21,7 @@ PGDG="pgdg"
 # checked out in $HOME/apt.postgresql.org/; run "make" to update
 PG_BETA_VERSION=""
 PG_DEVEL_VERSION="16"
-PG_REPOSITORY_DISTS="sid bookworm bullseye buster stretch kinetic jammy focal bionic"
+PG_REPOSITORY_DISTS="sid bookworm bullseye buster kinetic jammy focal bionic"
 PG_ARCHIVE_DISTS="sid bookworm bullseye buster stretch jessie wheezy squeeze lenny etch kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
 
 while getopts "c:f:h:ipstv:y" opt ; do
