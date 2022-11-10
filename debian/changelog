@@ -1,4 +1,4 @@
-postgresql-common (246) UNRELEASED; urgency=medium
+postgresql-common (246) unstable; urgency=medium
 
   * pg_buildext: If PGVERSION appears outside the package name only, fill in
     the newest supported version.
@@ -7,7 +7,7 @@ postgresql-common (246) UNRELEASED; urgency=medium
   * pgdg: Include .asc and .gpg keys from pgdg-keyring; upgrade
     apt.postgresql.org.sh to write pgdg.sources instead of pgdg.list.
 
- -- Christoph Berg <myon@debian.org>  Sat, 05 Nov 2022 11:51:24 +0100
+ -- Christoph Berg <myon@debian.org>  Thu, 10 Nov 2022 15:06:56 +0100
 
 postgresql-common (245) unstable; urgency=medium
 
