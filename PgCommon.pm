@@ -982,7 +982,7 @@ sub get_versions {
             my $version;
             ($version) = $entry =~ /^$pfx(\d+\.?\d+)$/; # untaint
             next if ($max_version and $version > $max_version);
-            $versions{$entry} = 1 if $version and get_program_path ($program, $version);
+            $versions{$version} = 1 if $version and get_program_path ($program, $version);
         }
         closedir D;
     }
