@@ -3,6 +3,7 @@ postgresql-common (247) UNRELEASED; urgency=medium
   [ Christoph Berg ]
   * Update pt_BR debconf translation, thanks Paulo Henrique de Lima Santana!
     (Closes: #1024197)
+  * postgresql.mk: Ignore test failures on alpha.
 
   [ Dennis Schwan ]
   * Fix pgsql-XX isn't numeric in numeric comparison. (Salsa #31)
