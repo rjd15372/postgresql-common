@@ -1,3 +1,10 @@
+postgresql-common (247) UNRELEASED; urgency=medium
+
+  * Update pt_BR debconf translation, thanks Paulo Henrique de Lima Santana!
+    (Closes: #1024197)
+
+ -- Christoph Berg <myon@debian.org>  Wed, 16 Nov 2022 09:26:17 +0100
+
 postgresql-common (246) unstable; urgency=medium
 
   * pg_buildext: If PGVERSION appears outside the package name only, fill in
