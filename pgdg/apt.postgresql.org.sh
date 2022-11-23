@@ -216,10 +216,10 @@ Gtz3cydIohvNO9d90+29h0eGEDYti7j7maHkBKUAwlcPvMg5m3Y=
 EOF
 
 # devel version comes from *-pgdg-snapshot (with lower default apt pinning priority)
-if [ "${PGVERSION:-0}" -ge "${PG_DEVEL_VERSION:-999}" ]; then
+if dpkg --compare-versions "${PGVERSION:-0}" ge "${PG_DEVEL_VERSION:-999}"; then
     PIN="-t $CODENAME-pgdg-snapshot"
 # beta version needs a different component
-elif [ "${PGVERSION:-0}" -ge "${PG_BETA_VERSION:-999}" ]; then
+elif dpkg --compare-versions "${PGVERSION:-0}" ge "${PG_BETA_VERSION:-999}"; then
     COMPONENTS="$COMPONENTS $PGVERSION"
 fi
 
@@ -233,7 +233,7 @@ Signed-By: $KEYRING
 EOF
 
 # write a separate section for devel without main so we don't include all of snapshot
-if [ "${PGVERSION:-0}" -ge "${PG_DEVEL_VERSION:-999}" ]; then
+if dpkg --compare-versions "${PGVERSION:-0}" ge "${PG_DEVEL_VERSION:-999}"; then
 cat >> $SOURCESLIST <<EOF
 
 Types: $TYPES
