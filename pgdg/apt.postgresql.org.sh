@@ -135,7 +135,9 @@ KEYRING="/usr/share/postgresql-common/pgdg/apt.postgresql.org.gpg"
 test -e $KEYRING || KEYRING="/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc"
 echo "Using keyring $KEYRING"
 # write .asc key to disk if not yet present
-test -e $KEYRING || cat >> $KEYRING <<EOF
+if ! test -e $KEYRING; then
+    mkdir -p /usr/share/postgresql-common/pgdg
+    cat > $KEYRING <<EOF
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQINBE6XR8IBEACVdDKT2HEH1IyHzXkb4nIWAY7echjRxo7MTcj4vbXAyBKOfjja
@@ -214,6 +216,7 @@ Gtz3cydIohvNO9d90+29h0eGEDYti7j7maHkBKUAwlcPvMg5m3Y=
 =DA1T
 -----END PGP PUBLIC KEY BLOCK-----
 EOF
+fi
 
 # devel version comes from *-pgdg-snapshot (with lower default apt pinning priority)
 if dpkg --compare-versions "${PGVERSION:-0}" ge "${PG_DEVEL_VERSION:-999}"; then
