@@ -138,9 +138,9 @@ postgres=CTc/postgres\n%;
             ($v >= 9.4 ? "3\n" : "1\n"); # --analyze-in-stages does 3 passes
         SKIP: {
             skip "alter role in database handling in PG <= 10 not supported", 1 if ($v <= 10);
-            is_program_out $pg_uid, "psql -XAtc '\\drds'", 0, "myuser|mydb|search_path=public, myotherschema
-myuser||search_path=public, myschema
-|mydb|search_path=public\n";
+            like_program_out $pg_uid, "psql -XAtc '\\drds'", 0, qr/myuser\|mydb\|search_path=public, myotherschema.*
+myuser\|\|search_path=public, myschema.*
+\|mydb\|search_path=public.*\n/;
         }
     }
 
