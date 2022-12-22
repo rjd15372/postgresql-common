@@ -4,7 +4,7 @@
 #
 # (C) 2005-2009 Martin Pitt <mpitt@debian.org>
 # (C) 2013 Peter Eisentraut <petere@debian.org>
-# (C) 2013-2021 Christoph Berg <myon@debian.org>
+# (C) 2013-2022 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -194,6 +194,10 @@ sub adapt_conffiles {
 
     if ($newversion >= '15') {
         $deprecate->(\%c, 'stats_temp_directory', 'does not exist anymore');
+    }
+
+    if ($newversion >= '16') {
+        $deprecate->(\%c, 'promote_trigger_file', 'does not exist anymore, use pg_promote() instead');
     }
 }
 
