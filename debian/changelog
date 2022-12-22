@@ -6,6 +6,7 @@ postgresql-common (247) UNRELEASED; urgency=medium
   * postgresql.mk: Ignore test failures on alpha.
   * pgdg/apt.postgresql.org.sh: Fix version comparisons for 9.x.
   * pg_upgradecluster: Remove promote_trigger_file in PG16.
+  * t/200_maintscripts.t: Run apt-get update before reinstalling pg-common.
 
   [ Dennis Schwan ]
   * Fix pgsql-XX isn't numeric in numeric comparison. (Salsa #31)

@@ -7,7 +7,7 @@ use lib 't';
 use TestLib;
 use PgCommon;
 
-use Test::More tests => $PgCommon::rpm ? 1 : 14;
+use Test::More tests => $PgCommon::rpm ? 1 : 15;
 
 if ($PgCommon::rpm) {
     pass 'No maintainer script tests on rpm';
@@ -27,6 +27,7 @@ chomp $postmaster_pid;
 ok $postmaster_pid > 0, "postmaster PID is $postmaster_pid";
 
 # "upgrade" postgresql-common to check if postgresql.service is left alone
+program_ok 0, 'apt-get update -q', 0, '';
 note `apt-cache policy postgresql-common`;
 program_ok 0, 'apt-get install -y --reinstall -o DPkg::Options::=--force-confnew postgresql-common', 0, '';
 note `apt-cache policy postgresql-common`;
