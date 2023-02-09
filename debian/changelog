@@ -1,4 +1,4 @@
-postgresql-common (247) UNRELEASED; urgency=medium
+postgresql-common (247) unstable; urgency=medium
 
   [ Christoph Berg ]
   * Update pt_BR debconf translation, thanks Paulo Henrique de Lima Santana!
@@ -11,7 +11,7 @@ postgresql-common (247) UNRELEASED; urgency=medium
   [ Dennis Schwan ]
   * Fix pgsql-XX isn't numeric in numeric comparison. (Salsa #31)
 
- -- Christoph Berg <myon@debian.org>  Wed, 16 Nov 2022 09:26:17 +0100
+ -- Christoph Berg <myon@debian.org>  Thu, 09 Feb 2023 11:28:43 +0100
 
 postgresql-common (246) unstable; urgency=medium
 
