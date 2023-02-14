@@ -27,7 +27,7 @@ include /usr/share/dpkg/buildflags.mk
 export DPKG_GENSYMBOLS_CHECK_LEVEL = 4
 
 # server catalog version
-CATVERSION = $(shell awk '/CATALOG_VERSION_NO/ { print $$3 }' src/include/catalog/catversion.h)
+CATVERSION = $(shell $(AUX_MK_DIR)/catversion)
 
 # configure flags
 
