@@ -1,5 +1,6 @@
 postgresql-common (248) UNRELEASED; urgency=medium
 
+  * Depend on sysvinit-utils alternatively to obsolete lsb-base.
   * Update ro debconf translation, mulțumesc Remus-Gabriel Chelu!
   * server/postgresql.mk: Allow setting MAJOR_PKG for custom server packages.
   * server/catversion: Also extract catalog file version number.
