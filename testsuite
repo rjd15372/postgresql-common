@@ -76,11 +76,13 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
                     ${PYTHON2_PACKAGE:-} \
                     $(dpkg --compare-versions $v ge 9.1 && echo postgresql-plpython3-$v$PG_FLAVOR) \
                     postgresql-pltcl-$v$PG_FLAVOR \
-                    postgresql-server-dev-$v$PG_FLAVOR
+                    postgresql-server-dev-$v$PG_FLAVOR \
+                    postgresql-doc-$v$PG_FLAVOR
             done
             apt-get install -y \
                 debhelper \
                 libecpg-dev \
+                locales-all \
                 procps systemd \
                 netcat-openbsd \
                 hunspell-en-us \
@@ -94,7 +96,8 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
                     postgresql$vv$PG_FLAVOR-plperl \
                     postgresql$vv$PG_FLAVOR-plpython3 \
                     postgresql$vv$PG_FLAVOR-pltcl \
-                    postgresql$vv$PG_FLAVOR-devel
+                    postgresql$vv$PG_FLAVOR-devel \
+                    postgresql$vv$PG_FLAVOR-doc
             done
             yum install -y \
                 nmap-ncat \

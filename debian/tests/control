@@ -15,5 +15,6 @@ Depends:
  netcat-openbsd,
  perl,
  postgresql-all,
+ postgresql-doc,
  procps,
 Restrictions: needs-root
