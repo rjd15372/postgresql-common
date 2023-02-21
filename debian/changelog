@@ -1,5 +1,6 @@
 postgresql-common (248) UNRELEASED; urgency=medium
 
+  * Merge postmaster.1.gz alternatives into psql.1.gz link group.
   * Depend on sysvinit-utils alternatively to obsolete lsb-base.
   * Update ro debconf translation, mulțumesc Remus-Gabriel Chelu!
   * server/postgresql.mk: Allow setting MAJOR_PKG for custom server packages.

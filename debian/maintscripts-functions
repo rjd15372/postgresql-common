@@ -1,32 +1,12 @@
 # This file contains common functionality for all postgresql server
 # package maintainer scripts.
 
-# arguments: version master package [package]
+# arguments: version master package [package package]
 _link_manpages() {
     MANS=$(unset GREP_OPTIONS; dpkg -L $3 $4 $5 2>/dev/null | grep -E '/man/.*\.[1-9](\.gz)?$' | grep -v "$2") || true
     [ -n "$MANS" ] || return 0
 
     SLAVES=$(for i in $MANS; do TARGET=$(echo $i | sed "s/postgresql\/$1\///"); echo -n " --slave $TARGET $(basename $i) $i"; done)
-    # pg_basebackup once moved from server to client; upgrades are still
-    # affected by this for quite a while, so remove this alternative before
-    # reinstalling it to avoid failure. This needs to be kept until we stop
-    # supporting upgrades from -9.1.
-    if [ "$2" = "psql.1.gz" ]; then
-	OUT=$(LC_ALL=C update-alternatives --display postmaster.1.gz 2> /dev/null) || true
-	if [ "${OUT#*auto mode}" != "$OUT" ] && [ "${OUT#*pg_basebackup.1.gz}" != "$OUT" ]; then
-            echo "Adjusting postmaster.1.gz alternatives for pg_basebackup move..."
-	    update-alternatives --remove postmaster.1.gz /usr/share/postgresql/9.1/man/man1/postmaster.1.gz
-	fi
-    # similarly, if we have both 9.1 and e. g. 9.3 installed, pg_basebackup.1
-    # will already be in the psql.1.gz alternative group; if we upgrade 9.1, we
-    # then must not try to put it into postmaster.1.gz again, as that will
-    # fail
-    elif [ "$2" = "postmaster.1.gz" ] && [ "$1" = "9.1" ]; then
-	if update-alternatives --display psql.1.gz 2>/dev/null | grep -q pg_basebackup; then
-	    #echo "Skipping postmaster.1.gz alternatives as pg_basebackup.1 is already in psql.1.gz group"
-	    return
-	fi
-    fi
 
     # user might have removed the directories, allow u-a to succeed
     mkdir -p /usr/share/man/man1 /usr/share/man/man3 /usr/share/man/man7
@@ -38,6 +18,21 @@ _link_manpages() {
     update-alternatives --install /usr/share/man/$section/$2 \
 	$2 /usr/share/postgresql/$1/man/$section/$2 \
 	$priority $SLAVES
+}
+
+# Merge postmaster.1.gz (removed in PG16) alternatives with psql.1.gz (248)
+relink_postmaster_manpages ()
+{
+    update-alternatives --list postmaster.1.gz >/dev/null 2>&1 || return 0
+
+    echo "Merging postmaster.1.gz alternatives into psql.1.gz link group ..."
+    update-alternatives --remove-all postmaster.1.gz
+    for dir in /usr/lib/postgresql/*; do
+        if test -x $dir/bin/psql; then
+            v=${dir#/usr/lib/postgresql/}
+            _link_manpages $v psql.1.gz postgresql-client-$v postgresql-$v postgresql-contrib-$v
+        fi
+    done
 }
 
 # arguments: version master
@@ -95,7 +90,8 @@ or a similar command (see 'man pg_createcluster')." >&2
         fi
     fi
 
-    _link_manpages "$VERSION" postmaster.1.gz "postgresql-$1" "postgresql-contrib-$1"
+    relink_postmaster_manpages
+    _link_manpages "$VERSION" psql.1.gz "postgresql-client-$VERSION" "postgresql-$VERSION" "postgresql-contrib-$VERSION"
 
     # check if our catalog version changed
     postinst_check_catversion "$VERSION"
@@ -123,14 +119,16 @@ stop_version() {
 }
 
 remove_version() {
-    _unlink_manpages "$1" postmaster.1.gz
+    # we still want to retain the alternatives for the client packages
+    _link_manpages "$1" psql.1.gz "postgresql-client-$1"
     _remove_tsearch "$1"
     # update list of packages not to apt-autoremove
     /usr/share/postgresql-common/pg_updateaptconfig
 }
 
 configure_client_version() {
-    _link_manpages "$1" psql.1.gz "postgresql-client-$1"
+    relink_postmaster_manpages
+    _link_manpages "$1" psql.1.gz "postgresql-client-$1" "postgresql-$1" "postgresql-contrib-$1"
 }
 
 remove_client_version() {
@@ -138,12 +136,13 @@ remove_client_version() {
 }
 
 configure_contrib_version() {
-    _link_manpages "$1" postmaster.1.gz "postgresql-$1" "postgresql-contrib-$1"
+    relink_postmaster_manpages
+    _link_manpages "$1" psql.1.gz "postgresql-client-$1" "postgresql-$1" "postgresql-contrib-$1"
 }
 
 remove_contrib_version() {
     # we still want to retain the alternatives for the server packages
-    _link_manpages "$1" postmaster.1.gz "postgresql-$1"
+    _link_manpages "$1" psql.1.gz "postgresql-client-$1" "postgresql-$1"
 }
 
 configure_doc_version() {
