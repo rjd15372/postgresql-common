@@ -7,7 +7,7 @@ use lib 't';
 use TestLib;
 use POSIX qw/setlocale LC_ALL LC_MESSAGES/;
 
-use Test::More tests => $PgCommon::rpm ? (3 + 10*@MAJORS) : (15 + 7*@MAJORS);
+use Test::More tests => $PgCommon::rpm ? (3 + 10*@MAJORS) : (14 + 8*@MAJORS);
 
 ok (-f "/etc/os-release", "/etc/os-release exists");
 my ($os, $osversion) = os_release();

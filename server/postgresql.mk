@@ -195,6 +195,7 @@ override_dh_install-arch:
 	ln -s ../postgresql-common/README.Debian.gz debian/postgresql-$(MAJOR_PKG)/usr/share/doc/postgresql-$(MAJOR_VER)/README.Debian.gz
 
 	# assemble perl version of pg_config in libpq-dev
+	mkdir -p debian/libpq-dev/usr/bin
 	sed -ne '1,/__DATA__/p' $(AUX_MK_DIR)/pg_config.pl > debian/libpq-dev/usr/bin/pg_config
 	LC_ALL=C debian/postgresql-client-$(MAJOR_PKG)/usr/lib/postgresql/$(MAJOR_VER)/bin/pg_config | sed -e 's![^ ]*/debian/postgresql-client-$(MAJOR_PKG)!!' >> debian/libpq-dev/usr/bin/pg_config
 	LC_ALL=C debian/postgresql-client-$(MAJOR_PKG)/usr/lib/postgresql/$(MAJOR_VER)/bin/pg_config --help >> debian/libpq-dev/usr/bin/pg_config
