@@ -6,6 +6,7 @@ postgresql-common (248) UNRELEASED; urgency=medium
   * Update ro debconf translation, mulțumesc Remus-Gabriel Chelu!
   * server/postgresql.mk: Allow setting MAJOR_PKG for custom server packages.
   * server/catversion: Also extract catalog file version number.
+  * debian/maintscripts-functions: Support flavored server packages.
   * testsuite: Support flavored server packages (testsuite -F ee).
 
  -- Christoph Berg <myon@debian.org>  Sun, 12 Feb 2023 23:09:49 +0100
