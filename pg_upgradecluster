@@ -4,7 +4,7 @@
 #
 # (C) 2005-2009 Martin Pitt <mpitt@debian.org>
 # (C) 2013 Peter Eisentraut <petere@debian.org>
-# (C) 2013-2022 Christoph Berg <myon@debian.org>
+# (C) 2013-2023 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -451,7 +451,6 @@ my $upgrade_port = next_free_port;
 my @argv = ('pg_createcluster', '-u', $info{'owneruid'}, '-g', $info{'ownergid'},
     '--socketdir', $info{'socketdir'}, '--port', $upgrade_port, '--no-status',
     $newversion, $newcluster);
-
 push @argv, ('--datadir', $datadir) if $datadir;
 push @argv, ('--logfile', $logfile) if $logfile;
 push @argv, ('--encoding', $encoding) unless $locale or $lc_ctype;
@@ -464,8 +463,12 @@ push @argv, ('--lc-messages', $lc_messages) if $lc_messages;
 push @argv, ('--lc-monetary', $lc_monetary) if $lc_monetary;
 push @argv, ('--lc-numeric', $lc_numeric) if $lc_numeric;
 push @argv, ('--lc-time', $lc_time) if $lc_time;
+push @argv, ('--');
+push @argv, ('--data-checksums') if $oldcontrol->{'Data page checksum version'}; # 0 = off
+push @argv, ('--encryption-key-command', $info{config}->{encryption_key_command}) if $info{config}->{encryption_key_command}; # PostgreSQL TDE
+
+# call pg_createcluster
 delete $ENV{'LC_ALL'};
-push @argv, ('--', '--data-checksums') if $oldcontrol->{'Data page checksum version'}; # 0 = off
 error "Could not create target cluster" if system @argv;
 print "\n";
 
