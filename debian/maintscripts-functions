@@ -141,7 +141,7 @@ remove_version() {
 
 configure_client_version() {
     VERSION="$1"
-    PKG_VER="${2:-$1}"
+    PKG_VER="${3:-$1}"
     relink_postmaster_manpages
     _link_manpages "$VERSION" psql.1.gz "postgresql-client-$PKG_VER" "postgresql-$PKG_VER" "postgresql-contrib-$PKG_VER"
 }
@@ -153,7 +153,7 @@ remove_client_version() {
 
 configure_contrib_version() {
     VERSION="$1"
-    PKG_VER="${2:-$1}"
+    PKG_VER="${3:-$1}"
     relink_postmaster_manpages
     _link_manpages "$VERSION" psql.1.gz "postgresql-client-$PKG_VER" "postgresql-$PKG_VER" "postgresql-contrib-$PKG_VER"
 }
@@ -167,7 +167,7 @@ remove_contrib_version() {
 
 configure_doc_version() {
     VERSION="$1"
-    PKG_VER="${2:-$1}"
+    PKG_VER="${3:-$1}"
     _link_manpages "$VERSION" SPI_connect.3.gz "postgresql-doc-$PKG_VER"
 }
 
