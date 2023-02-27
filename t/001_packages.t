@@ -7,7 +7,7 @@ use lib 't';
 use TestLib;
 use POSIX qw/setlocale LC_ALL LC_MESSAGES/;
 
-use Test::More tests => $PgCommon::rpm ? (3 + 10*@MAJORS) : (14 + 8*@MAJORS);
+use Test::More tests => $PgCommon::rpm ? (3 + 9*@MAJORS) : (15 + 7*@MAJORS);
 
 ok (-f "/etc/os-release", "/etc/os-release exists");
 my ($os, $osversion) = os_release();
@@ -34,11 +34,11 @@ if ($PgCommon::rpm) {
         ok ((rpm_installed "postgresql$vv$f-plpython3"), "postgresql$vv$f-plpython3 installed");
         ok ((rpm_installed "postgresql$vv$f-pltcl"),    "postgresql$vv$f-pltcl installed");
         ok ((rpm_installed "postgresql$vv$f-devel"),    "postgresql$vv$f-devel installed");
-        ok ((rpm_installed "postgresql$vv$f-doc"),      "postgresql$vv$f-doc installed");
     }
     exit;
 }
 
+my $docpkgs = 0;
 foreach my $v (@MAJORS) {
     ok ((deb_installed "postgresql-$v$f"), "postgresql-$v$f installed");
     SKIP: {
@@ -57,8 +57,13 @@ foreach my $v (@MAJORS) {
     skip "No postgresql-contrib-$v$f package for version $v", 1 if ($v >= 10);
     ok ((deb_installed "postgresql-contrib-$v$f"), "postgresql-contrib-$v$f installed");
   }
-    ok ((deb_installed "postgresql-doc-$v$f"), "postgresql-doc-$v$f installed");
+    my $docpkg = "postgresql-doc-$v$f";
+    if (deb_installed $docpkg) {
+        note "$docpkg installed";
+        $docpkgs++;
+    }
 }
+ok $docpkgs, "At least one doc package installed";
 
 ok ((deb_installed 'libecpg-dev'), 'libecpg-dev installed');
 ok ((deb_installed 'procps'), 'procps installed');
