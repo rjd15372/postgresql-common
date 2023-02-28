@@ -23,7 +23,7 @@ for my $name (qw(psql pg_dump postgres pg_ctl)) {
 }
 
 # doc link group
-my $newest_doc_version = `dpkg -l 'postgresql-doc-[1-9]*' | sed -ne 's/^ii  postgresql-doc-\\([0-9.]*\\) .*/\\1/p' | sort -g | tail -n 1`;
+my $newest_doc_version = `dpkg -l 'postgresql-doc-[1-9]*' | sed -ne 's/^ii  postgresql-doc-\\([0-9.]*\\).*/\\1/p' | sort -g | tail -n 1`;
 note "Newest PG doc version installed is $newest_doc_version";
 SKIP: {
     skip "No SPI_connect.3.gz link group on 8.x", 3 if ($newest_doc_version < 9.0);
