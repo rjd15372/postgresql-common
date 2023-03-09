@@ -1,5 +1,6 @@
 postgresql-common (248) UNRELEASED; urgency=medium
 
+  [ Christoph Berg ]
   * Merge postmaster.1.gz alternatives into psql.1.gz link group.
   * Test-Depend on postgresql-doc to test the man3 alternatives.
   * Depend on sysvinit-utils alternatively to obsolete lsb-base.
@@ -11,7 +12,10 @@ postgresql-common (248) UNRELEASED; urgency=medium
   * pg_upgradecluster: Copy encryption_key_command from old cluster to support
     PostgreSQL TDE.
 
- -- Christoph Berg <myon@debian.org>  Sun, 12 Feb 2023 23:09:49 +0100
+  [ Athos Ribeiro ]
+  * Fix set_conffile_value comment parsing regular expression.
+
+ -- Athos Ribeiro <athos.ribeiro@canonical.com>  Thu, 09 Mar 2023 11:28:40 -0300
 
 postgresql-common (247) unstable; urgency=medium
 
