@@ -1,4 +1,4 @@
-postgresql-common (248) UNRELEASED; urgency=medium
+postgresql-common (248) unstable; urgency=medium
 
   [ Christoph Berg ]
   * Update ro debconf translation, mulțumesc Remus-Gabriel Chelu!
@@ -6,7 +6,7 @@ postgresql-common (248) UNRELEASED; urgency=medium
   [ Athos Ribeiro ]
   * Fix set_conffile_value comment parsing regular expression.
 
- -- Athos Ribeiro <athos.ribeiro@canonical.com>  Thu, 09 Mar 2023 11:28:40 -0300
+ -- Christoph Berg <myon@debian.org>  Tue, 14 Mar 2023 15:19:01 +0100
 
 postgresql-common (247) unstable; urgency=medium
 
