@@ -1,10 +1,8 @@
-postgresql-common (248) UNRELEASED; urgency=medium
+postgresql-common (249) UNRELEASED; urgency=medium
 
-  [ Christoph Berg ]
   * Merge postmaster.1.gz alternatives into psql.1.gz link group.
   * Test-Depend on postgresql-doc to test the man3 alternatives.
   * Depend on sysvinit-utils alternatively to obsolete lsb-base.
-  * Update ro debconf translation, mulțumesc Remus-Gabriel Chelu!
   * server/postgresql.mk: Allow setting MAJOR_PKG for custom server packages.
   * server/catversion: Also extract catalog file version number.
   * debian/maintscripts-functions: Support flavored server packages.
@@ -12,10 +10,17 @@ postgresql-common (248) UNRELEASED; urgency=medium
   * pg_upgradecluster: Copy encryption_key_command from old cluster to support
     PostgreSQL TDE.
 
+ -- Christoph Berg <myon@debian.org>  Tue, 14 Mar 2023 15:19:01 +0100
+
+postgresql-common (248) unstable; urgency=medium
+
+  [ Christoph Berg ]
+  * Update ro debconf translation, mulțumesc Remus-Gabriel Chelu!
+
   [ Athos Ribeiro ]
   * Fix set_conffile_value comment parsing regular expression.
 
- -- Athos Ribeiro <athos.ribeiro@canonical.com>  Thu, 09 Mar 2023 11:28:40 -0300
+ -- Christoph Berg <myon@debian.org>  Tue, 14 Mar 2023 15:19:01 +0100
 
 postgresql-common (247) unstable; urgency=medium
 
