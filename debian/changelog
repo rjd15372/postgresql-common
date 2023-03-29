@@ -9,6 +9,7 @@ postgresql-common (249) UNRELEASED; urgency=medium
   * testsuite: Support flavored server packages (testsuite -F ee).
   * pg_upgradecluster: Copy encryption_key_command from old cluster to support
     PostgreSQL TDE.
+  * t/050_encodings.t: Accept en_US_POSIX-encoded cluster with LANG=C on PG16.
 
  -- Christoph Berg <myon@debian.org>  Tue, 14 Mar 2023 15:19:01 +0100
 
