@@ -12,6 +12,8 @@ postgresql-common (249) UNRELEASED; urgency=medium
   * pg_backupcluster, t/045_backup.t: Handle icu-encoded clusters and
     databases.
   * t/050_encodings.t: Accept en_US_POSIX-encoded cluster with LANG=C on PG16.
+  * pg_upgradecluster, t/052_upgrade_encodings.t: Preserve ICU locale when
+    upgrading from PG15+.
 
  -- Christoph Berg <myon@debian.org>  Tue, 14 Mar 2023 15:19:01 +0100
 

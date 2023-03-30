@@ -31,6 +31,7 @@ delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
 my ($version, $newversion, $cluster, $newcluster);
 my (%info, %newinfo);
 my ($encoding, $old_lc_ctype, $old_lc_collate); # old cluster encoding
+my ($old_locale_provider, $old_icu_locale, $old_icu_rules);
 my $maintenance_db = 'template1';
 
 # do not trip over cwd not being accessible to postgres superuser
@@ -301,7 +302,7 @@ sub get_encoding {
     if ($version <= '8.3') {
 	($old_lc_ctype, $old_lc_collate) = get_cluster_locales $version, $cluster;
     } else {
-	($old_lc_ctype, $old_lc_collate) = get_db_locales $version, $cluster, $maintenance_db;
+	($old_lc_ctype, $old_lc_collate, $old_locale_provider, $old_icu_locale, $old_icu_rules) = get_db_locales $version, $cluster, $maintenance_db;
     }
     unless ($encoding && $old_lc_ctype && $old_lc_collate) {
 	error 'could not get cluster locales';
@@ -464,6 +465,9 @@ push @argv, ('--lc-monetary', $lc_monetary) if $lc_monetary;
 push @argv, ('--lc-numeric', $lc_numeric) if $lc_numeric;
 push @argv, ('--lc-time', $lc_time) if $lc_time;
 push @argv, ('--');
+push @argv, ('--locale-provider', $old_locale_provider) if $old_locale_provider;
+push @argv, ('--icu-locale', $old_icu_locale) if $old_icu_locale;
+push @argv, ('--icu-rules', $old_icu_rules) if $old_icu_rules;
 push @argv, ('--data-checksums') if $oldcontrol->{'Data page checksum version'}; # 0 = off
 push @argv, ('--encryption-key-command', $info{config}->{encryption_key_command}) if $info{config}->{encryption_key_command}; # PostgreSQL TDE
 

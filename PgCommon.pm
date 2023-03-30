@@ -1348,6 +1348,8 @@ sub get_db_encoding {
 
  Arguments: <version> <cluster> <database>
  Returns: (LC_CTYPE, LC_COLLATE) or (undef,undef) if it cannot be determined.
+ PG15 adds locale provider and icu locale to the returned values
+ PG16 adds icu rules
 
 =cut
 
@@ -1357,30 +1359,45 @@ sub get_db_locales {
     my $socketdir = get_cluster_socketdir $version, $cluster;
     my $psql = get_program_path 'psql', $version;
     return undef unless ($port && $socketdir && $psql);
-    my ($ctype, $collate);
+    my ($ctype, $collate, $locale_provider, $icu_locale, $icu_rules);
 
     # try to switch to cluster owner
     prepare_exec 'LC_ALL';
     $ENV{'LC_ALL'} = 'C';
     my $orig_euid = $>;
     $> = (stat (cluster_data_directory $version, $cluster))[4];
+
     open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
         'SHOW lc_ctype', $db or
         die "Internal error: could not call $psql to determine db lc_ctype: $!";
     my $out = <PSQL> // error 'could not determine db lc_ctype';
     close PSQL;
     ($ctype) = $out =~ /^([\w.\@-]+)$/; # untaint
+
     open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
         'SHOW lc_collate', $db or
         die "Internal error: could not call $psql to determine db lc_collate: $!";
     $out = <PSQL> // error 'could not determine db lc_collate';
     close PSQL;
     ($collate) = $out =~ /^([\w.\@-]+)$/; # untaint
+
+    if ($version >= 15) {
+        open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
+            "SELECT CASE datlocprovider::text WHEN 'c' THEN 'libc' WHEN 'i' THEN 'icu' END, daticulocale" .
+            ($version >= 16 ? ", icurules" : "") .
+            " FROM pg_database where datname = current_database()", $db or
+            die "Internal error: could not call $psql to determine db lc_collate: $!";
+        $out = <PSQL> // error 'could not determine db lc_collate';
+        close PSQL;
+        $out =~ /^(.*)\|(.*)(?:\|(.*))?$/; # untaint
+        ($locale_provider, $icu_locale, $icu_rules) = ($1, $2, $3);
+    }
+
     $> = $orig_euid;
     restore_exec;
     chomp $ctype;
     chomp $collate;
-    return ($ctype, $collate) unless $?;
+    return ($ctype, $collate, $locale_provider, $icu_locale, $icu_rules) unless $?;
     return (undef, undef);
 }
 
