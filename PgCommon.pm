@@ -1384,7 +1384,7 @@ sub get_db_locales {
     if ($version >= 15) {
         open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
             "SELECT CASE datlocprovider::text WHEN 'c' THEN 'libc' WHEN 'i' THEN 'icu' END, daticulocale" .
-            ($version >= 16 ? ", icurules" : "") .
+            ($version >= 16 ? ", daticurules" : "") .
             " FROM pg_database where datname = current_database()", $db or
             die "Internal error: could not call $psql to determine db lc_collate: $!";
         $out = <PSQL> // error 'could not determine db lc_collate';
