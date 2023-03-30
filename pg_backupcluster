@@ -43,15 +43,18 @@ Actions:
   archivecleanup         Remove obsolete WAL files from archive
   list                   Show dumps, basebackups, and WAL
 Options:
+  -c --checkpoint <spread|fast>  Passed to pg_basebackup
   -k --keep-on-error     Keep faulty backup directory on error
   -v --verbose           Verbose output
 ";
 }
 
+my $checkpoint = 'spread';
 my $keep_on_error;
 my $verbose;
 
 exit 1 unless GetOptions (
+    'c|checkpoint=s' => sub { $checkpoint = $_[1] =~ /^f/ ? "fast" : "spread" },
     'k|keep-on-error' => \$keep_on_error,
     'v|verbose' => \$verbose,
 );
@@ -129,6 +132,7 @@ sub create_basebackup($) {
         "--cluster", "$version/$cluster",
         "--verbose",
         (-t 2 ? "--progress" : ()),
+        "--checkpoint=$checkpoint",
         "--format", "tar", "--gzip",
         ($version < 10 ? "--xlog" : ()),
         "-D", $backupdir;
@@ -516,6 +520,10 @@ Show dumps, basebackups, and WAL, with size.
 =head1 OPTIONS
 
 =over 4
+
+=item B<-c --checkpoint=spread|fast>
+
+Passed to B<pg_basebackup>. Default is B<spread>.
 
 =item B<-k --keep-on-error>
 
