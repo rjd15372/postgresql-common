@@ -5,7 +5,7 @@ PgCommon - Common functions for the postgresql-common framework
 =head1 COPYRIGHT AND LICENSE
 
  (C) 2008-2009 Martin Pitt <mpitt@debian.org>
- (C) 2012-2022 Christoph Berg <myon@debian.org>
+ (C) 2012-2023 Christoph Berg <myon@debian.org>
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -1389,8 +1389,8 @@ sub get_db_locales {
             die "Internal error: could not call $psql to determine db lc_collate: $!";
         $out = <PSQL> // error 'could not determine db lc_collate';
         close PSQL;
-        $out =~ /^(.*)\|(.*)(?:\|(.*))?$/; # untaint
-        ($locale_provider, $icu_locale, $icu_rules) = ($1, $2, $3);
+        ($out) = $out =~ /^(.*)$/; # untaint
+        ($locale_provider, $icu_locale, $icu_rules) = split /\|/, $out;
     }
 
     $> = $orig_euid;
