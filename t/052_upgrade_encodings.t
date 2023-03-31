@@ -31,7 +31,7 @@ if ($oldv <= '8.3') {
 if ($oldv >= 15) {
     program_ok 'postgres', 'psql -c "create database icutest template template0 locale_provider icu icu_locale de"', 0, "creating database with ICU locale";
 } else {
-    program_ok 'postgres', 'psql -c "create database icutest', 0, "creating placeholder icutest database";
+    program_ok 'postgres', 'psql -c "create database icutest"', 0, "creating placeholder icutest database";
 }
 
 is ((exec_as 'postgres', "printf 'A\\324B' | psql -c \"create table t(x varchar); copy t from stdin\" latintest", $outref), 
