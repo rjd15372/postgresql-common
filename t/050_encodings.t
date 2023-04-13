@@ -109,7 +109,7 @@ foreach my $v (@MAJORS) {
             "pg_createcluster: LC_ALL dominates LANG");
     if ($v >= 16) {
         like_program_out 'postgres', "psql -Atl --cluster $v/main", 0,
-            qr/template1.*UTF8\|icu\|C\|C\|en_US_POSIX/, 'template1 is using en_US_POSIX';
+            qr/template1.*UTF8\|icu\|C\|C\|en-US-u-va-posix/, 'template1 is using en-US-u-va-posix';
     } else {
         like_program_out 'postgres', "psql -Atl --cluster $v/main", 0,
             qr/template1.*ASCII/, 'template1 is ASCII encoded';
