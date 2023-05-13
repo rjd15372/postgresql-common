@@ -1,3 +1,9 @@
+postgresql-common (250) UNRELEASED; urgency=medium
+
+  * server/postgresql.mk: Fix ignoring test failures on alpha.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 13 May 2023 13:29:06 +0200
+
 postgresql-common (249) experimental; urgency=medium
 
   * Merge postmaster.1.gz alternatives into psql.1.gz link group.

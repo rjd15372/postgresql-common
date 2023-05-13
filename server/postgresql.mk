@@ -129,7 +129,7 @@ endif
 # alpha fails stats tests with postgresql-15
 # hurd implemented semaphores only recently and tests still fail a lot
 # plperl fails on kfreebsd-* (#704802)
-ifneq ($(filter alpha hurd kfreebsd,$(DEB_HOST_ARCH_OS)),)
+ifneq ($(filter alpha hurd% kfreebsd%,$(DEB_HOST_ARCH)),)
   TEST_FAIL_COMMAND = echo "Ignoring test failures on this architecture"
 else
   TEST_FAIL_COMMAND = exit 1
