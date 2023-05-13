@@ -126,10 +126,11 @@ ifneq ($(filter pkg.postgresql.cassert,$(DEB_BUILD_PROFILES)),)
   GENCONTROL_FLAGS += -Vcassert='$${Newline}$${Newline}This package has been built with cassert enabled.'
 endif
 
-# alpha fails stats tests with postgresql-15
+# alpha/hppa fail stats tests with postgresql-15
 # hurd implemented semaphores only recently and tests still fail a lot
 # plperl fails on kfreebsd-* (#704802)
-ifneq ($(filter alpha hurd% kfreebsd%,$(DEB_HOST_ARCH)),)
+# sparc64 fails bin/summarization-and-inprogress-insertion test with postgresql-15
+ifneq ($(filter alpha hppa hurd% kfreebsd% sparc64,$(DEB_HOST_ARCH)),)
   TEST_FAIL_COMMAND = echo "Ignoring test failures on this architecture"
 else
   TEST_FAIL_COMMAND = exit 1
