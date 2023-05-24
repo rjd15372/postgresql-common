@@ -1,10 +1,10 @@
-postgresql-common (250) UNRELEASED; urgency=medium
+postgresql-common (250) experimental; urgency=medium
 
   * server/postgresql.mk: Fix ignoring test failures on alpha; ignore test
     results on hppa and sparc64.
   * pg_upgradecluster: Remove vacuum_defer_cleanup_age in PG16.
 
- -- Christoph Berg <myon@debian.org>  Sat, 13 May 2023 13:29:06 +0200
+ -- Christoph Berg <myon@debian.org>  Wed, 24 May 2023 10:41:06 +0200
 
 postgresql-common (249) experimental; urgency=medium
 
