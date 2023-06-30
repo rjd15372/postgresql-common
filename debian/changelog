@@ -1,3 +1,9 @@
+postgresql-common (252) UNRELEASED; urgency=medium
+
+  * pg_upgradecluster: Add --keep-on-error option.
+
+ -- Christoph Berg <myon@debian.org>  Fri, 30 Jun 2023 14:33:04 +0200
+
 postgresql-common (251) unstable; urgency=medium
 
   * Refresh pgdg/apt.postgresql.org.sh.

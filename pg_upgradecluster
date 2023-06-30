@@ -337,6 +337,7 @@ my $link = 0;
 my $clone = 0;
 my $keep_port = 0;
 my $start = -1; # -1 = auto
+my $keep_on_error = 0;
 
 my ($locale, $lc_collate, $lc_ctype, $lc_messages, $lc_monetary, $lc_numeric,
     $lc_time, $logfile, $old_bindir, $jobs);
@@ -358,6 +359,7 @@ GetOptions ('v|version=s' => \$newversion,
             'old-bindir=s' => \$old_bindir,
             'maintenance-db=s' => \$maintenance_db,
             'start!' => \$start,
+            'keep-on-error' => \$keep_on_error,
     ) or exit 1;
 
 if ($method eq 'dump') {
@@ -516,8 +518,10 @@ if ($upgrade_scripts) {
     }
     wait;
     if ($? > 0) {
-        print STDERR "Error during running upgrade hooks, removing new cluster\n";
-        system 'pg_dropcluster', '--stop', $newversion, $newcluster;
+        unless ($keep_on_error) {
+            print STDERR "Error during running upgrade hooks, removing new cluster\n";
+            system 'pg_dropcluster', '--stop', $newversion, $newcluster;
+        }
         exit 1;
     }
 }
@@ -904,6 +908,11 @@ Database to connect to for maintenance queries.  The default is B<template1>.
 
 Start the new database cluster after upgrading. The default is to start the new
 cluster if the old cluster was running, or if upgrade hook scripts are present.
+
+=item B<--keep-on-error>
+
+If upgrading fails, the newly created cluster is removed. This option disables
+that.
 
 =back
 
