@@ -1368,26 +1368,20 @@ sub get_db_locales {
     $> = (stat (cluster_data_directory $version, $cluster))[4];
 
     open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
-        'SHOW lc_ctype', $db or
-        die "Internal error: could not call $psql to determine db lc_ctype: $!";
-    my $out = <PSQL> // error 'could not determine db lc_ctype';
+        "SELECT datctype, datcollate FROM pg_database where datname = current_database()", $db or
+        die "Internal error: could not call $psql to determine datctype and datcollate: $!";
+    my $out = <PSQL> // error 'could not determine datctype and datcollate';
     close PSQL;
-    ($ctype) = $out =~ /^([\w.\@-]+)$/; # untaint
-
-    open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
-        'SHOW lc_collate', $db or
-        die "Internal error: could not call $psql to determine db lc_collate: $!";
-    $out = <PSQL> // error 'could not determine db lc_collate';
-    close PSQL;
-    ($collate) = $out =~ /^([\w.\@-]+)$/; # untaint
+    ($out) = $out =~ /^(.*)$/; # untaint
+    ($ctype, $collate) = split /\|/, $out;
 
     if ($version >= 15) {
         open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
             "SELECT CASE datlocprovider::text WHEN 'c' THEN 'libc' WHEN 'i' THEN 'icu' END, daticulocale" .
             ($version >= 16 ? ", daticurules" : "") .
             " FROM pg_database where datname = current_database()", $db or
-            die "Internal error: could not call $psql to determine db lc_collate: $!";
-        $out = <PSQL> // error 'could not determine db lc_collate';
+            die "Internal error: could not call $psql to determine datlocprovider: $!";
+        $out = <PSQL> // error 'could not determine datlocprovider';
         close PSQL;
         ($out) = $out =~ /^(.*)$/; # untaint
         ($locale_provider, $icu_locale, $icu_rules) = split /\|/, $out;
