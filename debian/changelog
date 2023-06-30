@@ -1,3 +1,9 @@
+postgresql-common (251) unstable; urgency=medium
+
+  * Refresh pgdg/apt.postgresql.org.sh.
+
+ -- Christoph Berg <myon@debian.org>  Fri, 30 Jun 2023 12:42:37 +0200
+
 postgresql-common (250) experimental; urgency=medium
 
   * server/postgresql.mk: Fix ignoring test failures on alpha; ignore test

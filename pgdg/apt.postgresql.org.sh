@@ -2,7 +2,7 @@
 
 # script to add apt.postgresql.org to sources.list.d
 
-# Copyright (C) 2013-2022 Christoph Berg <myon@debian.org>
+# Copyright (C) 2013-2023 Christoph Berg <myon@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@ PGDG="pgdg"
 
 # variables imported from https://git.postgresql.org/gitweb/?p=pgapt.git;a=blob;f=pgapt.conf
 # checked out in $HOME/apt.postgresql.org/; run "make" to update
-PG_BETA_VERSION=""
-PG_DEVEL_VERSION="16"
-PG_REPOSITORY_DISTS="sid bookworm bullseye buster kinetic jammy focal bionic"
-PG_ARCHIVE_DISTS="sid bookworm bullseye buster stretch jessie wheezy squeeze lenny etch kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
+PG_BETA_VERSION="16"
+PG_DEVEL_VERSION="17"
+PG_REPOSITORY_DISTS="sid trixie bookworm bullseye buster lunar kinetic jammy focal bionic"
+PG_ARCHIVE_DISTS="sid trixie bookworm bullseye buster stretch jessie wheezy squeeze lenny etch lunar kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
 
 while getopts "c:f:h:ipstv:y" opt ; do
     case $opt in
