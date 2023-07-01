@@ -3,6 +3,7 @@ postgresql-common (252) UNRELEASED; urgency=medium
   * pg_upgradecluster: Add --keep-on-error option.
   * PgCommon get_db_locales: PG16 removes lc_ctype and lc_collate GUCs, query
     pg_database instead.
+  * t/050_encodings.t: Revert back to old LC_ALL=C behavior.
 
  -- Christoph Berg <myon@debian.org>  Fri, 30 Jun 2023 14:33:04 +0200
 

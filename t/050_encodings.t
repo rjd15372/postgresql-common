@@ -107,13 +107,8 @@ foreach my $v (@MAJORS) {
     # check LC_* over LANG domination
     is ((system "LANGUAGE= LC_ALL=C LANG=bo_GUS.UTF-8 pg_createcluster --start $v main >/dev/null 2>&1"), 0,
             "pg_createcluster: LC_ALL dominates LANG");
-    if ($v >= 16) {
-        like_program_out 'postgres', "psql -Atl --cluster $v/main", 0,
-            qr/template1.*UTF8\|icu\|C\|C\|en-US-u-va-posix/, 'template1 is using en-US-u-va-posix';
-    } else {
-        like_program_out 'postgres', "psql -Atl --cluster $v/main", 0,
-            qr/template1.*ASCII/, 'template1 is ASCII encoded';
-    }
+    like_program_out 'postgres', "psql -Atl --cluster $v/main", 0,
+        qr/template1.*ASCII/, 'template1 is ASCII encoded';
     is ((system "pg_dropcluster $v main --stop"), 0, 'Dropping cluster');
 }
 
