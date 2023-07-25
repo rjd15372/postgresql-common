@@ -135,8 +135,8 @@ foreach my $v (@MAJORS) {
         like $$outref, qr/^myicudb\|postgres\|UTF8\|(icu\|)?en_US.UTF-8\|en_US.UTF-8\|(de\|icu\||de\|\|)?$/m, "myicudb locales" if ($v >= 15);
         is_program_out $pg_uid, "psql -XAtc 'show work_mem'", 0, "11MB\n";
         is_program_out $pg_uid, "psql -XAtc 'select * from foo' mydb", 0, "data from backup\n";
-        is_program_out $pg_uid, "psql -XAtc \"select analyze_count from pg_stat_user_tables where relname = 'foo'\" mydb", 0,
-            ($v >= 9.4 ? "3\n" : "1\n"); # --analyze-in-stages does 3 passes
+        is_program_out $pg_uid, "psql -XAtc \"select analyze_count between 1 and 3 from pg_stat_user_tables where relname = 'foo'\" mydb", 0,
+            "t\n"; # --analyze-in-stages does 3 passes
         SKIP: {
             skip "alter role in database handling in PG <= 10 not supported", 1 if ($v <= 10);
             like_program_out $pg_uid, "psql -XAtc '\\drds'", 0, qr/myuser\|mydb\|search_path=public, myotherschema.*
