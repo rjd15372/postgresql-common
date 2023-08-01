@@ -201,6 +201,10 @@ sub adapt_conffiles {
         $deprecate->(\%c, 'promote_trigger_file', 'does not exist anymore, use pg_promote() instead');
         $deprecate->(\%c, 'vacuum_defer_cleanup_age', 'does not exist anymore');
     }
+
+    if ($newversion >= '17') {
+        $deprecate->(\%c, 'db_user_namespace', 'does not exist anymore');
+    }
 }
 
 sub migrate_config_files() {

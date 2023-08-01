@@ -1,5 +1,6 @@
 postgresql-common (253) UNRELEASED; urgency=medium
 
+  * pg_upgradecluster: Remove db_user_namespace in PG17.
   * t/045_backup.t: Relax analyze_count check that's flaky on s390x.
   * pgdg/apt.postgresql.org.sh: Allow multiple versions in -v.
 
