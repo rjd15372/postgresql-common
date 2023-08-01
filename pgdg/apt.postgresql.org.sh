@@ -218,13 +218,23 @@ Gtz3cydIohvNO9d90+29h0eGEDYti7j7maHkBKUAwlcPvMg5m3Y=
 EOF
 fi
 
-# devel version comes from *-pgdg-snapshot (with lower default apt pinning priority)
-if dpkg --compare-versions "${PGVERSION:-0}" ge "${PG_DEVEL_VERSION:-999}"; then
-    PIN="-t $CODENAME-pgdg-snapshot"
-# beta version needs a different component
-elif dpkg --compare-versions "${PGVERSION:-0}" ge "${PG_BETA_VERSION:-999}"; then
-    COMPONENTS="$COMPONENTS $PGVERSION"
-fi
+for version in ${PGVERSION:-0}; do
+    # devel version comes from *-pgdg-snapshot (with lower default apt pinning priority)
+    if dpkg --compare-versions $version ge "${PG_DEVEL_VERSION:-999}"; then
+        COMPONENTS="$COMPONENTS $version" # devel component is likely empty, but add it to be sure
+        DEVEL_COMPONENT="${DEVEL_COMPONENT:-} $version"
+        PIN="-t $CODENAME-pgdg-snapshot"
+    # beta version needs a different component
+    elif dpkg --compare-versions $version ge "${PG_BETA_VERSION:-999}"; then
+        COMPONENTS="$COMPONENTS $version"
+    fi
+
+    # select packages to install
+    PACKAGES="${PACKAGES:-} postgresql-$version postgresql-server-dev-$version"
+    case $PGVERSION in
+        8*|9*) PACKAGES="$PACKAGES postgresql-contrib-$version" ;;
+    esac
+done
 
 echo "Writing $SOURCESLIST ..."
 cat > $SOURCESLIST <<EOF
@@ -236,13 +246,13 @@ Signed-By: $KEYRING
 EOF
 
 # write a separate section for devel without main so we don't include all of snapshot
-if dpkg --compare-versions "${PGVERSION:-0}" ge "${PG_DEVEL_VERSION:-999}"; then
+if [ "${DEVEL_COMPONENT:-}" ]; then
 cat >> $SOURCESLIST <<EOF
 
 Types: $TYPES
 URIs: https://$HOST/pub/repos/apt
 Suites: $CODENAME-pgdg-snapshot
-Components: $PGVERSION
+Components: ${DEVEL_COMPONENT# }
 Signed-By: $KEYRING
 EOF
 fi
@@ -274,10 +284,6 @@ fi
 if [ "${INSTALL:-}" ]; then
     echo
     echo "Installing packages for PostgreSQL $PGVERSION ..."
-    case $PGVERSION in
-        8*|9*) CONTRIB="postgresql-contrib-$PGVERSION" ;;
-    esac
     apt-get -y -o DPkg::Options::=--force-confnew \
-        install ${PIN:-} \
-        postgresql-$PGVERSION ${CONTRIB:-} postgresql-server-dev-$PGVERSION
+        install ${PIN:-} $PACKAGES
 fi

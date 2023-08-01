@@ -1,6 +1,7 @@
 postgresql-common (253) UNRELEASED; urgency=medium
 
   * t/045_backup.t: Relax analyze_count check that's flaky on s390x.
+  * pgdg/apt.postgresql.org.sh: Allow multiple versions in -v.
 
  -- Christoph Berg <myon@debian.org>  Tue, 25 Jul 2023 21:39:11 +0200
 
