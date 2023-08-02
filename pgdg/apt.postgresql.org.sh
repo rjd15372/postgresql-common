@@ -218,7 +218,7 @@ Gtz3cydIohvNO9d90+29h0eGEDYti7j7maHkBKUAwlcPvMg5m3Y=
 EOF
 fi
 
-for version in ${PGVERSION:-0}; do
+for version in ${PGVERSION:-}; do
     # devel version comes from *-pgdg-snapshot (with lower default apt pinning priority)
     if dpkg --compare-versions $version ge "${PG_DEVEL_VERSION:-999}"; then
         COMPONENTS="$COMPONENTS $version" # devel component is likely empty, but add it to be sure
@@ -231,7 +231,7 @@ for version in ${PGVERSION:-0}; do
 
     # select packages to install
     PACKAGES="${PACKAGES:-} postgresql-$version postgresql-server-dev-$version"
-    case $PGVERSION in
+    case $version in
         8*|9*) PACKAGES="$PACKAGES postgresql-contrib-$version" ;;
     esac
 done
