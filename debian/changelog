@@ -1,3 +1,9 @@
+postgresql-common (254) UNRELEASED; urgency=medium
+
+  * server: Ignore test results on ia64.
+
+ -- Christoph Berg <myon@debian.org>  Mon, 14 Aug 2023 17:34:44 +0200
+
 postgresql-common (253) unstable; urgency=medium
 
   * pg_upgradecluster: Remove db_user_namespace in PG17.

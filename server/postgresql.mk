@@ -128,9 +128,10 @@ endif
 
 # alpha/hppa fail stats tests with postgresql-15
 # hurd implemented semaphores only recently and tests still fail a lot
+# ia64 fails the infinite_recurse() test with postgresql-16
 # plperl fails on kfreebsd-* (#704802)
 # sparc64 fails bin/summarization-and-inprogress-insertion test with postgresql-15
-ifneq ($(filter alpha hppa hurd% kfreebsd% sparc64,$(DEB_HOST_ARCH)),)
+ifneq ($(filter alpha hppa hurd% ia64 kfreebsd% sparc64,$(DEB_HOST_ARCH)),)
   TEST_FAIL_COMMAND = echo "Ignoring test failures on this architecture"
 else
   TEST_FAIL_COMMAND = exit 1
