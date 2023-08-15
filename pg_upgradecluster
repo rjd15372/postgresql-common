@@ -33,6 +33,7 @@ my (%info, %newinfo);
 my ($encoding, $old_lc_ctype, $old_lc_collate); # old cluster encoding
 my ($old_locale_provider, $old_icu_locale, $old_icu_rules);
 my $maintenance_db = 'template1';
+my $keep_on_error = 0;
 
 # do not trip over cwd not being accessible to postgres superuser
 chdir '/';
@@ -326,6 +327,34 @@ sub run_parts {
     }
 }
 
+sub run_upgrade_scripts($) {
+    my $phase = shift;
+
+    print "Running $phase phase upgrade hook scripts ...\n";
+    if (!fork) {
+        change_ugid $info{'owneruid'}, $info{'ownergid'};
+
+        if ($PgCommon::rpm) {
+            run_parts ("$PgCommon::common_confdir/pg_upgradecluster.d",
+                $version, $newcluster, $newversion, $phase);
+            exit;
+        }
+
+        my @argv = ('run-parts', '--lsbsysinit', '-a', $version, '-a', $newcluster,
+            '-a', $newversion, '-a', $phase,
+            "$PgCommon::common_confdir/pg_upgradecluster.d");
+        error "$PgCommon::common_confdir/pg_upgradecluster.d script failed" if system @argv;
+        exit;
+    }
+    wait;
+    if ($? > 0) {
+        unless ($keep_on_error) {
+            print STDERR "Error during running upgrade hooks, removing new cluster\n";
+            system 'pg_dropcluster', '--stop', $newversion, $newcluster;
+        }
+        exit 1;
+    }
+}
 
 #
 # Execution starts here
@@ -341,7 +370,6 @@ my $link = 0;
 my $clone = 0;
 my $keep_port = 0;
 my $start = -1; # -1 = auto
-my $keep_on_error = 0;
 
 my ($locale, $lc_collate, $lc_ctype, $lc_messages, $lc_monetary, $lc_numeric,
     $lc_time, $logfile, $old_bindir, $jobs);
@@ -503,32 +531,8 @@ my $upgrade_scripts = (-d "$PgCommon::common_confdir/pg_upgradecluster.d" &&
          `run-parts --test $PgCommon::common_confdir/pg_upgradecluster.d`));
 
 # Run upgrade scripts in init phase
-if ($upgrade_scripts) {
-    print "Running <init> phase upgrade hook scripts...\n";
-    if (!fork) {
-	change_ugid $info{'owneruid'}, $info{'ownergid'};
-
-        if ($PgCommon::rpm) {
-            run_parts ("$PgCommon::common_confdir/pg_upgradecluster.d",
-                $version, $newcluster, $newversion, 'init');
-            exit;
-        }
-
-	@argv = ('run-parts', '--lsbsysinit', '-a', $version, '-a', $newcluster,
-	    '-a', $newversion, '-a', 'init',
-	    "$PgCommon::common_confdir/pg_upgradecluster.d");
-	error "$PgCommon::common_confdir/pg_upgradecluster.d script failed" if system @argv;
-        exit 0;
-    }
-    wait;
-    if ($? > 0) {
-        unless ($keep_on_error) {
-            print STDERR "Error during running upgrade hooks, removing new cluster\n";
-            system 'pg_dropcluster', '--stop', $newversion, $newcluster;
-        }
-        exit 1;
-    }
-}
+run_upgrade_scripts('init') if ($upgrade_scripts);
+print "\n";
 
 # dump cluster; drop to cluster owner privileges
 
@@ -778,26 +782,7 @@ if ($start) {
 }
 
 # Run upgrade scripts in finish phase
-if ($upgrade_scripts) {
-    print "Running <finish> phase upgrade hook scripts...\n";
-    if (!fork) {
-	change_ugid $info{'owneruid'}, $info{'ownergid'};
-
-        if ($PgCommon::rpm) {
-            run_parts ("$PgCommon::common_confdir/pg_upgradecluster.d",
-                $version, $newcluster, $newversion, 'finish');
-            exit;
-        }
-
-	@argv = ('run-parts', '--lsbsysinit', '-a', $version, '-a', $newcluster,
-	    '-a', $newversion, '-a', 'finish',
-	    "$PgCommon::common_confdir/pg_upgradecluster.d");
-	error "$PgCommon::common_confdir/pg_upgradecluster.d script failed" if system @argv;
-        exit 0;
-    }
-    wait;
-    exit $? >> 8 if ($?);
-}
+run_upgrade_scripts('finish') if ($upgrade_scripts);
 
 print "\nSuccess. Please check that the upgraded cluster works. If it does,
 you can remove the old cluster with
