@@ -4,6 +4,8 @@ postgresql-common (254) UNRELEASED; urgency=medium
   * pg_upgradecluster: Honor --keep-on-error not just for failing upgrade
     scripts; properly start old cluster again after errors. On PG15+, move
     pg_upgrade output from pg_upgrade_output.d to /var/log/postgresql/.
+  * Remove /usr/share/postgresql-common/upgrade-scripts, upgrade scripts for
+    postgresql-common itself. I believe this functionality was never used.
 
  -- Christoph Berg <myon@debian.org>  Mon, 14 Aug 2023 17:34:44 +0200
 
