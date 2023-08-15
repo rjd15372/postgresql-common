@@ -698,13 +698,10 @@ if (!fork) {
 	# pg_ctlcluster, but not by pg_upgrade).
 	unlink "/var/run/postgresql/$version-$cluster.pid";
 
-        # Move output files to our log directory
-        if ($newversion >= 15) {
-            for my $file (glob "$newinfo{pgdata}/pg_upgrade_output.d/*") {
-                ($file) = $file =~ m!(.*)!; # untaint
-                my ($basename) = $file =~ m!([^/]*)$!; # untaint
-                system "mv '$file' '$logdir/$basename'" and error "mv $file $logdir/$basename";
-            }
+	# Move output files to our log directory
+	if (-d (my $outdir =  "$newinfo{pgdata}/pg_upgrade_output.d")) {
+	    system mv => $outdir, $logdir
+		and error "Could not move $outdir to $logdir";
         }
         rmdir $logdir; # remove it if it's empty
         print "pg_upgradecluster: pg_upgrade output scripts are in $logdir\n" if (-d $logdir);
