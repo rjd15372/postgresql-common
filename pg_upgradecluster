@@ -686,8 +686,7 @@ if (!fork) {
 	push @argv, "--clone" if $clone;
 	push @argv, '-j', $jobs if $jobs;
 
-	# Make a directory for pg_upgrade to store its reports and log
-	# files.  It will not be removed.
+        # Make a directory for pg_upgrade to store its reports and log files.
 	my $logdir = tempdir("/var/log/postgresql/pg_upgradecluster-$version-$newversion-$newcluster.XXXX");
 	chdir $logdir;
 
@@ -699,8 +698,18 @@ if (!fork) {
 	# pg_ctlcluster, but not by pg_upgrade).
 	unlink "/var/run/postgresql/$version-$cluster.pid";
 
-	$status == 0 or error "pg_upgrade run failed. Logfiles are in $logdir";
-        print "pg_upgrade output scripts are in $logdir\n";
+        # Move output files to our log directory
+        if ($newversion >= 15) {
+            for my $file (glob "$newinfo{pgdata}/pg_upgrade_output.d/*") {
+                ($file) = $file =~ m!(.*)!; # untaint
+                my ($basename) = $file =~ m!([^/]*)$!; # untaint
+                system "mv '$file' '$logdir/$basename'" and error "mv $file $logdir/$basename";
+            }
+        }
+        rmdir $logdir; # remove it if it's empty
+        print "pg_upgradecluster: pg_upgrade output scripts are in $logdir\n" if (-d $logdir);
+
+        exit 1 if ($status != 0);
     }
 
     exit 0;
