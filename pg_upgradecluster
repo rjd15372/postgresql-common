@@ -709,8 +709,10 @@ if (!fork) {
 wait;
 
 if ($?) {
-    print STDERR "Error during cluster dumping, removing new cluster\n";
-    system 'pg_dropcluster', '--stop', $newversion, $newcluster;
+    unless ($keep_on_error) {
+        print STDERR "Error during cluster dumping, removing new cluster\n";
+        system 'pg_dropcluster', '--stop', $newversion, $newcluster;
+    }
 
     # Restart old cluster to allow connections again (two steps because we started without systemd)
     if (system 'pg_ctlcluster', $version, $cluster, 'stop') {

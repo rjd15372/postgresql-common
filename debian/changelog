@@ -1,6 +1,8 @@
 postgresql-common (254) UNRELEASED; urgency=medium
 
   * server: Ignore test results on ia64.
+  * pg_upgradecluster: Honor --keep-on-error not just for failing upgrade
+    scripts.
 
  -- Christoph Berg <myon@debian.org>  Mon, 14 Aug 2023 17:34:44 +0200
 
