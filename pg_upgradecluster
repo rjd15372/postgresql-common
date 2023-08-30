@@ -201,6 +201,7 @@ sub adapt_conffiles {
     if ($newversion >= '16') {
         $deprecate->(\%c, 'promote_trigger_file', 'does not exist anymore, use pg_promote() instead');
         $deprecate->(\%c, 'vacuum_defer_cleanup_age', 'does not exist anymore');
+        $deprecate->(\%c, 'force_parallel_mode', 'does not exist anymore');
     }
 
     if ($newversion >= '17') {
