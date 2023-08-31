@@ -2,7 +2,7 @@ postgresql-common (254) UNRELEASED; urgency=medium
 
   * /etc/postgresql-common/pg_upgradecluster.d/analyze: Automatically analyze
     databases after upgrade.
-  * server: Ignore test results on ia64.
+  * server: Ignore test results on ia64 and sh4.
   * pg_upgradecluster: Honor --keep-on-error not just for failing upgrade
     scripts; properly start old cluster again after errors. On PG15+, move
     pg_upgrade output from pg_upgrade_output.d to /var/log/postgresql/.
