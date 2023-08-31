@@ -9,6 +9,7 @@ postgresql-common (254) UNRELEASED; urgency=medium
     Remove force_parallel_mode in PG16+.
   * Remove /usr/share/postgresql-common/upgrade-scripts, upgrade scripts for
     postgresql-common itself. I believe this functionality was never used.
+  * pgdg/apt.postgresql.org.sh: Set umask 022.
 
  -- Christoph Berg <myon@debian.org>  Mon, 14 Aug 2023 17:34:44 +0200
 

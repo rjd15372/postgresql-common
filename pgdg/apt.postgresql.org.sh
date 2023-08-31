@@ -129,6 +129,8 @@ if [ -z "${YES:-}" ]; then
     echo
 fi
 
+# keyring needs to be readable for apt
+umask 022
 # prefer .gpg keyring from postgresql-common
 KEYRING="/usr/share/postgresql-common/pgdg/apt.postgresql.org.gpg"
 # otherwise, use the .asc key
