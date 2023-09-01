@@ -181,7 +181,7 @@ is_program_out 'nobody', 'psql -tAc "SELECT * FROM nums" testro', 0,
     "1\n", 'SELECT output is the same in original and upgraded testro';
 
 # Check that table was analyzed
-is_program_out 'nobody', "psql -XAtc \"select analyze_count between 1 and 3 from pg_stat_user_tables where relname = 'phone'\" test", 0, "t\n",
+like_program_out 'nobody', "psql -XAtc \"select analyze_count from pg_stat_user_tables where relname = 'phone'\" test", 0, qr/^[1-3]$/,
     'check analyze count'; # --analyze-in-stages does 3 passes
 
 # Check sequence value

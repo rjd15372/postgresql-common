@@ -646,11 +646,6 @@ if (!fork) {
 	    close SINK;
 
 	    # clean up
-	    print 'Analyzing database ', $db, "...\n";
-	    (system $psql, '-h', $newsocket, '-p', $newinfo{'port'}, '-qX',
-		'-d', $db, '-c', 'ANALYZE') == 0 or
-		error 'Could not ANALYZE database';
-
 	    unless ($databases{$db}) {
 		print "Disabling access to database $db again\n";
 		(system $psql, '-h', $oldsocket, '-p', $info{'port'}, '-qX',
