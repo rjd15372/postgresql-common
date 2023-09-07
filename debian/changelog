@@ -1,4 +1,4 @@
-postgresql-common (254) UNRELEASED; urgency=medium
+postgresql-common (254) unstable; urgency=medium
 
   * /etc/postgresql-common/pg_upgradecluster.d/analyze: Automatically analyze
     databases after upgrade.
@@ -8,11 +8,12 @@ postgresql-common (254) UNRELEASED; urgency=medium
     scripts; properly start old cluster again after errors. On PG15+, move
     pg_upgrade output from pg_upgrade_output.d to /var/log/postgresql/.
     Remove force_parallel_mode in PG16+.
+  * Thanks to Dagfinn Ilmari Mannsåker for helping with the patches!
   * Remove /usr/share/postgresql-common/upgrade-scripts, upgrade scripts for
     postgresql-common itself. I believe this functionality was never used.
   * pgdg/apt.postgresql.org.sh: Set umask 022.
 
- -- Christoph Berg <myon@debian.org>  Mon, 14 Aug 2023 17:34:44 +0200
+ -- Christoph Berg <myon@debian.org>  Thu, 07 Sep 2023 11:12:30 +0200
 
 postgresql-common (253) unstable; urgency=medium
 
