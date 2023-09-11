@@ -57,12 +57,6 @@ sub error {
     die "Error: $_[0]\n";
 }
 
-=head2 prepare_exec, restore_exec
-
- Functions for configuration
-
-=cut
-
 our $confroot = '/etc/postgresql';
 if ($ENV{'PG_CLUSTER_CONF_ROOT'}) {
     ($confroot) = $ENV{'PG_CLUSTER_CONF_ROOT'} =~ /(.*)/; # untaint
@@ -80,11 +74,18 @@ our $defaultport = 5432;
 our $have_python2 = 0; # python2 removed in bullseye+
 #py2#$have_python2 = 1;
 
+=head2 prepare_exec, restore_exec
+
+ Untaint the environment for executing an external program
+
+ Optional arguments: list of additional variables
+
+=cut
+
 {
     my %saved_env;
 
     # untaint the environment for executing an external program
-    # Optional arguments: list of additional variables
     sub prepare_exec {
 	my @cleanvars = qw/PATH IFS ENV BASH_ENV CDPATH/;
 	push @cleanvars, @_;
@@ -95,7 +96,7 @@ our $have_python2 = 0; # python2 removed in bullseye+
 	    delete $ENV{$_};
 	}
 
-	$ENV{'PATH'} = '';
+	$ENV{'PATH'} = '/sbin:/bin:/usr/sbin:/usr/bin';
     }
 
     # restore the environment after prepare_exec()

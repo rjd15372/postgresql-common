@@ -1,3 +1,9 @@
+postgresql-common (255) UNRELEASED; urgency=medium
+
+  * PgCommon.pm: Set defined path in prepare_exec. Thanks Niko Tyni!
+
+ -- Christoph Berg <myon@debian.org>  Mon, 11 Sep 2023 15:34:59 +0200
+
 postgresql-common (254) unstable; urgency=medium
 
   * /etc/postgresql-common/pg_upgradecluster.d/analyze: Automatically analyze
