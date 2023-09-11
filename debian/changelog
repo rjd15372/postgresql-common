@@ -1,3 +1,11 @@
+postgresql-common (248+deb12u1) bookworm; urgency=medium
+
+  * PgCommon.pm: Set defined path in prepare_exec. Fixes compatibility with
+    trixie's perl version, and also a mild security issue. Thanks Niko Tyni!
+    (Closes: #1107154)
+
+ -- Christoph Berg <myon@debian.org>  Tue, 03 Jun 2025 15:03:54 +0200
+
 postgresql-common (248) unstable; urgency=medium
 
   [ Christoph Berg ]

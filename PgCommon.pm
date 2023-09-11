@@ -95,7 +95,7 @@ our $have_python2 = 0; # python2 removed in bullseye+
 	    delete $ENV{$_};
 	}
 
-	$ENV{'PATH'} = '';
+	$ENV{'PATH'} = '/sbin:/bin:/usr/sbin:/usr/bin';
     }
 
     # restore the environment after prepare_exec()
