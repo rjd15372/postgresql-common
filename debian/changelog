@@ -1,6 +1,7 @@
 postgresql-common (255) UNRELEASED; urgency=medium
 
   * PgCommon.pm: Set defined path in prepare_exec. Thanks Niko Tyni!
+  * debian/supported-versions: Add 16 as default version.
 
  -- Christoph Berg <myon@debian.org>  Mon, 11 Sep 2023 15:34:59 +0200
 
