@@ -206,6 +206,7 @@ sub adapt_conffiles {
 
     if ($newversion >= '17') {
         $deprecate->(\%c, 'db_user_namespace', 'does not exist anymore');
+        $deprecate->(\%c, 'old_snapshot_threshold', 'does not exist anymore');
     }
 }
 
