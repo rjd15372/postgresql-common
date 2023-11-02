@@ -105,6 +105,10 @@ ifeq ($(call version_ge,15),y)
   endif
 endif
 
+ifeq ($(call version_ge,17),y)
+  WITH_PG_BSD_INDENT = y
+endif
+
 # Facilitate hierarchical profile generation on amd64 (#730134)
 ifeq ($(DEB_HOST_ARCH),amd64)
   CFLAGS += -fno-omit-frame-pointer
@@ -161,6 +165,9 @@ override_dh_auto_build-arch:
 	$(MAKE) -C build/contrib all
 	# build tutorial stuff
 	$(MAKE) -C build/src/tutorial NO_PGXS=1
+ifeq ($(WITH_PG_BSD_INDENT),y)
+	$(MAKE) -C build/src/tools/pg_bsd_indent
+endif
 
 override_dh_auto_install-arch:
 	$(MAKE) -C build/doc/src/sgml install-man DESTDIR=$(CURDIR)/debian/tmp
@@ -170,6 +177,11 @@ override_dh_auto_install-arch:
 	# move SPI examples into server package (they wouldn't be in the doc package in an -A build)
 	mkdir -p debian/postgresql-$(MAJOR_PKG)/usr/share/doc/postgresql-$(MAJOR_VER)
 	mv debian/tmp/usr/share/doc/postgresql-doc-$(MAJOR_VER)/extension debian/postgresql-$(MAJOR_PKG)/usr/share/doc/postgresql-$(MAJOR_VER)/examples
+ifeq ($(WITH_PG_BSD_INDENT),y)
+	$(MAKE) -C build/src/tools/pg_bsd_indent install DESTDIR=$(CURDIR)/debian/tmp
+	install -m644 src/tools/pgindent/pgindent $(CURDIR)/debian/tmp/usr/lib/postgresql/$(MAJOR_VER)/bin
+	install -m644 src/tools/pgindent/typedefs.list $(CURDIR)/debian/tmp/usr/share/postgresql/$(MAJOR_VER)
+endif
 
 ifeq ($(filter nodoc,$(DEB_BUILD_PROFILES)),)
 override_dh_auto_install-indep:
@@ -253,6 +265,9 @@ ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
 	    done; \
 	    $(TEST_FAIL_COMMAND); \
 	fi
+ifeq ($(WITH_PG_BSD_INDENT),y)
+	$(MAKE) -C build/src/tools/pg_bsd_indent test DESTDIR=$(CURDIR)/debian/tmp
+endif
 endif
 
 override_dh_installdeb-arch:
