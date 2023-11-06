@@ -36,9 +36,9 @@ if ($ENV{PG_VERSIONS}) {
 my @versions = split /\s+/, `/usr/share/postgresql-common/supported-versions`;
 
 # prepare build environment
-chdir 't/foo';
-chmod 0777, '.', 'foo-123';
+chmod 0777, 't/foo', 't/foo/foo-123', 't/bar/debian';
 umask 0022;
+chdir 't/foo';
 
 program_ok 0, 'make clean';
 program_ok 'nobody', 'make tar';
@@ -76,6 +76,27 @@ foreach my $ver (@versions) {
 }
 
 program_ok 'nobody', 'make clean';
+
+note "testing pg_buildext updatecontrol";
+chdir '../bar';
+program_ok 'nobody', 'PG_SUPPORTED_VERSIONS="0.9 1.0 1.1 2 3" pg_buildext updatecontrol';
+is `cat debian/control`, "Source: bar
+Build-Depends: whatever, postgresql-1.0-moo (>= 1), postgresql-1.1-moo (>= 1), postgresql-2-moo (>= 1), more,
+ postgresql-2-new,
+ postgresql-1.0, postgresql-1.1, postgresql-2
+
+Package: postgresql-1.0-bar
+Architecture: some
+Depends: postgresql-1.0-moo
+
+Package: postgresql-1.1-bar
+Architecture: some
+Depends: postgresql-1.1-moo
+
+Package: postgresql-2-bar
+Architecture: some
+Depends: postgresql-2-moo
+", "PGVERSION and PGVERSIONS were correctly replaced";
 
 done_testing();
 

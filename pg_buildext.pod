@@ -33,7 +33,9 @@ B<pg_buildext updatecontrol> is run.
 Package sections that contain B<PGVERSION> in the package name are replaced by
 a list of sections, filling in the supported PostgreSQL versions.
 Package sections that contain B<PGVERSION> outside the package name have the
-newest supported PostgreSQL version filled in (useful for meta packages).
+newest supported PostgreSQL version filled in (useful for meta packages);
+words containing B<PGVERSIONS> be replaced by a list of words with the
+supported versions filled in, this is most useful in B<Build-Depends>.
 Include
 C</usr/share/postgresql-common/pgxs_debian_control.mk> in C<debian/rules> to
 run a check at build time if updating debian/control is required.
@@ -332,6 +334,9 @@ B<installcheck> was switched to use it in the same version.
 
 B<dh $@ --with pgxs> and B<pgxs_loop>, the corresponding B<--buildsystem>, and
 the B<psql> and B<virtualenv> actions were introduced in postgresql-server-dev-all (>= 217~).
+
+The replacement of B<PGVERSIONS> (plural) in debian/control.in was introduced in
+postgresql-server-dev-all (>= 256~).
 
 =head1 SEE ALSO
 

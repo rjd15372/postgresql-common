@@ -1,0 +1,8 @@
+Source: bar
+Build-Depends: whatever, postgresql-PGVERSIONS-moo (>= 1), more,
+ postgresql-PGVERSION-new,
+ postgresql-PGVERSIONS
+
+Package: postgresql-PGVERSION-bar
+Architecture: some
+Depends: postgresql-PGVERSION-moo

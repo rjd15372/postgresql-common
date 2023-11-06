@@ -276,14 +276,32 @@ gencontrol() {
 
     perl -e \
         '$/ = ""; # read paragraphs
-        my $newest_pgversion = $ENV{PGVERSIONS} =~ s/.*\s//sr;
+        my @pgversions = split /\s+/, $ENV{PGVERSIONS};
+        my $newest_pgversion = $pgversions[-1];
+
+        sub replace_all ($) {
+            $_ = shift;
+            my @out;
+            for my $version (@pgversions) {
+                push @out, s/PGVERSIONS/$version/rg;
+            }
+            return join ", ", @out;
+        }
+
         while (<>) {
             chomp;
             if (/^Package: .*PGVERSION/) {
-                foreach my $version (split /\n/, $ENV{PGVERSIONS}) {
+                foreach my $version (@pgversions) {
                     push @out, s/PGVERSION/$version/rg;
                 }
             } else {
+                s/(
+                    [^[:space:](),]*
+                    PGVERSIONS
+                    [^[:space:](),]*
+                    (?:\s*\([^(),]*\))? # optional part in parentheses
+                    [^[:space:](),]*
+                    )/replace_all($1)/xeg;
                 s/PGVERSION/$newest_pgversion/g;
                 push @out, $_;
             }
@@ -314,6 +332,9 @@ updatecontrol() {
     if [ -f debian/tests/control.in ]; then
         cat $tmptestscontrol > debian/tests/control
     fi
+
+    # re-check build-dependencies (no error raised)
+    ( dpkg-checkbuilddeps 2>&1 || : ) | sed -e 's/error/notice/'
 }
 
 # when a version is included in the action, just act on this one (this is
