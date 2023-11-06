@@ -4,6 +4,7 @@ postgresql-common (256) UNRELEASED; urgency=medium
   * Install pg_bsd_indent and pgindent into server-dev in PG17.
   * pg_buildext: words containing PGVERSIONS are replaced by a list of
     words with versions filled in. Most useful in Build-Depends.
+  * pg_buildext: Add actions run and run_installed.
 
  -- Christoph Berg <myon@debian.org>  Thu, 28 Sep 2023 22:47:18 +0200
 

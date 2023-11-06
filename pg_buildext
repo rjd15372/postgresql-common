@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 #
 # build a PostgreSQL module based on PGXS for given list of supported major
 # versions
 #
 # (C) 2010 Dimitri Fontaine <dfontaine@hi-media.com>
-# (C) 2011-2022 Christoph Berg <myon@debian.org>
+# (C) 2011-2023 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -39,15 +39,17 @@ shift $(($OPTIND - 1))
 # positional arguments: action [srcdir] [target [opt]]
 [ "${1:-}" ] || die "no action given"
 action="$1"
-if [ -d "${2:-}" ] && [ "${3:-}" ]; then # optional: $2 is source directory
-    srcdir="${2:-}"
+shift
+
+if [ -d "${1:-}" ] && [ "${2:-}" ]; then # optional: source directory
+    srcdir="${1:-}"
     [ "$srcdir" = "." ] && srcdir="$PWD"
     shift
 else
     srcdir="$PWD"
 fi
-target="${2:-}"
-opt="${3:-}"
+target="${1:-}"
+opt="${2:-}"
 
 prepare_env() {
     local version=$1
@@ -177,6 +179,19 @@ installcheck() {
         # since we are in the top-level directory, clean up behind us
         make clean PG_CONFIG="$pgc" USE_PGXS=1 $MAKEVARS
     fi
+}
+
+run_run () {
+    local v=$1
+    shift
+
+    (
+        echo + "${@//%v/$v}"
+        "${@//%v/$v}" < $PSQLTMP
+    ) || return $?
+}
+run_run_installed () {
+    run_run "$@"
 }
 
 run_psql () {
@@ -429,7 +444,7 @@ case $action in
         exit $ret
         ;;
 
-    psql|virtualenv)
+    run|run_installed|psql|virtualenv)
         PSQLTMP=$(mktemp --tmpdir psql.XXXXXX)
         trap "rm -f $PSQLTMP" EXIT
         # if we are fed any input (and hence aren't reading from a terminal),
@@ -438,7 +453,7 @@ case $action in
 
         # prefer testing installed versions over supported versions as the set
         # of versions might have changed (unless a package-pattern is provided)
-        if [ -f debian/control.in ] && [ -z "$opt" ]; then
+        if [ "$action" != "run" ] && [ -f debian/control.in ] && [ -z "$opt" ]; then
             versions=$(installed_versions)
         else
             versions=$(versions)
@@ -447,7 +462,7 @@ case $action in
         ret=0
         for v in $versions; do
             echo "### PostgreSQL $v $action ###"
-            if run_$action $v; then
+            if run_$action $v "$@"; then
                 echo "### End $v $action ###"
             else
                 ret=$?
