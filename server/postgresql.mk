@@ -84,10 +84,17 @@ ifeq ($(call version_ge,10),y)
 endif
 
 ifeq ($(call version_ge,11),y)
-  # if LLVM is installed, use it
-  ifneq ($(wildcard /usr/bin/llvm-config-*),)
-    LLVM_CONFIG = $(lastword $(shell ls -v /usr/bin/llvm-config-*))
-    LLVM_VERSION = $(subst /usr/bin/llvm-config-,,$(LLVM_CONFIG))
+  # if package depends on LLVM, use it
+  LLVM_VERSIONED_DEP=$(shell grep 'llvm-[0-9]*-dev' debian/control | grep -v "!$(DEB_HOST_ARCH)" | grep -o '[0-9]*' | head -n1)
+  LLVM_DEP=$(shell grep 'llvm-dev' debian/control | grep -v "!$(DEB_HOST_ARCH)")
+  ifneq ($(LLVM_VERSIONED_DEP)$(LLVM_DEP),)
+    ifneq ($(LLVM_VERSIONED_DEP),)
+      LLVM_VERSION = $(LLVM_VERSIONED_DEP)
+      LLVM_CONFIG = /usr/bin/llvm-config-$(LLVM_VERSION)
+    else
+      LLVM_CONFIG = $(lastword $(shell ls -v /usr/bin/llvm-config-*))
+      LLVM_VERSION = $(subst /usr/bin/llvm-config-,,$(LLVM_CONFIG))
+    endif
     CONFIGURE_FLAGS += --with-llvm LLVM_CONFIG=$(LLVM_CONFIG) CLANG=/usr/bin/clang-$(LLVM_VERSION)
   else
     LLVM_VERSION = 0.invalid # mute dpkg error on empty version fields in debian/control

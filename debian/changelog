@@ -5,6 +5,7 @@ postgresql-common (256) UNRELEASED; urgency=medium
   * pg_buildext: words containing PGVERSIONS are replaced by a list of
     words with versions filled in. Most useful in Build-Depends.
   * pg_buildext: Add actions run and run_installed.
+  * server/postgresql.mk: Grab LLVM version from B-D instead of autodetecting.
 
  -- Christoph Berg <myon@debian.org>  Thu, 28 Sep 2023 22:47:18 +0200
 
