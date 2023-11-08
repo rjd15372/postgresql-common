@@ -186,7 +186,7 @@ override_dh_auto_install-arch:
 	mv debian/tmp/usr/share/doc/postgresql-doc-$(MAJOR_VER)/extension debian/postgresql-$(MAJOR_PKG)/usr/share/doc/postgresql-$(MAJOR_VER)/examples
 ifeq ($(WITH_PG_BSD_INDENT),y)
 	$(MAKE) -C build/src/tools/pg_bsd_indent install DESTDIR=$(CURDIR)/debian/tmp
-	install -m644 src/tools/pgindent/pgindent $(CURDIR)/debian/tmp/usr/lib/postgresql/$(MAJOR_VER)/bin
+	install -m755 src/tools/pgindent/pgindent $(CURDIR)/debian/tmp/usr/lib/postgresql/$(MAJOR_VER)/bin
 	install -m644 src/tools/pgindent/typedefs.list $(CURDIR)/debian/tmp/usr/share/postgresql/$(MAJOR_VER)
 endif
 
