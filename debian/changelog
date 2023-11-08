@@ -1,4 +1,4 @@
-postgresql-common (256) UNRELEASED; urgency=medium
+postgresql-common (256) unstable; urgency=medium
 
   * pg_upgradecluster: Remove old_snapshot_threshold in PG17.
   * Install pg_bsd_indent and pgindent into server-dev in PG17.
@@ -7,7 +7,7 @@ postgresql-common (256) UNRELEASED; urgency=medium
   * pg_buildext: Add actions run and run_installed.
   * server/postgresql.mk: Grab LLVM version from B-D instead of autodetecting.
 
- -- Christoph Berg <myon@debian.org>  Thu, 28 Sep 2023 22:47:18 +0200
+ -- Christoph Berg <myon@debian.org>  Wed, 08 Nov 2023 16:25:17 +0100
 
 postgresql-common (255) unstable; urgency=medium
 
