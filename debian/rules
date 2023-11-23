@@ -28,6 +28,8 @@ override_dh_installinit:
 	dh_installinit -ppostgresql-common --name=postgresql -u'defaults 19 21' --no-stop-on-upgrade
 override_dh_installsystemd:
 	dh_installsystemd --no-stop-on-upgrade
+	# move unit files to /usr on systems that support it
+	if test -x /usr/bin/dh_movetousr; then dh_movetousr; fi
 
 override_dh_gencontrol:
 	dh_gencontrol -ppostgresql-server-dev-all -- -Vserver-dev-all-depends="$(foreach v,$(SUPPORTED_VERSIONS),postgresql-server-dev-$v,)"

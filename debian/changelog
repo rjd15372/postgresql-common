@@ -1,3 +1,9 @@
+postgresql-common (257) UNRELEASED; urgency=medium
+
+  * Move systemd unit files to /usr on releases that support it.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 23 Nov 2023 16:24:50 +0000
+
 postgresql-common (256) unstable; urgency=medium
 
   * pg_upgradecluster: Remove old_snapshot_threshold in PG17.
