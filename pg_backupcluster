@@ -106,9 +106,9 @@ sub switch_to_cluster_owner() {
 
 # backup functions
 
-sub get_backupdir($) {
-    my $suffix = shift;
-    my $timestamp = strftime("%FT%H%M%SZ", gmtime);
+sub get_backupdir($$) {
+    my ($starttime, $suffix) = @_;
+    my $timestamp = strftime("%FT%H%M%SZ", gmtime($starttime));
     my $backupdir = "$clusterdir/$timestamp.$suffix";
     error "$backupdir already exists" if (-d $backupdir);
     print "Creating $suffix in $backupdir\n" if ($verbose);
@@ -230,15 +230,38 @@ sub create_status($$$$) {
     my $statusjson = {
         cluster => $cluster,
         duration => $endtime - $starttime,
-        end => scalar(gmtime($endtime)),
-        start => scalar(gmtime($starttime)),
+        end => strftime("%FT%H%M%SZ", gmtime($endtime)),
+        start => strftime("%FT%H%M%SZ", gmtime($starttime)),
         status => $status,
         type => $type,
         version => $version,
     };
+    if (my $hostname = `hostname`) {
+        chomp $hostname;
+        $statusjson->{hostname} = $hostname;
+    }
+    if (-e '/etc/machine-id') {
+        open my $fh, '/etc/machine-id';
+        my $machine_id = <$fh>;
+        close $fh;
+        if ($machine_id) {
+            chomp $machine_id;
+            $statusjson->{'machine-id'} = $machine_id;
+        }
+    }
+    if (-e '/etc/machine-info') {
+        open my $fh, '/etc/machine-info';
+        while (<$fh>) {
+            if (/^DEPLOYMENT=(.*)/) {
+                $statusjson->{'machine-deployment'} = $1;
+            }
+        }
+        close $fh;
+    }
 
+    my $json = JSON->new->canonical;
     open F, '>', $statusfile or error "$statusfile: $!";
-    print F encode_json($statusjson) . "\n" or error "$statusfile: $!";
+    print F $json->encode($statusjson) . "\n" or error "$statusfile: $!";
     close F or error "$$statusfile: $!";
 }
 
@@ -389,7 +412,7 @@ if ($action eq 'createdirectory') {
     my $starttime = time;
     create_directory();
     switch_to_cluster_owner();
-    my $backupdir = get_backupdir('backup');
+    my $backupdir = get_backupdir($starttime, 'backup');
     $SIG{__DIE__} = sub { remove_backup_on_error($backupdir) };
     create_basebackup($backupdir);
     create_configbackup($backupdir);
@@ -403,7 +426,7 @@ if ($action eq 'createdirectory') {
     my $starttime = time;
     create_directory();
     switch_to_cluster_owner();
-    my $backupdir = get_backupdir('dump');
+    my $backupdir = get_backupdir($starttime, 'dump');
     $SIG{__DIE__} = sub { remove_backup_on_error($backupdir) };
     create_dumpall($backupdir);
     create_configbackup($backupdir);
