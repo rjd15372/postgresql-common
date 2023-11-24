@@ -1,6 +1,8 @@
 postgresql-common (257) UNRELEASED; urgency=medium
 
   * Move systemd unit files to /usr on releases that support it.
+  * debian/maintscripts-functions: More carefully build update-alternatives
+    command line. Hopefully fixes "link and path can't be the same" errors.
 
  -- Christoph Berg <myon@debian.org>  Thu, 23 Nov 2023 16:24:50 +0000
 

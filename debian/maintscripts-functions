@@ -9,10 +9,10 @@
 _link_manpages() {
     VERSION="$1"
     NAME="$2"
-    MANS=$(unset GREP_OPTIONS; dpkg -L $3 $4 $5 2>/dev/null | grep -E '/man/.*\.[1-9](\.gz)?$' | grep -v "$NAME") || true
+    MANS=$(unset GREP_OPTIONS; dpkg -L $3 $4 $5 2>/dev/null | grep -E "postgresql/$VERSION/man/.*\\.[1-9](\\.gz)?\$" | grep -v "$NAME") || true
     [ -n "$MANS" ] || return 0
 
-    SLAVES=$(for i in $MANS; do TARGET=$(echo $i | sed "s/postgresql\/$VERSION\///"); echo -n " --slave $TARGET $(basename $i) $i"; done)
+    SLAVES=$(for man in $MANS; do TARGET=$(echo $man | sed -e "s/postgresql\/$VERSION\/man/man/"); echo -n " --slave $TARGET ${man##*/} $man"; done)
 
     # user might have removed the directories, allow u-a to succeed
     mkdir -p /usr/share/man/man1 /usr/share/man/man3 /usr/share/man/man7
