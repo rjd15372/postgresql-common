@@ -49,6 +49,7 @@ _unlink_manpages() {
     mkdir -p /usr/share/man/man1 /usr/share/man/man3 /usr/share/man/man7
     section=$(echo "$NAME" | sed -e 's/.*\.\(.*\)\..*/man\1/')
     update-alternatives --remove $NAME /usr/share/postgresql/$VERSION/man/$section/$NAME
+    rmdir --ignore-fail-on-non-empty -p /usr/share/man/man1 /usr/share/man/man3 /usr/share/man/man7
 }
 
 _remove_tsearch() {
