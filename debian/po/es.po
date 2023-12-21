@@ -36,10 +36,10 @@ msgstr ""
 "Last-Translator: Camaleón <noelamac@gmail.com>\n"
 "Language-Team: Debian Spanish <debian-l10n-spanish@lists.debian.org>\n"
 "Language: es\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. Type: error
 #. Description
@@ -52,15 +52,15 @@ msgstr "Versión principal ${old} obsoleta"
 #: ../postgresql-common.templates:1001
 msgid ""
 "The PostgreSQL version ${old} is obsolete, but the server or client packages "
-"are still installed. Please install the latest packages (postgresql-${latest}"
-" and postgresql-client-${latest}) and upgrade the existing ${oldversion} "
-"clusters with pg_upgradecluster (see manpage)."
+"are still installed. Please install the latest packages (postgresql-"
+"${latest} and postgresql-client-${latest}) and upgrade the existing "
+"${oldversion} clusters with pg_upgradecluster (see manpage)."
 msgstr ""
 "La versión de PostgreSQL ${old} está obsoleta, pero el paquete del cliente o "
 "del servidor aún están instalados. Debe instalar las últimas versiones de "
 "los paquetes (postgresql-${latest} y postgresql-client-${latest}) y "
-"actualizar sus clústers ${oldversion} con la orden «pg_upgradecluster» "
-"(consulte la página del manual)."
+"actualizar sus clústers ${oldversion} con la orden "
+"«pg_upgradecluster» (consulte la página del manual)."
 
 #. Type: error
 #. Description
