@@ -46,7 +46,9 @@ sub check_major {
 
     # check that the xlog/wal symlink was created
     my $first_xlog = $v >= 9.0 ? "000000010000000000000001" : "000000010000000000000000";
-    ok_dir $xlogdir, [$first_xlog, "archive_status"],
+    my @expectdir = ($first_xlog, "archive_status");
+    push @expectdir, "summaries" if ($v >= 17);
+    ok_dir $xlogdir, [@expectdir],
         "xlog/wal directory $xlogdir was created";
 
     # check pg_hba.conf auth methods

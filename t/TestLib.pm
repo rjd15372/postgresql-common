@@ -132,7 +132,7 @@ sub dircontent {
     opendir D, $dir or return ["opendir $dir: $!"];
     my @e = grep { $_ ne '.' && $_ ne '..' } readdir (D);
     closedir D;
-    return \@e;
+    return [sort @e];
 }
 
 # Return environment of given PID
