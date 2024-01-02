@@ -362,6 +362,8 @@ if (-f "$datadir/PG_VERSION") {
     ($owneruid, $ownergid) = (stat "$datadir/PG_VERSION")[4,5];
     if ($existingver == $version) {
         print "Configuring already existing cluster (configuration: $confdir, data: $datadir, owner: $owneruid:$ownergid)\n";
+        # Do not remove already existing data directory on errors
+        $cleanup_cruft = 0;
     } else {
         error "$datadir contains a version $existingver cluster, but $version was requested";
     }

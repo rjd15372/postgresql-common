@@ -36,6 +36,10 @@ postgresql-common (269) UNRELEASED; urgency=medium
   [ Dennis Schwan ]
   * Prevent removal of update-alternatives in RPM when updating package.
 
+  [ Michael Banck ]
+  * pg_createcluster: Do not remove existing data directory on failure.
+    (Closes: #105630)
+
  -- Christoph Berg <myon@debian.org>  Thu, 09 Jan 2025 14:25:18 +0100
 
 postgresql-common (267) unstable; urgency=medium
