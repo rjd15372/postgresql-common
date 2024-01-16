@@ -399,7 +399,6 @@ GetOptions ('v|version=s' => \$newversion,
 if ($method eq 'dump') {
     error 'cannot use --link with --method=dump' if ($link);
     error 'cannot use --clone with --method=dump' if ($clone);
-    error 'cannot use --jobs with --method=dump' if ($jobs);
 } elsif ($method eq 'link') {
     $method = 'upgrade';
     $link = 1;
@@ -422,7 +421,10 @@ if ($method eq 'dump') {
 ($logfile) = $logfile =~ /^([^\n]+)$/ if $logfile;
 ($old_bindir) = $old_bindir =~ /^(\/.*)$/ if $old_bindir;
 ($maintenance_db) = $maintenance_db =~ /^([\w-]+)$/ if $maintenance_db;
-($jobs) = $jobs =~ /^(\d+)$/ if $jobs;
+if ($jobs) {
+    ($jobs) = $jobs =~ /^(\d+)$/;
+    $ENV{PGJOBS} = $jobs; # make setting available to upgrade hooks
+}
 
 if ($#ARGV < 1) {
     print "Usage: $0 [OPTIONS] <old version> <cluster name> [<new data directory>]\n";
@@ -886,8 +888,9 @@ is merely passed on to pg_upgrade.  See L<pg_upgrade(1)> for details.
 =item B<-j>, B<--jobs>
 
 In pg_upgrade mode, number of simultaneous processes to use. This
-option is merely passed on to pg_upgrade. See L<pg_upgrade(1)>
-for details.
+option is passed on to pg_upgrade. See L<pg_upgrade(1)> for details.
+It is also used by the B<analyze> upgrade hook (via the B<PGJOBS> environment
+variable).
 
 =item B<--keep-port>
 

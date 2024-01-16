@@ -8,6 +8,7 @@ postgresql-common (257) UNRELEASED; urgency=medium
     /etc/machine-info) to backup status; use machine-readable timestamps for
     starttime/endtime; sort keys.
   * pg_upgradecluster: Skip upgrade scripts when --no-start is given.
+  * pg_upgradecluster: Pass --jobs to analyze script. (Closes: #1054179)
   * debian/po/sv.po: Updated Swedish translation by Martin Bagge and Anders
     Jonsson, thanks! (Closes: #1059169)
 
