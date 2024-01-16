@@ -779,7 +779,13 @@ if ($start) {
 }
 
 # Run upgrade scripts in finish phase
-run_upgrade_scripts('finish') if ($upgrade_scripts);
+if ($upgrade_scripts) {
+    if ($start) {
+        run_upgrade_scripts('finish');
+    } else {
+        print "Warning: Skipping upgrade scripts because --no-start was given\n";
+    }
+}
 
 print "\nSuccess. Please check that the upgraded cluster works. If it does,
 you can remove the old cluster with

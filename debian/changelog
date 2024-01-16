@@ -7,6 +7,7 @@ postgresql-common (257) UNRELEASED; urgency=medium
   * pg_backupcluster: Add hostname, machine-id, and machine-deployment (from
     /etc/machine-info) to backup status; use machine-readable timestamps for
     starttime/endtime; sort keys.
+  * pg_upgradecluster: Skip upgrade scripts when --no-start is given.
   * debian/po/sv.po: Updated Swedish translation by Martin Bagge and Anders
     Jonsson, thanks! (Closes: #1059169)
 
