@@ -83,7 +83,7 @@ ifeq ($(call version_ge,10),y)
   CONFIGURE_FLAGS += --with-icu
 endif
 
-ifeq ($(call version_ge,11),y)
+ifeq ($(call version_ge,11)$(filter pkg.postgresql.nollvm,$(DEB_BUILD_PROFILES)),y)
   # if package depends on LLVM, use it
   LLVM_VERSIONED_DEP=$(shell grep 'llvm-[0-9]*-dev' debian/control | grep -v "!$(DEB_HOST_ARCH)" | grep -o '[0-9]*' | head -n1)
   LLVM_DEP=$(shell grep 'llvm-dev' debian/control | grep -v "!$(DEB_HOST_ARCH)")
@@ -100,6 +100,8 @@ ifeq ($(call version_ge,11),y)
     LLVM_VERSION = 0.invalid # mute dpkg error on empty version fields in debian/control
   endif
   TEMP_CONFIG = TEMP_CONFIG=$(AUX_MK_DIR)/test-with-jit.conf
+else
+  LLVM_VERSION = 0.invalid # mute dpkg error on empty version fields in debian/control
 endif
 
 ifeq ($(call version_ge,14),y)
