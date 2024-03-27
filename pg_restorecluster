@@ -2,7 +2,7 @@
 
 # pg_restorecluster: restore from a pg_backupcluster backup
 #
-# Copyright (C) 2021 Christoph Berg <myon@debian.org>
+# Copyright (C) 2021-2024 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -243,13 +243,6 @@ sub restore_globals($$) {
     error "psql failed" if ($?);
 }
 
-sub create_databases($) {
-    my ($backup) = @_;
-
-    print "Creating databases from $backup/databases.sql ...\n";
-    system_or_error "psql", "--cluster", "$version/$cluster", "-vON_ERROR_STOP=1", "-Xqf", "$backup/databases.sql";
-}
-
 sub restore_dumps($) {
     my ($backup) = @_;
 
@@ -258,7 +251,8 @@ sub restore_dumps($) {
         $dump = $1; # untaint
         my $db = $2;
         print "Restoring $dump to database $db ...\n";
-        system_or_error "pg_restore", "--cluster", "$version/$cluster", "-d", $db, $dump;
+        my @create = ($db eq "postgres" or $db eq "template1") ? () : ("--create");
+        system_or_error "pg_restore", "--cluster", "$version/$cluster", @create, "-d", "postgres", $dump;
     }
 }
 
@@ -339,7 +333,6 @@ if ($backup =~ /\.backup$/) {
     start_cluster();
     switch_to_cluster_owner($owneruid, $ownergid);
     restore_globals($backup, $owneruid);
-    create_databases($backup);
     restore_dumps($backup);
     analyze();
     print "\n";

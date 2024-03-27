@@ -38,6 +38,7 @@ foreach my $v (@MAJORS) {
     program_ok $pg_uid, "psql -c 'create table foo (t text)' mydb";
     program_ok $pg_uid, "psql -c \"insert into foo values ('data from backup')\" mydb";
     program_ok $pg_uid, "psql -c 'CREATE USER myuser'";
+    program_ok $pg_uid, "psql -c 'grant create on database mydb to myuser'";
     program_ok $pg_uid, "psql -c 'alter role myuser set search_path=public, myschema'";
     program_ok $pg_uid, "createdb --locale-provider icu --icu-locale de -T template0 myicudb" if ($v >= 15);
 
@@ -94,6 +95,8 @@ foreach my $v (@MAJORS) {
         }
     }
     if ($systemd) {
+        program_ok $pg_uid, "psql -c 'alter system set checkpoint_timeout=30'"; # minimum
+        program_ok $pg_uid, "psql -c 'select pg_reload_conf()'";
         program_ok 0, "systemctl start pg_basebackup\@$v-main";
     } else {
         program_ok 0, "pg_backupcluster --checkpoint=fast $v main basebackup";
@@ -131,7 +134,8 @@ foreach my $v (@MAJORS) {
         like_program_out 0, "pg_lsclusters -h", 0, qr/$v main 5432 online postgres .var.lib.postgresql.$v.snowflake/;
         my $outref;
         is exec_as($pg_uid, "psql -XAtl", $outref), 0, 'psql -XAtl';
-        like $$outref, qr/^mydb\|postgres\|SQL_ASCII\|(libc\|)?en_US.UTF-8\|en_US.UTF-8\|(\|libc\||\|\|)?$/m, "mydb locales";
+        like $$outref, qr/^mydb\|postgres\|SQL_ASCII\|(libc\|)?en_US.UTF-8\|en_US.UTF-8\|(\|libc\||\|\|)?(=Tc\/postgres)?$/m, "mydb locales";
+        like $$outref, qr/myuser=C\/postgres/m, "mydb grants" if ($v >= 11); # pg_restore --create support in 11
         like $$outref, qr/^myicudb\|postgres\|UTF8\|(icu\|)?en_US.UTF-8\|en_US.UTF-8\|(de\|icu\||de\|\|)?$/m, "myicudb locales" if ($v >= 15);
         is_program_out $pg_uid, "psql -XAtc 'show work_mem'", 0, "11MB\n";
         is_program_out $pg_uid, "psql -XAtc 'select * from foo' mydb", 0, "data from backup\n";

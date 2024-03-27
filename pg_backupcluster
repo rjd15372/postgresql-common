@@ -2,7 +2,7 @@
 
 # simple pg_basebackup front-end
 #
-# Copyright (C) 2021-2023 Christoph Berg <myon@debian.org>
+# Copyright (C) 2021-2024 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -142,16 +142,25 @@ sub create_dumpall($) {
     my $backupdir = shift;
     mkdir($backupdir, 0750) or error "mkdir $backupdir: $!";
 
-    my $pg16 = $version >= 16 ? "|| ' --icu-rules ' || daticurules" : "";
-    my $pg15 = $version >= 15 ? "CASE datlocprovider::text
-        WHEN 'c' THEN '--locale-provider libc'
-        WHEN 'i' THEN '--locale-provider icu --icu-locale ' || daticulocale $pg16
-      END," : "";
+    my $icu = "";
+    if ($version >= 15) {
+        $icu = "CASE datlocprovider::text
+            WHEN 'c' THEN '--locale-provider libc'
+            WHEN 'b' THEN '--locale-provider builtin'
+            WHEN 'i' THEN '--locale-provider icu'";
+        if ($version < 17) {
+            $icu .= " || ' --icu-locale ' || daticulocale";
+        }
+        if ($version >= 16) {
+            $icu .= " || ' --icu-rules ' || daticurules";
+        }
+        $icu .= "\nEND,";
+    }
     my $clusterquery = "SELECT
   '--encoding', pg_catalog.pg_encoding_to_char(encoding),
   '--lc-collate', datcollate,
   '--lc-ctype', datctype,
-  $pg15
+  $icu
   CASE WHEN current_setting('data_checksums')::boolean THEN '-- --data-checksums' END
 FROM pg_database WHERE datname = 'template0'";
     system_or_error "psql",
@@ -163,44 +172,6 @@ FROM pg_database WHERE datname = 'template0'";
         "--cluster", "$version/$cluster",
         "--globals-only",
         "--file", "$backupdir/globals.sql";
-
-    $pg16 = $version >= 16 ? "|| ' ICU_RULES ' || quote_literal(coalesce(daticurules, ''))" : "";
-    $pg15 = $version >= 15 ? "|| CASE datlocprovider::text
-        WHEN 'c' THEN 'LOCALE_PROVIDER libc'
-        WHEN 'i' THEN 'LOCALE_PROVIDER icu ICU_LOCALE ' || quote_literal(daticulocale) $pg16
-      END" : "";
-    my $dbquery = "/* database creation */
-SELECT
-  format('CREATE DATABASE %I WITH OWNER %I TEMPLATE template0 ENCODING %L LC_COLLATE %L LC_CTYPE %L',
-    datname, rolname, pg_encoding_to_char(encoding), datcollate, datctype) $pg15 || ';' AS command
-FROM pg_database
-LEFT JOIN pg_roles r ON r.oid = datdba
-WHERE datallowconn AND datname NOT IN ('postgres', 'template1')
-
-UNION ALL
-
-/* database options */
-SELECT
-  CASE
-    WHEN rolname IS NULL THEN format('ALTER DATABASE %I', datname)
-    ELSE format('ALTER ROLE %I IN DATABASE %I', rolname, datname)
-  END ||
-  format(' SET %I = ', match[1]) ||
-  CASE
-    WHEN match[1] IN ('local_preload_libraries', 'search_path', 'session_preload_libraries', 'shared_preload_libraries', 'temp_tablespaces', 'unix_socket_directories')
-    THEN match[2]
-    ELSE quote_literal(match[2])
-  END ||
-  ';' AS command
-FROM pg_db_role_setting s
-JOIN pg_database d ON d.oid = setdatabase
-LEFT JOIN pg_roles r ON r.oid = setrole,
-unnest(setconfig) u(setting),
-regexp_matches(setting, '(.+)=(.+)') m(match)";
-    system_or_error "psql",
-        "--cluster", "$version/$cluster",
-        "-XAtc", $dbquery,
-        "-o", "$backupdir/databases.sql";
 
     my $dblist = 'SELECT datname FROM pg_database WHERE datallowconn ORDER BY datname';
     my $databases = `psql --cluster '$version/$cluster' -XAtc '$dblist'`;
