@@ -5,7 +5,7 @@ PgCommon - Common functions for the postgresql-common framework
 =head1 COPYRIGHT AND LICENSE
 
  (C) 2008-2009 Martin Pitt <mpitt@debian.org>
- (C) 2012-2023 Christoph Berg <myon@debian.org>
+ (C) 2012-2024 Christoph Berg <myon@debian.org>
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -1348,7 +1348,7 @@ sub get_db_encoding {
  owner. (For versions >= 8.4; for older versions use get_cluster_locales()).
 
  Arguments: <version> <cluster> <database>
- Returns: (LC_CTYPE, LC_COLLATE) or (undef,undef) if it cannot be determined.
+ Returns: (LC_CTYPE, LC_COLLATE, locprovider, iculocale, icurules) or undef if it cannot be determined.
  PG15 adds locale provider and icu locale to the returned values
  PG16 adds icu rules
 
@@ -1368,32 +1368,24 @@ sub get_db_locales {
     my $orig_euid = $>;
     $> = (stat (cluster_data_directory $version, $cluster))[4];
 
+    my $datlocprovider = $version >= 15 ? "CASE datlocprovider::text WHEN 'c' THEN 'libc' WHEN 'i' THEN 'icu' WHEN 'b' THEN 'builtin' END" : "NULL";
+    my $daticulocale = ($version >= 15 and $version < 17) ? "daticulocale" : "NULL";
+    my $daticurules = $version >= 16 ? "daticurules" : "NULL";
+
     open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
-        "SELECT datctype, datcollate FROM pg_database where datname = current_database()", $db or
+        "SELECT datctype, datcollate, $datlocprovider, $daticulocale, $daticurules FROM pg_database where datname = current_database()", $db or
         die "Internal error: could not call $psql to determine datctype and datcollate: $!";
     my $out = <PSQL> // error 'could not determine datctype and datcollate';
     close PSQL;
     ($out) = $out =~ /^(.*)$/; # untaint
-    ($ctype, $collate) = split /\|/, $out;
-
-    if ($version >= 15) {
-        open PSQL, '-|', $psql, '-h', $socketdir, '-p', $port, '-AXtc',
-            "SELECT CASE datlocprovider::text WHEN 'c' THEN 'libc' WHEN 'i' THEN 'icu' END, daticulocale" .
-            ($version >= 16 ? ", daticurules" : "") .
-            " FROM pg_database where datname = current_database()", $db or
-            die "Internal error: could not call $psql to determine datlocprovider: $!";
-        $out = <PSQL> // error 'could not determine datlocprovider';
-        close PSQL;
-        ($out) = $out =~ /^(.*)$/; # untaint
-        ($locale_provider, $icu_locale, $icu_rules) = split /\|/, $out;
-    }
+    ($ctype, $collate, $locale_provider, $icu_locale, $icu_rules) = split /\|/, $out;
 
     $> = $orig_euid;
     restore_exec;
     chomp $ctype;
     chomp $collate;
     return ($ctype, $collate, $locale_provider, $icu_locale, $icu_rules) unless $?;
-    return (undef, undef);
+    return (undef, undef, undef, undef, undef);
 }
 
 

@@ -3,6 +3,7 @@ postgresql-common (259) UNRELEASED; urgency=medium
   * pg_backupcluster, pg_restorecluster: Let `pg_restore --create` handle
     database creation and restore of database options and grants.
     (Removes databases.sql from dumps.)
+  * PgCommon.pm get_db_encoding: Refactor for dropped daticulocale in 17.
 
  -- Christoph Berg <myon@debian.org>  Wed, 27 Mar 2024 17:43:07 +0100
 
