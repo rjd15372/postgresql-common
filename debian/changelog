@@ -1,4 +1,4 @@
-postgresql-common (259) UNRELEASED; urgency=medium
+postgresql-common (259) unstable; urgency=medium
 
   * pg_backupcluster, pg_restorecluster: Let `pg_restore --create` handle
     database creation and restore of database options and grants.
@@ -6,7 +6,7 @@ postgresql-common (259) UNRELEASED; urgency=medium
   * PgCommon.pm get_db_encoding: Refactor for dropped daticulocale in 17.
   * pg_buildext: Pass PG_VIRTUALENV_ARGS to pg_virtualenv.
 
- -- Christoph Berg <myon@debian.org>  Wed, 27 Mar 2024 17:43:07 +0100
+ -- Christoph Berg <myon@debian.org>  Mon, 15 Apr 2024 14:09:12 +0200
 
 postgresql-common (258) unstable; urgency=medium
 
