@@ -4,7 +4,7 @@
 # versions
 #
 # (C) 2010 Dimitri Fontaine <dfontaine@hi-media.com>
-# (C) 2011-2023 Christoph Berg <myon@debian.org>
+# (C) 2011-2024 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -23,13 +23,11 @@ die() {
     exit 1
 }
 
-VENVARGS=""
-MAKEVARS=""
 while getopts "c:i:m:o:s" opt ; do
     case $opt in
-	c|i|o) VENVARGS="$VENVARGS -$opt $OPTARG" ;;
+	c|i|o) PG_VIRTUALENV_ARGS="${PG_VIRTUALENV_ARGS:-} -$opt $OPTARG" ;;
 	m) MAKEVARS="$OPTARG" ;;
-	s) VENVARGS="$VENVARGS -$opt" ;;
+	s) PG_VIRTUALENV_ARGS="${PG_VIRTUALENV_ARGS:-} -$opt" ;;
 	*) exit 1 ;;
     esac
 done
@@ -80,7 +78,7 @@ build() {
     mkdir -p $vtarget
     # if a Makefile was created by configure, use it, else the top level Makefile
     [ -f $vtarget/Makefile ] || makefile="-f $srcdir/Makefile"
-    make -C $vtarget ${makefile:-} PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 $MAKEVARS || return $?
+    make -C $vtarget ${makefile:-} PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 ${MAKEVARS:-} || return $?
 }
 
 substvars() {
@@ -113,7 +111,7 @@ install() {
     mkdir -p $vtarget
     # if a Makefile was created by configure, use it, else the top level Makefile
     [ -f $vtarget/Makefile ] || makefile="-f $srcdir/Makefile"
-    make -C $vtarget ${makefile:-} install DESTDIR="$PWD/debian/$package" PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 $MAKEVARS || return $?
+    make -C $vtarget ${makefile:-} install DESTDIR="$PWD/debian/$package" PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 ${MAKEVARS:-} || return $?
     substvars "$1" "$package"
 }
 
@@ -129,12 +127,12 @@ loop() {
     package=$(echo $target | sed -e "s:%v:$1:g")
 
     echo "# $1: make"
-    make -C "$srcdir"         PG_CONFIG="$pgc" USE_PGXS=1 $MAKEVARS || return $?
+    make -C "$srcdir"         PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-} || return $?
     echo "# $1: make install"
-    make -C "$srcdir" install DESTDIR="$PWD/debian/$package" PG_CONFIG="$pgc" USE_PGXS=1 $MAKEVARS || return $?
+    make -C "$srcdir" install DESTDIR="$PWD/debian/$package" PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-} || return $?
     substvars "$1" "$package"
     echo "# $1: make clean"
-    make -C "$srcdir" clean   PG_CONFIG="$pgc" USE_PGXS=1 $MAKEVARS # clean errors are fatal
+    make -C "$srcdir" clean   PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-} # clean errors are fatal
 }
 
 installcheck() {
@@ -158,9 +156,9 @@ installcheck() {
     if [ "$target" ] && [ "$target" != "." ]; then # if target is given, use it, else stay in the top source dir
 	# if a Makefile was created by configure, use it, else the top level Makefile
 	[ -f $vtarget/Makefile ] || makefile="-f $srcdir/Makefile"
-        if ! pg_virtualenv ${PKGARGS:-} $VENVARGS -v $1 \
+        if ! pg_virtualenv ${PKGARGS:-} ${PG_VIRTUALENV_ARGS:-} -v $1 \
 	    make -C $vtarget ${makefile:-} installcheck ${DESTDIR:-} \
-		PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 $MAKEVARS; then
+		PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 ${MAKEVARS:-}; then
 	    if [ -r $vtarget/regression.diffs ]; then
 		echo "**** $vtarget/regression.diffs ****"
 		cat $vtarget/regression.diffs
@@ -168,8 +166,8 @@ installcheck() {
 	    return 1
 	fi
     else
-        if ! pg_virtualenv ${PKGARGS:-} $VENVARGS -v $1 \
-	    make installcheck ${DESTDIR:-} PG_CONFIG="$pgc" USE_PGXS=1 $MAKEVARS; then
+        if ! pg_virtualenv ${PKGARGS:-} ${PG_VIRTUALENV_ARGS:-} -v $1 \
+	    make installcheck ${DESTDIR:-} PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-}; then
 	    if [ -r regression.diffs ]; then
 		echo "**** regression.diffs ****"
 		cat regression.diffs
@@ -177,7 +175,7 @@ installcheck() {
 	    return 1
 	fi
         # since we are in the top-level directory, clean up behind us
-        make clean PG_CONFIG="$pgc" USE_PGXS=1 $MAKEVARS
+        make clean PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-}
     fi
 }
 
@@ -213,7 +211,7 @@ run_psql () {
         if [ "$target" ] && [ "$target" != "." ]; then # if target is given, use it, else stay in the top source dir
             cd $target
         fi
-        pg_virtualenv ${PKGARGS:-} $VENVARGS -v $1 \
+        pg_virtualenv ${PKGARGS:-} ${PG_VIRTUALENV_ARGS:-} -v $1 \
             psql -Xe -v ON_ERROR_STOP=1 < $PSQLTMP
     ) || return $?
 }
@@ -237,7 +235,7 @@ run_virtualenv () {
         if [ "$target" ] && [ "$target" != "." ]; then # if target is given, use it, else stay in the top source dir
             cd $target
         fi
-        pg_virtualenv ${PKGARGS:-} $VENVARGS -v $1 ${SHELL:-/bin/sh} -ex < $PSQLTMP
+        pg_virtualenv ${PKGARGS:-} ${PG_VIRTUALENV_ARGS:-} -v $1 ${SHELL:-/bin/sh} -ex < $PSQLTMP
     ) || return $?
 }
 

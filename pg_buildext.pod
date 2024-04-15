@@ -64,6 +64,9 @@ is fine to provide the tests control file directly.)
 
 Passed to B<pg_virtualenv> when running B<installcheck>.
 
+These arguments can also be set via the B<PG_VIRTUALENV_ARGS> environment
+variable.
+
 =item B<-m> I<arg>
 
 Passed to B<make>.
@@ -278,6 +281,9 @@ configure the list of supported versions on your system.
   override_dh_installdocs:
 	  dh_installdocs --all README.*
 
+  override_dh_pgxs_test:
+	  +pg_buildext installcheck . build-%v postgresql-%v-foobar
+
   override_dh_auto_clean:
 	  +pg_buildext clean build-%v
 
@@ -346,6 +352,8 @@ The replacement of B<PGVERSIONS> (plural) in debian/control.in and
 B<pg_buildext run> and B<run_installed> were introduced in
 postgresql-common (>= 256~).
 
+Setting B<pg_virtualenv> arguments from B<PG_VIRTUALENV_ARGS> was introduced in
+postgresql-common (>= 259~).
 
 =head1 SEE ALSO
 
