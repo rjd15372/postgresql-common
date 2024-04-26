@@ -1,3 +1,9 @@
+postgresql-common (260) UNRELEASED; urgency=medium
+
+  * t/020_create_sql_remove.t: Skip plpython3 tests on 9.x and Python 3.12+.
+
+ -- Christoph Berg <myon@debian.org>  Fri, 26 Apr 2024 16:41:52 +0000
+
 postgresql-common (259) unstable; urgency=medium
 
   * pg_backupcluster, pg_restorecluster: Let `pg_restore --create` handle

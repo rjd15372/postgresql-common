@@ -45,10 +45,12 @@ foreach my $v (@MAJORS) {
         skip "No python2 support", 1 unless ($v <= 11 and $PgCommon::have_python2);
         ok ((deb_installed "postgresql-plpython-$v$f"), "postgresql-plpython-$v$f installed");
     }
-    if ($v >= '9.1') {
+    SKIP: {
+        skip "no Python 3 package for version $v", 1 if ($v < '9.1');
+        my $pyver = `python3 --version 2>/dev/null`;
+        chomp $pyver;
+        skip "$pyver is too new for PL/Python3 on $v", 1 if ($v < 10 and $pyver and $pyver =~ /3\.1[2-9]/); # distutils removed in Python 3.12
 	ok ((deb_installed "postgresql-plpython3-$v$f"), "postgresql-plpython3-$v$f installed");
-    } else {
-	pass "no Python 3 package for version $v";
     }
     ok ((deb_installed "postgresql-plperl-$v$f"), "postgresql-plperl-$v$f installed");
     ok ((deb_installed "postgresql-pltcl-$v$f"), "postgresql-pltcl-$v$f installed");
