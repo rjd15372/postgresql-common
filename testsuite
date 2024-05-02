@@ -3,7 +3,7 @@
 # Run integration tests (on the installed packages).
 #
 # (C) 2005-2012 Martin Pitt <mpitt@debian.org>
-# (C) 2012-2023 Christoph Berg <myon@debian.org>
+# (C) 2012-2024 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -70,11 +70,21 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
                     [ "$(perl -I. -le 'use PgCommon; print $PgCommon::have_python2')" = "1" ] && PYTHON2_PACKAGE=postgresql-plpython-$v${PG_FLAVOR:=}
                     ;;
                 esac
+                case $v in
+                    8.*|9.0) ;;
+                    9.[1-6]) # plpython3 only for Python < 3.12
+                        py3ver=$(apt-cache policy python3)
+                        case $py3ver in
+                            *3.[0-9].*|*3.1[01].*) PYTHON3_PACKAGE=postgresql-plpython3-$v${PG_FLAVOR:-} ;;
+                        esac
+                        ;;
+                    *) PYTHON3_PACKAGE=postgresql-plpython3-$v${PG_FLAVOR:-} ;;
+                esac
                 apt-get install -y \
                     postgresql-contrib-$v${PG_FLAVOR:=} \
                     postgresql-plperl-$v$PG_FLAVOR \
                     ${PYTHON2_PACKAGE:-} \
-                    $(dpkg --compare-versions $v ge 9.1 && echo postgresql-plpython3-$v$PG_FLAVOR) \
+                    ${PYTHON3_PACKAGE:-} \
                     postgresql-pltcl-$v$PG_FLAVOR \
                     postgresql-server-dev-$v$PG_FLAVOR \
                     postgresql-doc-$v$PG_FLAVOR
