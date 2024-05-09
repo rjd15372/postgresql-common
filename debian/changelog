@@ -1,8 +1,8 @@
-postgresql-common (260) UNRELEASED; urgency=medium
+postgresql-common (260) unstable; urgency=medium
 
   * t/020_create_sql_remove.t: Skip plpython3 tests on 9.x and Python 3.12+.
 
- -- Christoph Berg <myon@debian.org>  Fri, 26 Apr 2024 16:41:52 +0000
+ -- Christoph Berg <myon@debian.org>  Thu, 09 May 2024 17:10:04 +0200
 
 postgresql-common (259) unstable; urgency=medium
 
