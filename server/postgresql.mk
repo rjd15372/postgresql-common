@@ -52,7 +52,6 @@ CONFIGURE_FLAGS = \
   --enable-nls \
   --enable-thread-safety \
   --enable-debug \
-  --enable-dtrace \
   --disable-rpath \
   --with-uuid=e2fs \
   --with-gnu-ld \
@@ -132,6 +131,7 @@ endif
 ifeq ($(DEB_HOST_ARCH_OS),linux)
   CONFIGURE_FLAGS += --with-systemd
   CONFIGURE_FLAGS += --with-selinux
+  CONFIGURE_FLAGS += --enable-dtrace
 endif
 
 ifneq ($(filter pkg.postgresql.cassert,$(DEB_BUILD_PROFILES)),)

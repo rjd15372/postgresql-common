@@ -1,3 +1,9 @@
+postgresql-common (261) UNRELEASED; urgency=medium
+
+  * server/postgresql.mk: Use --enable-dtrace only on Linux.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 23 May 2024 15:48:26 +0200
+
 postgresql-common (260) unstable; urgency=medium
 
   * t/020_create_sql_remove.t: Skip plpython3 tests on 9.x and Python 3.12+.
