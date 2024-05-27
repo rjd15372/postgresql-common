@@ -4,7 +4,7 @@
 # the postgresql-common infrastructure.
 #
 # (C) 2005-2013 Martin Pitt <mpitt@debian.org>
-# (C) 2012-2021 Christoph Berg <myon@debian.org>
+# (C) 2012-2024 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use PgCommon;
 use Getopt::Long;
-use POSIX qw/lchown setlocale LC_ALL LC_CTYPE/;
+use POSIX qw/lchown setlocale LC_ALL LC_NUMERIC/;
 
 $ENV{'PATH'} = '/sbin:/bin:/usr/sbin:/usr/bin'; # untaint
 
@@ -218,6 +218,7 @@ unless (setlocale (LC_ALL, "")) {
         grep { /^(LC_|LANG)/ } sort keys %ENV;
     error ("The locale requested by the environment is invalid:\n$env")
 }
+setlocale (LC_NUMERIC, "C"); # otherwise version comparisons break
 
 if (@ARGV < 2) {
     print "Usage: $0 [options] <version> <cluster name> [-- <initdb options>]
