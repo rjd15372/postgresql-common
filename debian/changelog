@@ -3,6 +3,7 @@ postgresql-common (261) UNRELEASED; urgency=medium
   * server/postgresql.mk: Use --enable-dtrace only on Linux.
   * pg_createcluster: Internally set LC_NUMERIC=C to ensure version
     comparisons use '.' as separator.
+  * t/045_backup.t: ALTER SYSTEM needs 9.4+.
 
  -- Christoph Berg <myon@debian.org>  Thu, 23 May 2024 15:48:26 +0200
 

@@ -95,7 +95,7 @@ foreach my $v (@MAJORS) {
         }
     }
     if ($systemd) {
-        program_ok $pg_uid, "psql -c 'alter system set checkpoint_timeout=30'"; # minimum
+        program_ok $pg_uid, "psql -c 'alter system set checkpoint_timeout=30'" if ($v >= 9.4); # 30s is minimum
         program_ok $pg_uid, "psql -c 'select pg_reload_conf()'";
         program_ok 0, "systemctl start pg_basebackup\@$v-main";
     } else {
