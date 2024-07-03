@@ -217,6 +217,7 @@ preinst_check_catversion()
                 echo "Saving binaries for PostgreSQL $MAJOR_VER catalog version $OLD_CATVERSION in $VARTMPDIR ..."
                 mkdir "$VARTMPDIR" # will fail&exit if (potentially rogue) file exists
                 cp -a /usr/lib/postgresql/$MAJOR_VER/bin /usr/lib/postgresql/$MAJOR_VER/lib "$VARTMPDIR"
+                chown -R postgres: "$VARTMPDIR" # make catversion bump instructions not require root
             fi
         fi
     done

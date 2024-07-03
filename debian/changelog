@@ -1,3 +1,10 @@
+postgresql-common (262) UNRELEASED; urgency=medium
+
+  * Chown /var/tmp/postgresql-* to postgres so catversion bump instructions do
+    not require root. Spotted by Greg Smith, thanks.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 03 Jul 2024 12:34:53 +0200
+
 postgresql-common (261) unstable; urgency=medium
 
   * server/postgresql.mk: Use --enable-dtrace only on Linux.
