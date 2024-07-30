@@ -2,6 +2,7 @@ postgresql-common (262) UNRELEASED; urgency=medium
 
   * Chown /var/tmp/postgresql-* to postgres so catversion bump instructions do
     not require root. Spotted by Greg Smith, thanks.
+  * Ignore test results on powerpc.
 
  -- Christoph Berg <myon@debian.org>  Wed, 03 Jul 2024 12:34:53 +0200
 
