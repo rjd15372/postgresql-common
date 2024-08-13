@@ -1,10 +1,3 @@
-postgresql-common (263) UNRELEASED; urgency=medium
-
-  * t/045_backup.t: Invoke pg_receivewal without shell redirections so killing
-    the PID works.
-
- -- Christoph Berg <myon@debian.org>  Tue, 13 Aug 2024 12:05:49 +0000
-
 postgresql-common (262) unstable; urgency=medium
 
   * Chown /var/tmp/postgresql-* to postgres so catversion bump instructions do

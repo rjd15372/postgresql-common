@@ -80,11 +80,8 @@ foreach my $v (@MAJORS) {
         } else {
             $receivewal_pid = fork;
             if ($receivewal_pid == 0) {
-                # no shell redirections here so the PID picked up is correct
-                exec "pg_backupcluster $v main receivewal" or exit(1);
-            } else {
-                note "starting pg_receivewal";
-                sleep 1;
+                # suppress "not renaming "000000010000000000000003.gz.partial", segment is not complete"
+                exec "pg_backupcluster $v main receivewal 2>/dev/null";
             }
         }
         program_ok $pg_uid, "psql -c 'create table poke_receivewal (t text)' mydb";
