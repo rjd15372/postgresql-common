@@ -123,7 +123,7 @@ foreach my $v (@MAJORS) {
         if ($systemd) {
             program_ok 0, "systemctl stop pg_receivewal\@$v-main";
         } else {
-            is kill('INT', $receivewal_pid), 1, "stop receivewal";
+            program_ok 0, "pkill -INT pg_receivewal";
         }
     }
 
