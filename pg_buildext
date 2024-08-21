@@ -158,7 +158,8 @@ installcheck() {
 	[ -f $vtarget/Makefile ] || makefile="-f $srcdir/Makefile"
         if ! pg_virtualenv ${PKGARGS:-} ${PG_VIRTUALENV_ARGS:-} -v $1 \
 	    make -C $vtarget ${makefile:-} installcheck ${DESTDIR:-} \
-		PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 ${MAKEVARS:-}; then
+                PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 \
+                PROVE_FLAGS=--verbose ${MAKEVARS:-}; then
 	    if [ -r $vtarget/regression.diffs ]; then
 		echo "**** $vtarget/regression.diffs ****"
 		cat $vtarget/regression.diffs
@@ -167,7 +168,8 @@ installcheck() {
 	fi
     else
         if ! pg_virtualenv ${PKGARGS:-} ${PG_VIRTUALENV_ARGS:-} -v $1 \
-	    make installcheck ${DESTDIR:-} PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-}; then
+            make installcheck ${DESTDIR:-} PG_CONFIG="$pgc" USE_PGXS=1 \
+                PROVE_FLAGS=--verbose ${MAKEVARS:-}; then
 	    if [ -r regression.diffs ]; then
 		echo "**** regression.diffs ****"
 		cat regression.diffs

@@ -1,3 +1,9 @@
+postgresql-common (263) UNRELEASED; urgency=medium
+
+  * pg_buildext: Set PROVE_FLAGS=--verbose in installcheck.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 21 Aug 2024 14:38:58 +0200
+
 postgresql-common (262) unstable; urgency=medium
 
   * Chown /var/tmp/postgresql-* to postgres so catversion bump instructions do
