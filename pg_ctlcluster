@@ -312,6 +312,10 @@ sub promote {
     exec $pg_ctl, '-D', $info{'pgdata'}, '-s', @pg_ctl_opts_from_cli, 'promote';
 }
 
+sub logrotate {
+    exec $pg_ctl, '-D', $info{'pgdata'}, '-s', @pg_ctl_opts_from_cli, 'logrotate';
+}
+
 #
 # main
 #
@@ -339,7 +343,7 @@ if ($mode =~ /^(s(mart)?|f(ast)?|i(mmediate)?)$/) {
 # parse command
 my $version_re = qr/(\d+\.?\d)/;
 my $cluster_re = qr/([^'"\s]+)/;
-my $action_re = qr/(start|stop|restart|reload|status|promote)/;
+my $action_re = qr/(start|stop|restart|reload|status|promote|logrotate)/;
 my $action;
 
 if (@ARGV >= 3 and "$ARGV[0] $ARGV[1] $ARGV[2]" =~ /^$version_re $cluster_re $action_re$/) {
@@ -509,7 +513,7 @@ pg_ctlcluster - start/stop/restart/reload a PostgreSQL cluster
 
 B<pg_ctlcluster> [I<options>] I<cluster-version> I<cluster-name> I<action> [B<--> I<pg_ctl options>]
 
-where I<action> = B<start>|B<stop>|B<restart>|B<reload>|B<status>|B<promote>
+where I<action> = B<start>|B<stop>|B<restart>|B<reload>|B<status>|B<promote>|B<logrotate>
 
 =head1 DESCRIPTION
 
@@ -561,6 +565,10 @@ options that were used to invoke it are displayed.
 
 Commands a running standby server to exit recovery and begin read-write
 operations.
+
+=item B<logrotate>
+
+Requests that the server of a given cluster rotates the log file.
 
 =back
 
