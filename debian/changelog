@@ -1,6 +1,10 @@
 postgresql-common (263) UNRELEASED; urgency=medium
 
+  [ Christoph Berg ]
   * pg_buildext: Set PROVE_FLAGS=--verbose in installcheck.
+
+  [ Andreas Karlsson ]
+  * pg_ctlcluster: Add logrotate action
 
  -- Christoph Berg <myon@debian.org>  Wed, 21 Aug 2024 14:38:58 +0200
 
