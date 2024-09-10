@@ -45,7 +45,8 @@ program_ok 'nobody', 'make tar';
 program_ok 'nobody', 'cd foo-123 && echo y | EDITOR=true dh_make_pgxs';
 
 note "testing 'dh --with pgxs'";
-program_ok 'nobody', 'cd foo-123 && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc';
+# Use -Ppkg.postgresql.32-bit so we don't have to bother with architecture-is-64-bit here
+program_ok 'nobody', 'cd foo-123 && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc -Ppkg.postgresql.32-bit';
 
 foreach my $ver (@versions) {
     my $deb = "postgresql-$ver-foo_123-1_$arch.deb";
@@ -69,7 +70,7 @@ note "testing 'dh --with pgxs_loop'";
 system "rm -f postgresql-*.deb";
 
 program_ok 'nobody', 'sed -i -e s/pgxs/pgxs_loop/ foo-123/debian/rules';
-program_ok 'nobody', 'cd foo-123 && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc';
+program_ok 'nobody', 'cd foo-123 && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc -Ppkg.postgresql.32-bit';
 
 foreach my $ver (@versions) {
     my $deb = "postgresql-$ver-foo_123-1_$arch.deb";
