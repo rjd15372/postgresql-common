@@ -1,12 +1,13 @@
-postgresql-common (263) UNRELEASED; urgency=medium
+postgresql-common (263) unstable; urgency=medium
 
   [ Christoph Berg ]
   * pg_buildext: Set PROVE_FLAGS=--verbose in installcheck.
+  * debian/supported-versions: Add 17 as default version.
 
   [ Andreas Karlsson ]
   * pg_ctlcluster: Add logrotate action
 
- -- Christoph Berg <myon@debian.org>  Wed, 21 Aug 2024 14:38:58 +0200
+ -- Christoph Berg <myon@debian.org>  Tue, 10 Sep 2024 13:03:32 +0200
 
 postgresql-common (262) unstable; urgency=medium
 

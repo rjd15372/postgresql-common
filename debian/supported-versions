@@ -26,7 +26,7 @@
 # newlines.)
 #
 # Recognized tokens:
-# default: use the appropiate defaults for the current distribution
+# default: use the appropriate defaults for the current distribution
 #          (as determined by os-release)
 # debian: use Debian defaults
 # debian-backports: use Debian Backports defaults
@@ -37,11 +37,11 @@
 # X: consider this version supported
 #
 # (C) 2005-2016 Martin Pitt <mpitt@debian.org>
-# (C) 2012-2023 Christoph Berg <myon@debian.org>
+# (C) 2012-2024 Christoph Berg <myon@debian.org>
 
 set -eu
 
-DEFAULT="16"
+DEFAULT="17"
 
 # functions
 
@@ -91,6 +91,7 @@ pgdg() {
 	14
 	15
 	16
+	17
 	EOF
 }
 
