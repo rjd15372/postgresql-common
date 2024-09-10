@@ -19,10 +19,10 @@ PGDG="pgdg"
 
 # variables imported from https://git.postgresql.org/gitweb/?p=pgapt.git;a=blob;f=pgapt.conf
 # checked out in $HOME/apt.postgresql.org/; run "make" to update
-PG_BETA_VERSION="16"
-PG_DEVEL_VERSION="17"
-PG_REPOSITORY_DISTS="sid trixie bookworm bullseye buster mantic lunar kinetic jammy focal bionic"
-PG_ARCHIVE_DISTS="sid trixie bookworm bullseye buster stretch jessie wheezy squeeze lenny etch mantic lunar kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
+PG_BETA_VERSION="17"
+PG_DEVEL_VERSION="18"
+PG_REPOSITORY_DISTS="sid trixie bookworm bullseye buster oracular noble mantic jammy focal"
+PG_ARCHIVE_DISTS="sid trixie bookworm bullseye buster stretch jessie wheezy squeeze lenny etch oracular noble mantic lunar kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
 
 while getopts "c:f:h:ipstv:y" opt ; do
     case $opt in
