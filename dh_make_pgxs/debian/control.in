@@ -5,8 +5,10 @@ Maintainer: Debian PostgreSQL Maintainers <team+postgresql@tracker.debian.org>
 Uploaders:
  @MAINTAINER_NAME@ <@DEBEMAIL@>,
 Build-Depends:
+ architecture-is-64-bit <!pkg.postgresql.32-bit>,
  debhelper-compat (= @COMPAT@),
- postgresql-all (>= 217~),
+ postgresql-all <!nocheck>,
+ postgresql-server-dev-all (>= 217~),
 Standards-Version: @STANDARDS_VERSION@
 Rules-Requires-Root: no
 Homepage: @URL@

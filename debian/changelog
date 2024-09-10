@@ -3,6 +3,9 @@ postgresql-common (263) unstable; urgency=medium
   [ Christoph Berg ]
   * pg_buildext: Set PROVE_FLAGS=--verbose in installcheck.
   * debian/supported-versions: Add 17 as default version.
+  * Most extension packages will now default to supporting only 64-bit
+    architectures. Enable the pkg.postgresql.32-bit build profile to revert
+    for local builds.
 
   [ Andreas Karlsson ]
   * pg_ctlcluster: Add logrotate action
