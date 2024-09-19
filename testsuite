@@ -66,10 +66,6 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
     case $ID in
         debian|ubuntu)
             for v in $PG_VERSIONS; do
-                case $v in 8.*|9.*|10|11)
-                    [ "$(perl -I. -le 'use PgCommon; print $PgCommon::have_python2')" = "1" ] && PYTHON2_PACKAGE=postgresql-plpython-$v${PG_FLAVOR:=}
-                    ;;
-                esac
                 case $v in
                     8.*|9.0) ;;
                     9.[1-6]) # plpython3 only for Python < 3.12
@@ -83,7 +79,6 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
                 apt-get install -y \
                     postgresql-contrib-$v${PG_FLAVOR:=} \
                     postgresql-plperl-$v$PG_FLAVOR \
-                    ${PYTHON2_PACKAGE:-} \
                     ${PYTHON3_PACKAGE:-} \
                     postgresql-pltcl-$v$PG_FLAVOR \
                     postgresql-server-dev-$v$PG_FLAVOR \

@@ -12,8 +12,6 @@ endif
 SUPPORTED_VERSIONS := $(shell PG_SUPPORTED_VERSIONS="$(FLAVOR)" debian/supported-versions)
 DEFAULT_VER := $(lastword $(SUPPORTED_VERSIONS))
 
-#py2#PYTHON2_PACKAGE=postgresql-plpython-$v
-
 %:
 	dh $@
 
@@ -40,6 +38,6 @@ override_dh_gencontrol:
 		-Vdefault-version="$(DEFAULT_VER)" -v'$(DEFAULT_VER)+$${source:Version}'
 
 	dh_gencontrol -ppostgresql-all -- \
-		-Vpostgresql-all-depends="$(foreach v,$(SUPPORTED_VERSIONS),postgresql-$v,postgresql-plperl-$v,$(if $(filter 8.% 9.% 10 11, $v), $(PYTHON2_PACKAGE)),postgresql-plpython3-$v,postgresql-pltcl-$v,)"
+		-Vpostgresql-all-depends="$(foreach v,$(SUPPORTED_VERSIONS),postgresql-$v,postgresql-plperl-$v,postgresql-plpython3-$v,postgresql-pltcl-$v,)"
 
 	dh_gencontrol --remaining-packages

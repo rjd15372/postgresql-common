@@ -11,7 +11,7 @@ use lib 't';
 use TestLib;
 use PgCommon;
 
-use Test::More tests => 147 * @MAJORS;
+use Test::More tests => 141 * @MAJORS;
 
 $ENV{_SYSTEMCTL_SKIP_REDIRECT} = 1; # FIXME: testsuite is hanging otherwise
 
@@ -280,16 +280,6 @@ tel|2
 	0, '', 'creating PL/Perl function as user nobody succeeds';
     is_program_out 'nobody', 'psql nobodydb -Atc "select remove_vowels(\'foobArish\')"',
 	0, "f__b_r_sh\n", 'calling PL/Perl function';
-
-    # Check PL/Python (untrusted)
-    SKIP: {
-    skip "No python2 support", 6 unless ($v <= 11 and $PgCommon::have_python2);
-    is_program_out 'postgres', create_extension($v, 'plpythonu'), 0, '', 'CREATE EXTENSION plpythonu succeeds for user postgres';
-    is_program_out 'postgres', 'psql nobodydb -qc "CREATE FUNCTION capitalize(text) RETURNS text AS \'import sys; return args[0].capitalize() + sys.version[0]\' LANGUAGE plpythonu;"',
-	0, '', 'creating PL/Python function as user postgres succeeds';
-    is_program_out 'nobody', 'psql nobodydb -Atc "select capitalize(\'foo\')"',
-	0, "Foo2\n", 'calling PL/Python function';
-    }
 
     # Check PL/Python3 (untrusted)
     SKIP: {

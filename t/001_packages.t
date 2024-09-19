@@ -7,7 +7,7 @@ use lib 't';
 use TestLib;
 use POSIX qw/setlocale LC_ALL LC_MESSAGES/;
 
-use Test::More tests => $PgCommon::rpm ? (3 + 9*@MAJORS) : (15 + 7*@MAJORS);
+use Test::More tests => $PgCommon::rpm ? (3 + 8*@MAJORS) : (15 + 6*@MAJORS);
 
 ok (-f "/etc/os-release", "/etc/os-release exists");
 my ($os, $osversion) = os_release();
@@ -27,10 +27,6 @@ if ($PgCommon::rpm) {
         ok ((rpm_installed "postgresql$vv$f-server"),   "postgresql$vv$f-server installed");
         ok ((rpm_installed "postgresql$vv$f-contrib"),  "postgresql$vv$f-contrib installed");
         ok ((rpm_installed "postgresql$vv$f-plperl"),   "postgresql$vv$f-plperl installed");
-        SKIP: {
-            skip "No python2 support", 1 unless ($v <= 12);
-            ok ((rpm_installed "postgresql$vv$f-plpython"), "postgresql$vv$f-plpython installed");
-        }
         ok ((rpm_installed "postgresql$vv$f-plpython3"), "postgresql$vv$f-plpython3 installed");
         ok ((rpm_installed "postgresql$vv$f-pltcl"),    "postgresql$vv$f-pltcl installed");
         ok ((rpm_installed "postgresql$vv$f-devel"),    "postgresql$vv$f-devel installed");
@@ -41,10 +37,6 @@ if ($PgCommon::rpm) {
 my $docpkgs = 0;
 foreach my $v (@MAJORS) {
     ok ((deb_installed "postgresql-$v$f"), "postgresql-$v$f installed");
-    SKIP: {
-        skip "No python2 support", 1 unless ($v <= 11 and $PgCommon::have_python2);
-        ok ((deb_installed "postgresql-plpython-$v$f"), "postgresql-plpython-$v$f installed");
-    }
     SKIP: {
         skip "no Python 3 package for version $v", 1 if ($v < '9.1');
         my $pyver = `python3 --version 2>/dev/null`;
