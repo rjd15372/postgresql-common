@@ -24,16 +24,16 @@ foreach my $v (@MAJORS) {
 
     my $jit_default = $v == '11' ? 'off' : 'on';
     like_program_out 'postgres', "psql -Xatc 'show jit'", 0, qr/$jit_default/, "JIT is $jit_default by default";
-    program_ok 'root', "pg_conftool $v main set jit on", 0, "Turn on JIT on PG11" if ($v == 11);
-    program_ok 'root', "pg_ctlcluster $v main reload", 0 if ($v == 11);
 
-    unlike_program_out 'postgres', "psql -c 'explain (analyze) select count(*) from pg_class'", 0, qr/JIT/,
-        "No JIT on cheap query";
-    program_ok 'root', "pg_conftool $v main set seq_page_cost 100000", 0;
-    program_ok 'root', "pg_conftool $v main set random_page_cost 100000", 0;
-    program_ok 'root', "pg_ctlcluster $v main reload", 0;
-    like_program_out 'postgres', "psql -c 'explain (analyze) select count(*) from pg_class'", 0, qr/Timing: Generation .* ms/,
-        "Expensive query is JITed";
+    if ($v > 11) { # skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)
+        unlike_program_out 'postgres', "psql -c 'explain (analyze) select count(*) from pg_class'", 0, qr/JIT/,
+            "No JIT on cheap query";
+        program_ok 'root', "pg_conftool $v main set seq_page_cost 100000", 0;
+        program_ok 'root', "pg_conftool $v main set random_page_cost 100000", 0;
+        program_ok 'root', "pg_ctlcluster $v main reload", 0;
+        like_program_out 'postgres', "psql -c 'explain (analyze) select count(*) from pg_class'", 0, qr/Timing: Generation .* ms/,
+            "Expensive query is JITed";
+    }
 
     program_ok 'root', "pg_dropcluster --stop $v main", 0;
     check_clean;
