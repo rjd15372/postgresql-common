@@ -2,6 +2,7 @@ postgresql-common (264) UNRELEASED; urgency=medium
 
   * postgresql-all: Drop dependency on postgresql-contrib-*.
   * Remove remaining traces of python2 compatibility code.
+  * debian/postgresql-common.tmpfile: Rename to .tmpfiles.
   * t/027_jit.t: Skip JIT tests in 11.
 
  -- Christoph Berg <myon@debian.org>  Thu, 19 Sep 2024 13:08:42 +0200
