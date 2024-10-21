@@ -60,6 +60,7 @@ Package: postgresql-client-common
 Architecture: all
 Multi-Arch: foreign
 Depends:
+ libipc-run-perl,
  netbase,
  ${misc:Depends},
  ${perl:Depends},
