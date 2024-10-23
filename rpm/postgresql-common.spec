@@ -64,12 +64,14 @@ for manpages in debian/*.manpages; do
     done < $manpages
 done
 # install pg_wrapper symlinks by augmenting the existing pgdg.rpm alternatives
+echo "if [ \$1 -eq 0 ]; then" >> postgresql-client-common.preun
 cat debian/postgresql-*common.links | \
 while read dest link; do
     name="pgsql-$(basename $link)"
     echo "update-alternatives --install /$link $name /$dest 9999" >> postgresql-client-common.post
     echo "update-alternatives --remove $name /$dest" >> postgresql-client-common.preun
 done
+echo "fi" >> postgresql-client-common.preun
 # activate rpm-specific tweaks
 sed -i -e 's/#redhat# //' \
     %{buildroot}/lib/systemd/system-generators/postgresql-generator \
@@ -124,9 +126,13 @@ fi
 update-alternatives --install /usr/bin/ecpg pgsql-ecpg /usr/share/postgresql-common/pg_wrapper 9999
 
 %preun -n postgresql-client-common -f postgresql-client-common.preun
-update-alternatives --remove pgsql-ecpg /usr/share/postgresql-common/pg_wrapper
+if [ $1 -eq 0 ]; then
+    update-alternatives --remove pgsql-ecpg /usr/share/postgresql-common/pg_wrapper
+fi
 
 %changelog
+* Wed Oct 23 2024 Dennis Schwan <dennis.schwan@1und1.de> 265-1
+- prevent update-alternatives execution when packages are updated and not removed
 * Tue Sep 29 2020 Christoph Berg <myon@debian.org> 217-1
 - Drop postgresql-server-dev-all package, it's debian-specific only.
 * Fri Dec 09 2016 Bernd Helmle <bernd.helmle@credativ.de> 177-1

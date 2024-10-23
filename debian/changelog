@@ -33,6 +33,9 @@ postgresql-common (269) UNRELEASED; urgency=medium
   [ Christopher Bock ]
   * pg_backupcluster: Fix backup directory in documentation.
 
+  [ Dennis Schwan ]
+  * Prevent removal of update-alternatives in RPM when updating package.
+
  -- Christoph Berg <myon@debian.org>  Thu, 09 Jan 2025 14:25:18 +0100
 
 postgresql-common (267) unstable; urgency=medium
