@@ -1,6 +1,6 @@
 postgresql-common (265) unstable; urgency=medium
 
-  * Add libio-pty-perl to postgresql-client-common depends for extension
+  * Add libipc-run-perl to postgresql-client-common depends for extension
     tests.
 
  -- Christoph Berg <myon@debian.org>  Mon, 21 Oct 2024 16:50:44 +0200
