@@ -1,3 +1,9 @@
+postgresql-common (266) UNRELEASED; urgency=medium
+
+  * Fix pg_backupcluster with data checksums enabled.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 31 Oct 2024 14:58:19 +0100
+
 postgresql-common (265) unstable; urgency=medium
 
   * Add libipc-run-perl to postgresql-client-common depends for extension

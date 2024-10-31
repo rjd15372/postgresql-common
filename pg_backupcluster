@@ -161,7 +161,9 @@ sub create_dumpall($) {
   '--lc-collate', datcollate,
   '--lc-ctype', datctype,
   $icu
-  CASE WHEN current_setting('data_checksums')::boolean THEN '-- --data-checksums' END
+  CASE WHEN current_setting('data_checksums')::boolean THEN '--data-checksums'
+  WHEN current_setting('server_version_num')::int >= 180000 THEN '--no-data-checksums'
+  END
 FROM pg_database WHERE datname = 'template0'";
     system_or_error "psql",
         "--cluster", "$version/$cluster",
