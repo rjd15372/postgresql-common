@@ -508,6 +508,7 @@ push @argv, ('--locale-provider', $old_locale_provider) if $old_locale_provider;
 push @argv, ('--icu-locale', $old_icu_locale) if $old_icu_locale;
 push @argv, ('--icu-rules', $old_icu_rules) if $old_icu_rules;
 push @argv, ('--data-checksums') if $oldcontrol->{'Data page checksum version'}; # 0 = off
+push @argv, ('--no-data-checksums') if ($newversion >= 18 and not $oldcontrol->{'Data page checksum version'}); # 18+ defaults to on
 push @argv, ('--encryption-key-command', $info{config}->{encryption_key_command}) if $info{config}->{encryption_key_command}; # PostgreSQL TDE
 
 # call pg_createcluster

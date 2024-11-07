@@ -1,5 +1,6 @@
 postgresql-common (266) UNRELEASED; urgency=medium
 
+  * pg_upgradecluster: Support upgrades to 18 with data checksums disabled.
   * Fix pg_backupcluster with data checksums enabled.
 
  -- Christoph Berg <myon@debian.org>  Thu, 31 Oct 2024 14:58:19 +0100
