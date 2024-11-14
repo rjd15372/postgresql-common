@@ -23,6 +23,8 @@ foreach my $v (@MAJORS) {
     program_ok 'root', "pg_createcluster $v main --start", 0;
 
     my $jit_default = $v == '11' ? 'off' : 'on';
+    my ($os, $osversion) = os_release();
+    $jit_default == 'off' if ($v >= 18 and $os eq 'ubuntu' and $osversion <= 20.04); # PG18 needs llvm 13+, but focal has only 10 and 12
     like_program_out 'postgres', "psql -Xatc 'show jit'", 0, qr/$jit_default/, "JIT is $jit_default by default";
 
     if ($v > 11) { # skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)

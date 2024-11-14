@@ -1,3 +1,9 @@
+postgresql-common (267) UNRELEASED; urgency=medium
+
+  * t/027_jit.t: No jit for PG18+ on Ubuntu focal.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 14 Nov 2024 17:20:18 +0100
+
 postgresql-common (266) unstable; urgency=medium
 
   * pg_upgradecluster: Support upgrades to 18 with data checksums disabled.
