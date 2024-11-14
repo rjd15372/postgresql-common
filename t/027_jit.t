@@ -13,6 +13,8 @@ if (grep { $_ eq $arch} qw(alpha hppa hurd-i386 ia64 kfreebsd-amd64 kfreebsd-i38
     exit;
 }
 
+my ($os, $osversion) = os_release();
+
 foreach my $v (@MAJORS) {
     if ($v < 11) {
         ok 1, "No JIT support on $v";
@@ -23,13 +25,12 @@ foreach my $v (@MAJORS) {
     program_ok 'root', "pg_createcluster $v main --start", 0;
 
     my $jit_default = $v == '11' ? 'off' : 'on';
-    my ($os, $osversion) = os_release();
-    $jit_default == 'off' if ($v >= 18 and $os eq 'ubuntu' and $osversion <= 20.04); # PG18 needs llvm 13+, but focal has only 10 and 12
     like_program_out 'postgres', "psql -Xatc 'show jit'", 0, qr/$jit_default/, "JIT is $jit_default by default";
+    unlike_program_out 'postgres', "psql -c 'explain (analyze) select count(*) from pg_class'", 0, qr/JIT/,
+        "No JIT on cheap query";
 
-    if ($v > 11) { # skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)
-        unlike_program_out 'postgres', "psql -c 'explain (analyze) select count(*) from pg_class'", 0, qr/JIT/,
-            "No JIT on cheap query";
+    if ($v > 11 and # skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)
+            not ($v >= 18 and $os eq 'ubuntu' and $osversion <= 20.04)) { # PG18 needs llvm 13+, but focal has only 10 and 12
         program_ok 'root', "pg_conftool $v main set seq_page_cost 100000", 0;
         program_ok 'root', "pg_conftool $v main set random_page_cost 100000", 0;
         program_ok 'root', "pg_ctlcluster $v main reload", 0;
