@@ -1,5 +1,6 @@
 postgresql-common (269) UNRELEASED; urgency=medium
 
+  [ Christoph Berg ]
   * If the "postgresql" meta package is installed, offer automated upgrading
     of the "main" cluster. (Closes: #810730)
   * pg_upgradecluster: Check if all packages for the old version are installed
@@ -27,6 +28,9 @@ postgresql-common (269) UNRELEASED; urgency=medium
   * debian/maintscripts-functions: Create "main" cluster only when no other
     clusters exist yet.
   * Remove obsolete /etc/sysctl.d/30-postgresql-shm.conf. (Closes: #1042927)
+
+  [ Christopher Bock ]
+  * pg_backupcluster: Fix backup directory in documentation.
 
  -- Christoph Berg <myon@debian.org>  Thu, 09 Jan 2025 14:25:18 +0100
 

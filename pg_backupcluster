@@ -33,7 +33,7 @@ umask 027;
 sub help () {
     print "Syntax: $0 [options] <version> <cluster> <action>
 Actions:
-  createdirectory        Create /var/backups/version-cluster
+  createdirectory        Create /var/backups/postgresql/version-cluster
   basebackup             Backup using pg_basebackup
   dump                   Backup using pg_dump
   expiredumps <N>        Remove all but last N dumps
@@ -470,7 +470,7 @@ To ease integration with B<systemd> operation, the alternative syntax
 
 =item B<createdirectory>
 
-Create /var/backups and /var/backups/I<version>-I<cluster>.
+Create /var/backups/postgresql and /var/backups/postgresql/I<version>-I<cluster>.
 This action can be run as root to create the directories required for backups.
 All other actions will also attempt to create the directories when missing, but
 can of course only do that when running as root. They will switch to the
@@ -535,15 +535,15 @@ Verbose output, even when not running on a terminal.
 
 =over 4
 
-=item /var/backups
+=item /var/backups/postgresql
 
 Default root directory for cluster backup directories.
 
-=item /var/backups/I<version>-I<cluster>
+=item /var/backups/postgresql/I<version>-I<cluster>
 
 Default directory for cluster backups.
 
-=item /var/backups/I<version>-I<cluster>/I<timestamp>B<.basebackup>
+=item /var/backups/postgresql/I<version>-I<cluster>/I<timestamp>B<.basebackup>
 
 Backup from B<pg_backupcluster ... basebackup>.
 
@@ -564,7 +564,7 @@ Completion timestamp of backup run.
 
 =back
 
-=item /var/backups/I<version>-I<cluster>/I<timestamp>B<.dump>
+=item /var/backups/postgresql/I<version>-I<cluster>/I<timestamp>B<.dump>
 
 Backup from B<pg_backupcluster ... dump>.
 
@@ -598,7 +598,7 @@ Completion timestamp of backup run.
 
 =back
 
-=item /var/backups/I<version>-I<cluster>/B<wal>
+=item /var/backups/postgresql/I<version>-I<cluster>/B<wal>
 
 WAL files from B<pg_receivewal>.
 
