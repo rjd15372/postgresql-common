@@ -1,3 +1,11 @@
+postgresql-common (268) unstable; urgency=medium
+
+  * Move contents of postgresql-server-dev-all to postgresql-common so they
+    can be used stand-alone without pulling in postgresql-server-dev-* and
+    dependencies. -server-dev-all is now a pure meta package.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 09 Jan 2025 14:25:18 +0100
+
 postgresql-common (267) unstable; urgency=medium
 
   * t/027_jit.t: No jit for PG18+ on Ubuntu focal.

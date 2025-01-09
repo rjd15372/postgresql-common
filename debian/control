@@ -35,11 +35,10 @@ Conflicts:
  pgdg-keyring,
 Breaks:
  postgresql-9.1 (<< 9.1.1-3~),
-# pg_buildext moved pg-s-d-all in 204
- postgresql-server-dev-all (<< 204),
+ postgresql-server-dev-all (<< 268),
 Replaces:
  pgdg-keyring,
- postgresql-server-dev-all (<< 204),
+ postgresql-server-dev-all (<< 268),
 Description: PostgreSQL database-cluster manager
  The postgresql-common package provides a structure under which
  multiple versions of PostgreSQL may be installed and/or multiple
@@ -88,10 +87,9 @@ Depends:
  ${misc:Depends},
  ${server-dev-all-depends},
 Description: extension build tool for multiple PostgreSQL versions
- The postgresql-server-dev-all package provides the pg_buildext script for
- simplifying packaging of a PostgreSQL extension supporting multiple major
- versions of the product, and dh_make_pgxs which builds a template debian/
- source package directory based on pg_buildext.
+ The postgresql-server-dev-all metapackage depends on all server-dev-NN
+ packages for all supported PostgreSQL major versions, required to
+ build PostgreSQL extension packages.
  .
  PostgreSQL is a fully featured object-relational database management
  system. It supports a large part of the SQL standard and is designed

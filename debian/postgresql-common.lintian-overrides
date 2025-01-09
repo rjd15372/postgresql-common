@@ -9,3 +9,5 @@ postgresql-common: systemd-service-file-refers-to-unusual-wantedby-target *lib/s
 postgresql-common: script-not-executable *usr/share/postgresql-common/server/postgresql.mk*
 # part of the testsuite
 package-contains-documentation-outside-usr-share-doc *usr/share/postgresql-common/t/foo/foo-123/README.md*
+# files only used when postgresql-server-dev-all is installed
+postgresql-common: missing-dep-for-interpreter /usr/bin/make*
