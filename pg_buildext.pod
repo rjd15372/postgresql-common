@@ -299,7 +299,7 @@ configure the list of supported versions on your system.
 
 =item B<debian/tests/control.in:> (optional)
 
-  Depends: @, postgresql-contrib-PGVERSION, postgresql-PGVERSION-bar
+  Depends: @, postgresql-PGVERSION-bar
   Tests: installcheck
   Restrictions: allow-stderr
 
