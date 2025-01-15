@@ -24,6 +24,8 @@ Depends:
  libjson-perl,
  sysvinit-utils (>= 3.05-4~) | lsb-base,
  postgresql-client-common (= ${source:Version}),
+# TODO: remove postgresql-common-dev dependency before the PG18 release
+ postgresql-common-dev (= ${source:Version}),
  ssl-cert (>= 1.0.11),
  ucf,
  ${misc:Depends},
@@ -35,10 +37,8 @@ Conflicts:
  pgdg-keyring,
 Breaks:
  postgresql-9.1 (<< 9.1.1-3~),
- postgresql-server-dev-all (<< 268),
 Replaces:
  pgdg-keyring,
- postgresql-server-dev-all (<< 268),
 Description: PostgreSQL database-cluster manager
  The postgresql-common package provides a structure under which
  multiple versions of PostgreSQL may be installed and/or multiple
@@ -78,18 +78,41 @@ Description: manager for multiple PostgreSQL client versions
  outer joins, multiversion concurrency control, and user-defined types
  and functions.
 
-Package: postgresql-server-dev-all
-Architecture: any
-Multi-Arch: same
+Package: postgresql-common-dev
+Architecture: all
 Depends:
  make:any,
- postgresql-common (= ${source:Version}),
+ ${misc:Depends},
+Breaks:
+ postgresql-common (<< 268),
+ postgresql-server-dev-all (<< 268),
+Replaces:
+ postgresql-common (<< 268),
+ postgresql-server-dev-all (<< 268),
+Description: extension build tool for multiple PostgreSQL versions
+ The postgresql-server-dev-all package provides the pg_buildext script for
+ simplifying packaging of a PostgreSQL extension supporting multiple major
+ versions of the product, and dh_make_pgxs which builds a template debian/
+ source package directory based on pg_buildext.
+ .
+ PostgreSQL is a fully featured object-relational database management
+ system. It supports a large part of the SQL standard and is designed
+ to be extensible by users in many aspects. Its features include ACID
+ transactions, foreign keys, views, sequences, subqueries, triggers,
+ outer joins, multiversion concurrency control, and user-defined types
+ and functions.
+
+Package: postgresql-server-dev-all
+Architecture: all
+Depends:
+ postgresql-common-dev (= ${source:Version}),
  ${misc:Depends},
  ${server-dev-all-depends},
-Description: extension build tool for multiple PostgreSQL versions
+Description: build tools for multiple PostgreSQL versions
  The postgresql-server-dev-all metapackage depends on all server-dev-NN
  packages for all supported PostgreSQL major versions, required to
- build PostgreSQL extension packages.
+ build PostgreSQL extension packages, as well as on postgresql-common-dev
+ for build infrastructure.
  .
  PostgreSQL is a fully featured object-relational database management
  system. It supports a large part of the SQL standard and is designed

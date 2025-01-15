@@ -1,5 +1,3 @@
-debhelper/dh_pgxs_test.1
-dh_make_pgxs/dh_make_pgxs.1
 pg_backupcluster.1
 pg_buildext.1
 pg_conftool.1

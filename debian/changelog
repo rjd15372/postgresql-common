@@ -1,8 +1,16 @@
 postgresql-common (268) unstable; urgency=medium
 
-  * Move contents of postgresql-server-dev-all to postgresql-common so they
-    can be used stand-alone without pulling in postgresql-server-dev-* and
-    dependencies. -server-dev-all is now a pure meta package.
+  * Move contents of postgresql-server-dev-all to new package
+    postgresql-common-dev so they can be used stand-alone without pulling in
+    postgresql-common-dev-* and dependencies. postgresql-server-dev-all is now
+    a pure meta package. Also take over pg_buildext and server build files
+    from postgresql-common.
+  * postgresql-common temporarily depends on postgresql-common-dev until
+    all extension test dependencies have been updated. (Planned for the PG18
+    release preparations.)
+  * postgresql-common-dev is arch: all, convert postgresql-server-dev-all back
+    to arch: all as well since the PG build chain isn't cross-build ready yet
+    anyway.
 
  -- Christoph Berg <myon@debian.org>  Thu, 09 Jan 2025 14:25:18 +0100
 
