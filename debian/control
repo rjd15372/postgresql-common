@@ -84,11 +84,11 @@ Depends:
  make:any,
  ${misc:Depends},
 Breaks:
- postgresql-common (<< 268),
- postgresql-server-dev-all (<< 268),
+ postgresql-common (<< 269),
+ postgresql-server-dev-all (<< 269),
 Replaces:
- postgresql-common (<< 268),
- postgresql-server-dev-all (<< 268),
+ postgresql-common (<< 269),
+ postgresql-server-dev-all (<< 269),
 Description: extension build tool for multiple PostgreSQL versions
  The postgresql-server-dev-all package provides the pg_buildext script for
  simplifying packaging of a PostgreSQL extension supporting multiple major
