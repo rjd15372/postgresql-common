@@ -37,7 +37,7 @@
 # X: consider this version supported
 #
 # (C) 2005-2016 Martin Pitt <mpitt@debian.org>
-# (C) 2012-2024 Christoph Berg <myon@debian.org>
+# (C) 2012-2025 Christoph Berg <myon@debian.org>
 
 set -eu
 
@@ -46,39 +46,6 @@ DEFAULT="17"
 # functions
 
 default() {
-    . /etc/os-release
-    case "$ID" in
-        [uU]buntu)
-            ubuntu
-            ;;
-        [dD]ebian)
-            debian
-            ;;
-        *)
-            echo "supported-versions: WARNING! Unknown distribution ID in /etc/os-release: $ID" >&2
-            if  echo $ID_LIKE | grep -E '(^| )ubuntu($| )' > /dev/null; then
-                echo "ubuntu found in ID_LIKE, treating as Ubuntu" >&2
-                ubuntu
-            elif echo $ID_LIKE | grep -E '(^| )debian($| )' > /dev/null; then
-                echo "debian found in ID_LIKE, treating as Debian" >&2
-                debian
-            else
-                echo "Please submit this as a bug report to your distribution." >&2
-                /bin/echo -e "$DEFAULT"
-            fi
-            ;;
-    esac
-}
-
-ubuntu() {
-    echo "$DEFAULT"
-}
-
-debian() {
-    echo "$DEFAULT"
-}
-
-debian_backports() {
     echo "$DEFAULT"
 }
 
@@ -120,17 +87,8 @@ echo "$SUPPORTED_VERSIONS" | while read version release; do
     case $version in
         "") ;;
         $COMMENT*) ;;
-        default)
+        default|debian*|ubuntu*)
             default
-            ;;
-        debian)
-            debian
-            ;;
-        debian-backports)
-            debian_backports
-            ;;
-        ubuntu)
-            ubuntu
             ;;
         pgdg) # apt.postgresql.org
             pgdg
