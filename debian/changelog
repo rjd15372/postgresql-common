@@ -13,6 +13,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
     anyway.
   * Remove postgresql-contrib meta package, provide it from postgresql.
   * supported-versions: Remove obsolete distribution-detection code.
+  * postgresql-common.config: Remove deprecation notice for old majors.
 
  -- Christoph Berg <myon@debian.org>  Thu, 09 Jan 2025 14:25:18 +0100
 
