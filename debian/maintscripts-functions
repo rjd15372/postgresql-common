@@ -78,28 +78,37 @@ set_system_locale() {
 }
 
 # arguments: <major version> <most recently configured package version>
-configure_version() {
+create_main_cluster() {
     VERSION="$1"
-    PKG_VER="${3:-$1}"
 
-    # Create a main cluster for given version ($VERSION) if no cluster already exists
-    # for that version and we are installing from scratch.
-    [ "$VERSION" ] || { echo "Error: configure_version: need version parameter" >&2; exit 1; }
-    if [ ! -d "/etc/postgresql/$VERSION" ] || [ -z "$(ls /etc/postgresql/$VERSION)" ] || \
-       [ -z "$(ls /etc/postgresql/$VERSION/*/postgresql.conf 2>/dev/null)" ]; then
-        # skip creating the main cluster when this is not the first install, or
-        # when explicitly disabled ($create is on/off/"")
-        create=$(pg_conftool /etc/postgresql-common/createcluster.conf show -bs create_main_cluster || :)
-        if [ -z "$2" ] && [ "$create" != "off" ]; then
-            set_system_locale
-            pg_createcluster -u postgres --no-status $VERSION main ||
-                echo "Error: could not create default cluster. Please create it manually with
+    # Skip if this package was configured before
+    [ "$2" ] && return 0
+
+    # Skip if any other cluster already exists
+    [ "$(ls /etc/postgresql/*/*/postgresql.conf 2>/dev/null)" ] && return 0
+
+    # Skip if this isn't the newest major installed (assumes other packages are
+    # unpacked first before this one is configured)
+    [ "$(ls -v /usr/lib/postgresql/*/bin/postgres | tail -n1)" = "/usr/lib/postgresql/$VERSION/bin/postgres" ] || return 0
+
+    # Skip when disabled explicitly
+    create=$(pg_conftool /etc/postgresql-common/createcluster.conf show -bs create_main_cluster || :)
+    [ "$create" = "off" ] && return 0
+
+    set_system_locale
+    pg_createcluster -u postgres --no-status $VERSION main ||
+        echo "Error: could not create default cluster. Please create it manually with
 
   pg_createcluster $VERSION main --start
 
 or a similar command (see 'man pg_createcluster')." >&2
-        fi
-    fi
+}
+
+# arguments: <major version> <most recently configured package version>
+configure_version() {
+    VERSION="$1"
+    PKG_VER="${3:-$1}"
+    [ "$VERSION" ] || { echo "Error: configure_version: need version parameter" >&2; exit 1; }
 
     relink_postmaster_manpages
     _link_manpages "$VERSION" psql.1.gz "postgresql-client-$PKG_VER" "postgresql-$PKG_VER" "postgresql-contrib-$PKG_VER"
@@ -109,6 +118,9 @@ or a similar command (see 'man pg_createcluster')." >&2
 
     # done with debconf
     db_stop
+
+    # create cluster
+    create_main_cluster "$VERSION" "$2"
 
     # update list of packages not to apt-autoremove
     /usr/share/postgresql-common/pg_updateaptconfig
