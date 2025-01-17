@@ -88,6 +88,7 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
                 debhelper \
                 libecpg-dev \
                 locales-all \
+                postgresql-common-dev \
                 procps systemd \
                 netcat-openbsd \
                 hunspell-en-us \

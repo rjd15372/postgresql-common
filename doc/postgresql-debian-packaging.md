@@ -570,7 +570,7 @@ postgresql-unit/debian/tests/
 └── installcheck*
 
 $ cat debian/tests/control
-Depends: @, make
+Depends: @, postgresql-common-dev
 Tests: installcheck
 Restrictions: allow-stderr
 

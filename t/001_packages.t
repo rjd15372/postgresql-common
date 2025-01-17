@@ -7,7 +7,7 @@ use lib 't';
 use TestLib;
 use POSIX qw/setlocale LC_ALL LC_MESSAGES/;
 
-use Test::More tests => $PgCommon::rpm ? (3 + 8*@MAJORS) : (15 + 6*@MAJORS);
+use Test::More tests => $PgCommon::rpm ? (3 + 8*@MAJORS) : (16 + 6*@MAJORS);
 
 ok (-f "/etc/os-release", "/etc/os-release exists");
 my ($os, $osversion) = os_release();
@@ -60,9 +60,9 @@ foreach my $v (@MAJORS) {
 ok $docpkgs, "At least one doc package installed";
 
 ok ((deb_installed 'libecpg-dev'), 'libecpg-dev installed');
+ok ((deb_installed 'postgresql-common-dev'), 'postgresql-common-dev installed');
 ok ((deb_installed 'procps'), 'procps installed');
 ok ((deb_installed 'netcat-openbsd'), 'netcat-openbsd installed');
-
 ok ((deb_installed 'hunspell-en-us'), 'hunspell-en-us installed');
 
 # check installed locales to fail tests early if they are missing
