@@ -1,5 +1,7 @@
 postgresql-common (269) UNRELEASED; urgency=medium
 
+  * If the "postgresql" meta package is installed, offer automated upgrading
+    of the "main" cluster. (Closes: #810730)
   * pg_upgradecluster: Check if all packages for the old version are installed
     for the new version as well. (Closes: #703850)
   * Move contents of postgresql-server-dev-all to new package

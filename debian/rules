@@ -16,6 +16,7 @@ DEFAULT_VER := $(lastword $(SUPPORTED_VERSIONS))
 override_dh_auto_configure:
 	@echo "### Building postgresql-common flavor $(FLAVOR)"
 	@echo "### Supported PostgreSQL versions: $(SUPPORTED_VERSIONS) (default version: $(DEFAULT_VER))"
+	sed -i -e "s/^NEWVERSION=.*/NEWVERSION=$(DEFAULT_VER)/" debian/postgresql.config debian/postgresql.postinst
 
 ifeq ($(FLAVOR), pgdg)
 execute_after_dh_install:
