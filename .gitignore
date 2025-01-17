@@ -1,6 +1,5 @@
 *.1
 *.8
-supported_versions
 t/bar/debian/control
 t/foo/foo_123*.*
 t/foo/foo-123/build-*/

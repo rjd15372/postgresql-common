@@ -2,9 +2,7 @@
 
 include /usr/share/dpkg/pkg-info.mk
 
-ifneq ($(findstring bpo,$(DEB_VERSION)),)
-	FLAVOR := debian-backports
-else ifneq ($(findstring pgdg,$(DEB_VERSION)),)
+ifneq ($(findstring pgdg,$(DEB_VERSION)),)
 	FLAVOR := pgdg
 else
 	FLAVOR := default
@@ -18,8 +16,13 @@ DEFAULT_VER := $(lastword $(SUPPORTED_VERSIONS))
 override_dh_auto_configure:
 	@echo "### Building postgresql-common flavor $(FLAVOR)"
 	@echo "### Supported PostgreSQL versions: $(SUPPORTED_VERSIONS) (default version: $(DEFAULT_VER))"
+
+ifeq ($(FLAVOR), pgdg)
+execute_after_dh_install:
+	mkdir -p debian/postgresql-common-dev/etc
 	echo "# See /usr/share/postgresql-common/supported-versions for documentation of this file" > supported_versions
-	echo "$(FLAVOR)" >> supported_versions
+	echo "$(FLAVOR)" >> debian/postgresql-common-dev/etc/supported_versions
+endif
 
 # do not restart postgresql.service on postgresql-common upgrades
 override_dh_installinit:

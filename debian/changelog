@@ -12,7 +12,9 @@ postgresql-common (269) UNRELEASED; urgency=medium
     to arch: all as well since the PG build chain isn't cross-build ready yet
     anyway.
   * Remove postgresql-contrib meta package, provide it from postgresql.
-  * supported-versions: Remove obsolete distribution-detection code.
+  * supported-versions: Remove obsolete distribution-detection code; move to
+    postgresql-common-dev; don't install
+    /etc/postgresql-common/supported_versions by default.
   * postgresql-common.config: Remove deprecation notice for old majors.
   * debian/maintscripts-functions: Create "main" cluster only when no other
     clusters exist yet.
