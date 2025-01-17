@@ -4,7 +4,7 @@
 #
 # (C) 2005-2009 Martin Pitt <mpitt@debian.org>
 # (C) 2013 Peter Eisentraut <petere@debian.org>
-# (C) 2013-2023 Christoph Berg <myon@debian.org>
+# (C) 2013-2025 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -37,6 +37,37 @@ my $keep_on_error = 0;
 
 # do not trip over cwd not being accessible to postgres superuser
 chdir '/';
+
+sub pre_upgrade_check($$$) {
+    my ($oldversion, $newversion, $force_packages) = @_;
+
+    return 1 if ($version == $newversion);
+
+    my @new_packages = package_list("postgresql*-$newversion*");
+
+    my $missing = 0;
+    for my $oldpkg (package_list("postgresql*-$oldversion*")) {
+        next if ($oldpkg =~ /-(dbgsym|doc)/);
+        my $newpkg = $oldpkg;
+        $newpkg =~ s/-$oldversion/-$newversion/;
+        if (not grep {$_ eq $newpkg} @new_packages) {
+            print "$oldpkg is installed, but $newpkg is missing\n";
+            $missing++;
+        }
+    }
+
+    if ($missing) {
+        print "$missing package(s) from version $oldversion missing for version $newversion\n";
+        if ($force_packages) {
+            print "Ignoring as --force-package was used\n";
+        } else {
+            print "Install the missing packages and try pg_upgradecluster again. To ignore the issue, use --force-packages\n";
+            return 0;
+        }
+    }
+
+    return 1;
+}
 
 # update the new cluster's conffiles
 sub adapt_conffiles {
@@ -367,6 +398,8 @@ sub run_upgrade_scripts($) {
 my $newest_version = get_newest_version('postgres');
 $newversion = $newest_version;
 
+my $check_only = 0;
+my $force_packages = 0;
 my $method = 'dump';
 my $link = 0;
 my $clone = 0;
@@ -376,6 +409,8 @@ my $start = -1; # -1 = auto
 my ($locale, $lc_collate, $lc_ctype, $lc_messages, $lc_monetary, $lc_numeric,
     $lc_time, $logfile, $old_bindir, $jobs);
 GetOptions ('v|version=s' => \$newversion,
+            'check' => \$check_only,
+            'force-packages' => \$force_packages,
 	    'locale=s' => \$locale,
 	    'lc-collate=s' => \$lc_collate,
 	    'lc-ctype=s' => \$lc_ctype,
@@ -450,6 +485,17 @@ error "cluster $version/$cluster is already on version $newversion. " .
 if (cluster_exists $newversion, $newcluster) {
     error "target cluster $newversion/$newcluster already exists";
 }
+
+if (not pre_upgrade_check($version, $newversion, $force_packages)) {
+    error "pg_upgradecluster pre-upgrade checks failed";
+}
+
+if ($check_only) {
+    print "pg_upgradecluster pre-upgrade checks ok\n";
+    exit;
+}
+
+print "Upgrading cluster $version/$cluster to $newversion/$newcluster ...\n";
 
 my $oldcontrol = get_cluster_controldata ($version, $cluster);
 
@@ -837,6 +883,15 @@ this defaults to /var/lib/postgresql/I<newversion>/I<name>.
 =item B<-v> I<newversion>
 
 Set the version to upgrade to (default: latest available).
+
+=item B<--check>
+
+Check if all packages required for the upgrade are installed.
+
+=item B<--force-packages>
+
+Proceed with upgrading even when not all packages from the old PostgreSQL
+version are installed for the new version as well.
 
 =item B<--logfile> I<filel>
 

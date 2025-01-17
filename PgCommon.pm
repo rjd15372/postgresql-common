@@ -5,7 +5,7 @@ PgCommon - Common functions for the postgresql-common framework
 =head1 COPYRIGHT AND LICENSE
 
  (C) 2008-2009 Martin Pitt <mpitt@debian.org>
- (C) 2012-2024 Christoph Berg <myon@debian.org>
+ (C) 2012-2025 Christoph Berg <myon@debian.org>
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
@@ -36,7 +36,7 @@ our @EXPORT = qw/error user_cluster_map get_cluster_port set_cluster_port
     change_ugid system_or_error config_bool replace_v_c
     get_db_encoding get_db_locales get_cluster_locales get_cluster_controldata
     get_cluster_databases cluster_conf_filename read_cluster_conf_file
-    read_pg_hba read_pidfile valid_hba_method/;
+    read_pg_hba read_pidfile valid_hba_method package_list/;
 our @EXPORT_OK = qw/$confroot $binroot $rpm
     quote_conf_value read_conf_file get_conf_value
     set_conf_value set_conffile_value disable_conffile_value disable_conf_value
@@ -1662,6 +1662,28 @@ sub valid_hba_method {
     my %valid_methods = qw/trust 1 reject 1 md5 1 crypt 1 password 1 krb5 1 ident 1 pam 1/;
 
     return exists($valid_methods{$method});
+}
+
+=head2 package_list
+
+ Arguments: pattern for dpkg -l
+ Returns: list of packages matching pattern
+
+=cut
+
+sub package_list($) {
+    my $pattern = shift;
+
+    my @packages;
+
+    open (my $fh, '-|', 'dpkg', '-l', $pattern) or error "could not read list of packages";
+    while (<$fh>) {
+        next unless (/^ii\s+(\S+)/);
+        push @packages, $1;
+    }
+    close $fh;
+
+    return @packages;
 }
 
 1;

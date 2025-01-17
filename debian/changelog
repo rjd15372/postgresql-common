@@ -1,5 +1,7 @@
 postgresql-common (269) UNRELEASED; urgency=medium
 
+  * pg_upgradecluster: Check if all packages for the old version are installed
+    for the new version as well. (Closes: #703850)
   * Move contents of postgresql-server-dev-all to new package
     postgresql-common-dev so they can be used stand-alone without pulling in
     postgresql-common-dev-* and dependencies. postgresql-server-dev-all is now
