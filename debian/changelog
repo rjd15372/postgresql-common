@@ -27,6 +27,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
   * postgresql-common.config: Remove deprecation notice for old majors.
   * debian/maintscripts-functions: Create "main" cluster only when no other
     clusters exist yet.
+  * pg_buildexit: Pass -j to `make` invocations. (Salsa: !23)
   * Remove obsolete /etc/sysctl.d/30-postgresql-shm.conf. (Closes: #1042927)
 
   [ Christopher Bock ]
