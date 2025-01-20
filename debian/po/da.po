@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: postgresql-common\n"
 "Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2016-03-05 11:47+0100\n"
+"POT-Creation-Date: 2025-01-20 11:27+0100\n"
 "PO-Revision-Date: 2017-03-04 19:25+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <debian-l10n-danish@lists.debian.org>\n"
@@ -16,71 +16,59 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. Type: error
+#. Type: boolean
 #. Description
-#: ../postgresql-common.templates:1001
-msgid "Obsolete major version ${old}"
-msgstr "Forældet hovedversion ${old}"
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The PostgreSQL version ${old} is obsolete, but the server or client packages "
-"are still installed. Please install the latest packages (postgresql-"
-"${latest} and postgresql-client-${latest}) and upgrade the existing "
-"${oldversion} clusters with pg_upgradecluster (see manpage)."
+#: ../postgresql.templates:1001
+msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
-"PostgreSQL-versionen ${old} er forældet, men server- eller klientpakkerne er "
-"stadig installeret. Installer venligst de seneste pakker (postgresql-"
-"${latest} og postgresql-client-${latest}) og opgrader de eksisterende "
-"${oldversion}-klynger med pg_upgradecluster (se manpage)."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please be aware that the installation of postgresql-${latest} will "
-"automatically create a default cluster ${latest}/main. If you want to "
-"upgrade the ${old}/main cluster, you need to remove the already existing "
-"${latest} cluster (pg_dropcluster --stop ${latest} main, see manpage for "
-"details)."
-msgstr ""
-"Vær venligst opmærksom på at installationen af postgresql-${latest} "
-"automatisk vil oprette en standardklynge ${latest}/main. Hvis du ønsker at "
-"opgradere ${old}/main-klyngen, skal du fjerne den allerede eksisterende "
-"${latest}-klynge (pg_dropcluster --stop ${latest} main, se manpage for "
-"detaljer)."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The old server and client packages are no longer supported. After the "
-"existing clusters are upgraded, the postgresql-${old} and postgresql-client-"
-"${old} packages should be removed."
-msgstr ""
-"De gamle server- og klientpakker er ikke længere understøttet. Efter de "
-"eksisterende klynger er opgraderet, bør pakkerne postgresql-${old} og "
-"postgresql-client-${old} fjernes."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please see /usr/share/doc/postgresql-common/README.Debian.gz for details."
-msgstr ""
-"Se venligst /usr/share/doc/postgresql-common/README.Debian.gz for detaljer."
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql.templates:1001
+msgid ""
+"The PostgreSQL database cluster ${oldversion}/main can be upgraded to "
+"version ${newversion}, this will be attempted now. (If no automated cluster "
+"upgrades are desired, uninstall the \"postgresql\" meta package.)"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Alternatively, the cluster can later be upgraded by running the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Once the upgraded cluster has been validated to work, drop the old cluster "
+"using the command:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid ""
+"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
+"{newversion} failed. Please investigate the situation and re-run the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql-common.templates:1001
 msgid "Enable SSL by default in new PostgreSQL clusters?"
 msgstr "Aktiver SSL som standard i nye PostgreSQL-klynger?"
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "PostgreSQL supports SSL-encrypted connections. This is usually a good thing. "
 "However, if the database is solely accessed using TCP connections on "
@@ -92,7 +80,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "UNIX domain socket connections (called \"local\" in pg_hba.conf) are not "
 "affected by this setting. This setting concerns new PostgreSQL clusters "
@@ -106,19 +94,19 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid "If unsure, enable SSL."
 msgstr "Hvis usikker, aktiver SSL."
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid "PostgreSQL ${version} catalog version changed"
 msgstr "PostgreSQL ${version}-katalogversion ændrede sig"
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
 "The PostgreSQL cluster ${version} ${cluster} was created using catalog "
 "version ${db_catversion}, but the currently being installed package "
@@ -126,18 +114,18 @@ msgid ""
 "not be able to use this cluster until it was upgraded to the new catalog "
 "version."
 msgstr ""
-"PostgreSQL-klyngen ${version} ${cluster} blev oprettet med katalogversion "
-"${db_catversion}, men den i øjeblikket installeret pakke postgresql-${version} "
-"bruger katalogversion ${new_catversion}. Du vil ikke være i stand til "
-"at bruge denne klynge indtil den er opgraderet til den nye katalogversion."
+"PostgreSQL-klyngen ${version} ${cluster} blev oprettet med katalogversion $"
+"{db_catversion}, men den i øjeblikket installeret pakke postgresql-$"
+"{version} bruger katalogversion ${new_catversion}. Du vil ikke være i stand "
+"til at bruge denne klynge indtil den er opgraderet til den nye "
+"katalogversion."
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
-"The necessary subset of binaries from the old version was saved in "
-"${vartmpdir}. To upgrade the cluster, execute these commands:"
+"The necessary subset of binaries from the old version was saved in $"
+"{vartmpdir}. To upgrade the cluster, execute these commands:"
 msgstr ""
-"Det nødvendige undersæt af binære filer fra den gamle version blev "
-"gemt i ${vartmpdir}. For at opgradere klyngen, så kør disse kommandoer:"
-
+"Det nødvendige undersæt af binære filer fra den gamle version blev gemt i $"
+"{vartmpdir}. For at opgradere klyngen, så kør disse kommandoer:"

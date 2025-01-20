@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: postgresql-common 216 italian debconf templates\n"
 "Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2016-03-05 11:47+0100\n"
+"POT-Creation-Date: 2025-01-20 11:27+0100\n"
 "PO-Revision-Date: 2020-08-29 14:43+0200\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
@@ -15,70 +15,59 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. Type: error
+#. Type: boolean
 #. Description
-#: ../postgresql-common.templates:1001
-msgid "Obsolete major version ${old}"
-msgstr "La versione ${old} è obsoleta"
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The PostgreSQL version ${old} is obsolete, but the server or client packages "
-"are still installed. Please install the latest packages (postgresql-"
-"${latest} and postgresql-client-${latest}) and upgrade the existing "
-"${oldversion} clusters with pg_upgradecluster (see manpage)."
+#: ../postgresql.templates:1001
+msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
-"La versione ${old} di PostgreSQL è obsoleta ma alcuni dei pacchetti server "
-"o client sono ancora installati. Installare i pacchetti più recenti "
-"(postgresql-${latest} e postgresql-client-${latest}) e aggiornare i cluster "
-"${oldversion} esistenti con pg_upgradecluster (consultare la pagina man)."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please be aware that the installation of postgresql-${latest} will "
-"automatically create a default cluster ${latest}/main. If you want to "
-"upgrade the ${old}/main cluster, you need to remove the already existing "
-"${latest} cluster (pg_dropcluster --stop ${latest} main, see manpage for "
-"details)."
-msgstr ""
-"Attenzione: l'installazione di postgresql-${latest} crea automaticamente il "
-"cluster predefinito ${latest}/main. Per aggiornare il cluster ${old}/main è "
-"necessario rimuovere cluster ${latest} dopo la sua creazione (pg_dropcluster "
-"--stop ${latest} main, consultare la pagina man per i dettagli)."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The old server and client packages are no longer supported. After the "
-"existing clusters are upgraded, the postgresql-${old} and postgresql-client-"
-"${old} packages should be removed."
-msgstr ""
-"I vecchi pacchetti di server e client non sono più supportati. Dopo aver "
-"aggiornato i cluster esistenti è consigliabile rimuovere i pacchetti "
-"postgresql-${old} e postgresql-client-${old}."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please see /usr/share/doc/postgresql-common/README.Debian.gz for details."
-msgstr ""
-"Consultare /usr/share/doc/postgresql-common/README.Debian.gz per i dettagli."
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql.templates:1001
+msgid ""
+"The PostgreSQL database cluster ${oldversion}/main can be upgraded to "
+"version ${newversion}, this will be attempted now. (If no automated cluster "
+"upgrades are desired, uninstall the \"postgresql\" meta package.)"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Alternatively, the cluster can later be upgraded by running the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Once the upgraded cluster has been validated to work, drop the old cluster "
+"using the command:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid ""
+"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
+"{newversion} failed. Please investigate the situation and re-run the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql-common.templates:1001
 msgid "Enable SSL by default in new PostgreSQL clusters?"
 msgstr "Attivare in modo predefinito SSL nei nuovi cluster PostgreSQL?"
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "PostgreSQL supports SSL-encrypted connections. This is usually a good thing. "
 "However, if the database is solely accessed using TCP connections on "
@@ -91,7 +80,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "UNIX domain socket connections (called \"local\" in pg_hba.conf) are not "
 "affected by this setting. This setting concerns new PostgreSQL clusters "
@@ -106,19 +95,19 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid "If unsure, enable SSL."
 msgstr "Se non si è sicuri, attivare SSL."
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid "PostgreSQL ${version} catalog version changed"
 msgstr "Nuova versione ${version} del catalogo PostgreSQL"
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
 "The PostgreSQL cluster ${version} ${cluster} was created using catalog "
 "version ${db_catversion}, but the currently being installed package "
@@ -127,17 +116,17 @@ msgid ""
 "version."
 msgstr ""
 "Il cluster PostgreSQL ${version} ${cluster} è stato creato utilizzando un "
-"catalogo con versione ${db_catversion}, tuttavia il pacchetto postgresql-"
-"${version} che si sta installando utilizza la versione ${new_catversion} del "
+"catalogo con versione ${db_catversion}, tuttavia il pacchetto postgresql-$"
+"{version} che si sta installando utilizza la versione ${new_catversion} del "
 "catalogo. Non sarà possibile utilizzare questo cluster fino a quando non "
 "aggiornato alla nuova versione di catalogo."
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
-"The necessary subset of binaries from the old version was saved in "
-"${vartmpdir}. To upgrade the cluster, execute these commands:"
+"The necessary subset of binaries from the old version was saved in $"
+"{vartmpdir}. To upgrade the cluster, execute these commands:"
 msgstr ""
-"Un sottoinsieme dei comandi della versione precedente necessari è salvato "
-"in ${vartmpdir}. Eseguire questi comandi per aggiornare il cluster:"
+"Un sottoinsieme dei comandi della versione precedente necessari è salvato in "
+"${vartmpdir}. Eseguire questi comandi per aggiornare il cluster:"

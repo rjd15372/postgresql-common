@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: postgresql-common\n"
 "Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2016-03-05 11:47+0100\n"
+"POT-Creation-Date: 2025-01-20 11:27+0100\n"
 "PO-Revision-Date: 2020-05-03 15:56+0000\n"
 "Last-Translator: Camaleón <noelamac@gmail.com>\n"
 "Language-Team: Debian Spanish <debian-l10n-spanish@lists.debian.org>\n"
@@ -41,74 +41,60 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#. Type: error
+#. Type: boolean
 #. Description
-#: ../postgresql-common.templates:1001
-msgid "Obsolete major version ${old}"
-msgstr "Versión principal ${old} obsoleta"
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The PostgreSQL version ${old} is obsolete, but the server or client packages "
-"are still installed. Please install the latest packages (postgresql-"
-"${latest} and postgresql-client-${latest}) and upgrade the existing "
-"${oldversion} clusters with pg_upgradecluster (see manpage)."
+#: ../postgresql.templates:1001
+msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
-"La versión de PostgreSQL ${old} está obsoleta, pero el paquete del cliente o "
-"del servidor aún están instalados. Debe instalar las últimas versiones de "
-"los paquetes (postgresql-${latest} y postgresql-client-${latest}) y "
-"actualizar sus clústers ${oldversion} con la orden "
-"«pg_upgradecluster» (consulte la página del manual)."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please be aware that the installation of postgresql-${latest} will "
-"automatically create a default cluster ${latest}/main. If you want to "
-"upgrade the ${old}/main cluster, you need to remove the already existing "
-"${latest} cluster (pg_dropcluster --stop ${latest} main, see manpage for "
-"details)."
-msgstr ""
-"Tenga en cuenta que la instalación de postgresql-${latest} creará "
-"automáticamente un clúster por omisión ${latest}/main. Tiene que borrar el "
-"clúster ${latest} existente («pg_dropcluster --stop ${latest}) si desea "
-"actualizar el clúster ${old}/main, consulte la página de manual para conocer "
-"los detalles."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The old server and client packages are no longer supported. After the "
-"existing clusters are upgraded, the postgresql-${old} and postgresql-client-"
-"${old} packages should be removed."
-msgstr ""
-"Ya no se da soporte a los paquetes antiguos de cliente y servidor. Debería "
-"eliminar los paquetes postgresql-${old} y postgresql-client-${old} después "
-"de actualizar los clústers que tenga."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please see /usr/share/doc/postgresql-common/README.Debian.gz for details."
-msgstr ""
-"Para más información consulte «/usr/share/doc/postgresql-common/README."
-"Debian.gz»."
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql.templates:1001
+msgid ""
+"The PostgreSQL database cluster ${oldversion}/main can be upgraded to "
+"version ${newversion}, this will be attempted now. (If no automated cluster "
+"upgrades are desired, uninstall the \"postgresql\" meta package.)"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Alternatively, the cluster can later be upgraded by running the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Once the upgraded cluster has been validated to work, drop the old cluster "
+"using the command:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid ""
+"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
+"{newversion} failed. Please investigate the situation and re-run the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql-common.templates:1001
 msgid "Enable SSL by default in new PostgreSQL clusters?"
 msgstr ""
 "¿Desea activar SSL como predeterminado en los nuevos clústers de PostgreSQL?"
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "PostgreSQL supports SSL-encrypted connections. This is usually a good thing. "
 "However, if the database is solely accessed using TCP connections on "
@@ -121,7 +107,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "UNIX domain socket connections (called \"local\" in pg_hba.conf) are not "
 "affected by this setting. This setting concerns new PostgreSQL clusters "
@@ -135,19 +121,19 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid "If unsure, enable SSL."
 msgstr "Si no está seguro, active SSL."
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid "PostgreSQL ${version} catalog version changed"
 msgstr "La versión del catálogo de PostgreSQL ${version} ha cambiado"
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
 "The PostgreSQL cluster ${version} ${cluster} was created using catalog "
 "version ${db_catversion}, but the currently being installed package "
@@ -162,10 +148,10 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
-"The necessary subset of binaries from the old version was saved in "
-"${vartmpdir}. To upgrade the cluster, execute these commands:"
+"The necessary subset of binaries from the old version was saved in $"
+"{vartmpdir}. To upgrade the cluster, execute these commands:"
 msgstr ""
 "El subconjunto de los archivos binarios necesarios de la versión antigua se "
 "han guardado en ${vartmpdir}. Para actualizar el clúster, ejecute las "

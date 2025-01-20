@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: postgresql-common 172\n"
 "Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2016-03-05 11:47+0100\n"
+"POT-Creation-Date: 2025-01-20 11:27+0100\n"
 "PO-Revision-Date: 2016-01-12 16:00+0100\n"
 "Last-Translator: Frans Spiesschaert <Frans.Spiesschaert@yucom.be>\n"
 "Language-Team: Debian Dutch l10n Team <debian-l10n-dutch@lists.debian.org>\n"
@@ -21,70 +21,59 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#. Type: error
+#. Type: boolean
 #. Description
-#: ../postgresql-common.templates:1001
-msgid "Obsolete major version ${old}"
-msgstr "Verouderde hoofdversie ${old}"
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The PostgreSQL version ${old} is obsolete, but the server or client packages "
-"are still installed. Please install the latest packages (postgresql-"
-"${latest} and postgresql-client-${latest}) and upgrade the existing "
-"${oldversion} clusters with pg_upgradecluster (see manpage)."
+#: ../postgresql.templates:1001
+msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
-"De PostgreSQL versie ${old} is verouderd, maar het server- en/of "
-"clientpakket zijn nog geïnstalleerd. U dient de nieuwste pakketten "
-"(postgresql-${latest} en postgresql-client-${latest}) te installeren en uw "
-"bestaande ${oldversion} clusters op te waarderen met pg_upgradecluster (zie "
-"de man-pagina)."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please be aware that the installation of postgresql-${latest} will "
-"automatically create a default cluster ${latest}/main. If you want to "
-"upgrade the ${old}/main cluster, you need to remove the already existing "
-"${latest} cluster (pg_dropcluster --stop ${latest} main, see manpage for "
-"details)."
-msgstr ""
-"Let op: de installatie van postgresql-${latest} zal automatisch een "
-"standaardcluster ${latest}/main aanmaken. Indien u de cluster ${old}/main "
-"wilt opwaarderen dient u de reeds bestaande cluster ${latest} te verwijderen "
-"met \"pg_dropcluster --stop ${latest} main\". Zie de man-pagina voor details."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The old server and client packages are no longer supported. After the "
-"existing clusters are upgraded, the postgresql-${old} and postgresql-client-"
-"${old} packages should be removed."
-msgstr ""
-"De oude server- en clientpakketten worden niet langer ondersteund. Nadat u "
-"de bestaande clusters hebt opgewaardeerd, kunt u het beste de pakketten "
-"postgresql-${old} en postgresql-client-${old} verwijderen."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please see /usr/share/doc/postgresql-common/README.Debian.gz for details."
-msgstr "Zie /usr/share/doc/postgresql-common/README.Debian.gz voor details."
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql.templates:1001
+msgid ""
+"The PostgreSQL database cluster ${oldversion}/main can be upgraded to "
+"version ${newversion}, this will be attempted now. (If no automated cluster "
+"upgrades are desired, uninstall the \"postgresql\" meta package.)"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Alternatively, the cluster can later be upgraded by running the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Once the upgraded cluster has been validated to work, drop the old cluster "
+"using the command:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid ""
+"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
+"{newversion} failed. Please investigate the situation and re-run the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql-common.templates:1001
 msgid "Enable SSL by default in new PostgreSQL clusters?"
 msgstr "Standaard SSL activeren voor nieuwe PostgreSQL clusters?"
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "PostgreSQL supports SSL-encrypted connections. This is usually a good thing. "
 "However, if the database is solely accessed using TCP connections on "
@@ -97,7 +86,7 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "UNIX domain socket connections (called \"local\" in pg_hba.conf) are not "
 "affected by this setting. This setting concerns new PostgreSQL clusters "
@@ -112,19 +101,19 @@ msgstr ""
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid "If unsure, enable SSL."
 msgstr "Activeer SSL in geval van twijfel."
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid "PostgreSQL ${version} catalog version changed"
 msgstr "PostgreSQL ${version}: de catalogusversie werd gewijzigd"
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
 "The PostgreSQL cluster ${version} ${cluster} was created using catalog "
 "version ${db_catversion}, but the currently being installed package "
@@ -140,10 +129,10 @@ msgstr ""
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
-"The necessary subset of binaries from the old version was saved in "
-"${vartmpdir}. To upgrade the cluster, execute these commands:"
+"The necessary subset of binaries from the old version was saved in $"
+"{vartmpdir}. To upgrade the cluster, execute these commands:"
 msgstr ""
 "Van de oude versie werd een subset binaire bestanden die u daarvoor nog "
 "nodig heeft, opgeslagen in ${vartmpdir}. Voer de volgende commando's uit om "

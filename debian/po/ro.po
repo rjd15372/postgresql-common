@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: postgresql-common 246\n"
 "Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2016-03-05 11:47+0100\n"
+"POT-Creation-Date: 2025-01-20 11:27+0100\n"
 "PO-Revision-Date: 2023-02-12 18:02+0100\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <debian-l10n-romanian@lists.debian.org>\n"
@@ -26,128 +26,118 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Poedit 3.2.2\n"
 
-#. Type: error
+#. Type: boolean
 #. Description
-#: ../postgresql-common.templates:1001
-msgid "Obsolete major version ${old}"
-msgstr "Versiunea majoră învechită ${old}"
-
-# cluster, manpage
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The PostgreSQL version ${old} is obsolete, but the server or client packages "
-"are still installed. Please install the latest packages (postgresql-${latest} "
-"and postgresql-client-${latest}) and upgrade the existing ${oldversion} "
-"clusters with pg_upgradecluster (see manpage)."
+#: ../postgresql.templates:1001
+msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
-"Versiunea PostgreSQL ${old} este învechită, dar pachetele pentru server sau "
-"client sunt încă instalate. Instalați cele mai recente pachete (postgresql-"
-"${latest} și postgresql-client-${latest}) și actualizați clusterele "
-"${oldversion} existente cu ajutorul comenzii «pg_upgradecluster» (consultați "
-"pagina de manual)."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"Please be aware that the installation of postgresql-${latest} will "
-"automatically create a default cluster ${latest}/main. If you want to upgrade "
-"the ${old}/main cluster, you need to remove the already existing ${latest} "
-"cluster (pg_dropcluster --stop ${latest} main, see manpage for details)."
-msgstr ""
-"Se atrage atenția că instalarea postgresql-${latest} va crea în mod automat un "
-"cluster implicit „${latest}/main”. Dacă doriți să actualizați clusterul „${old}/"
-"main”, este necesar să eliminați clusterul „${latest}” care deja există "
-"(«pg_dropcluster --stop ${latest} main», consultați pagina de manual pentru "
-"detalii)."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid ""
-"The old server and client packages are no longer supported. After the existing "
-"clusters are upgraded, the postgresql-${old} and postgresql-client-${old} "
-"packages should be removed."
-msgstr ""
-"Pachetele vechi pentru server și client nu mai sunt întreținute. După "
-"actualizarea clusterelor existente pachetele postgresql-${old} și postgresql-"
-"client-${old} ar trebui dezinstalate."
-
-#. Type: error
-#. Description
-#: ../postgresql-common.templates:1001
-msgid "Please see /usr/share/doc/postgresql-common/README.Debian.gz for details."
-msgstr ""
-"Consultați „/usr/share/doc/postgresql-common/README.Debian.gz” pentru detalii."
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql.templates:1001
+msgid ""
+"The PostgreSQL database cluster ${oldversion}/main can be upgraded to "
+"version ${newversion}, this will be attempted now. (If no automated cluster "
+"upgrades are desired, uninstall the \"postgresql\" meta package.)"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Alternatively, the cluster can later be upgraded by running the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql.templates:1001
+msgid ""
+"Once the upgraded cluster has been validated to work, drop the old cluster "
+"using the command:"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
+msgstr ""
+
+#. Type: note
+#. Description
+#: ../postgresql.templates:2001
+msgid ""
+"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
+"{newversion} failed. Please investigate the situation and re-run the command:"
+msgstr ""
+
+#. Type: boolean
+#. Description
+#: ../postgresql-common.templates:1001
 msgid "Enable SSL by default in new PostgreSQL clusters?"
 msgstr "Activați protocolul SSL în mod implicit în noile clustere PostgreSQL?"
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "PostgreSQL supports SSL-encrypted connections. This is usually a good thing. "
-"However, if the database is solely accessed using TCP connections on localhost, "
-"SSL can be turned off without introducing security issues."
+"However, if the database is solely accessed using TCP connections on "
+"localhost, SSL can be turned off without introducing security issues."
 msgstr ""
-"PostgreSQL acceptă conexiuni criptate SSL. Acesta este de obicei un lucru bun. "
-"Cu toate acestea, dacă baza de date este accesată exclusiv folosind conexiuni "
-"TCP în localhost (mașina ta), protocolul SSL poate fi dezactivat fără a "
-"introduce probleme de securitate."
+"PostgreSQL acceptă conexiuni criptate SSL. Acesta este de obicei un lucru "
+"bun. Cu toate acestea, dacă baza de date este accesată exclusiv folosind "
+"conexiuni TCP în localhost (mașina ta), protocolul SSL poate fi dezactivat "
+"fără a introduce probleme de securitate."
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid ""
 "UNIX domain socket connections (called \"local\" in pg_hba.conf) are not "
-"affected by this setting. This setting concerns new PostgreSQL clusters created "
-"during package install, or by using the pg_createcluster command. It does not "
-"reconfigure existing clusters."
+"affected by this setting. This setting concerns new PostgreSQL clusters "
+"created during package install, or by using the pg_createcluster command. It "
+"does not reconfigure existing clusters."
 msgstr ""
-"Conexiunile la soclul de domeniu UNIX (numite „local” în „pg_hba.conf”) nu sunt "
-"afectate de această configurare. Această configurare se referă la noile "
-"clustere PostgreSQL create în timpul instalării pachetului, sau prin utilizarea "
-"comenzii «pg_createcluster». Nu reconfigurează clusterele existente."
+"Conexiunile la soclul de domeniu UNIX (numite „local” în „pg_hba.conf”) nu "
+"sunt afectate de această configurare. Această configurare se referă la noile "
+"clustere PostgreSQL create în timpul instalării pachetului, sau prin "
+"utilizarea comenzii «pg_createcluster». Nu reconfigurează clusterele "
+"existente."
 
 #. Type: boolean
 #. Description
-#: ../postgresql-common.templates:2001
+#: ../postgresql-common.templates:1001
 msgid "If unsure, enable SSL."
 msgstr "Dacă nu sunteți sigur, activați protocolul SSL."
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid "PostgreSQL ${version} catalog version changed"
 msgstr "Versiunea catalogului PostgreSQL ${version} a fost schimbată"
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
-"The PostgreSQL cluster ${version} ${cluster} was created using catalog version "
-"${db_catversion}, but the currently being installed package postgresql-"
-"${version} is using catalog version ${new_catversion}. You will not be able to "
-"use this cluster until it was upgraded to the new catalog version."
+"The PostgreSQL cluster ${version} ${cluster} was created using catalog "
+"version ${db_catversion}, but the currently being installed package "
+"postgresql-${version} is using catalog version ${new_catversion}. You will "
+"not be able to use this cluster until it was upgraded to the new catalog "
+"version."
 msgstr ""
-"Clusterul PostgreSQL ${cluster} ${version} a fost creat folosind versiunea de "
-"catalog ${db_catversion}, dar pachetul în curs de instalare postgresql-"
-"${version} folosește versiunea de catalog ${new_catversion}. Nu veți putea să "
+"Clusterul PostgreSQL ${cluster} ${version} a fost creat folosind versiunea "
+"de catalog ${db_catversion}, dar pachetul în curs de instalare postgresql-$"
+"{version} folosește versiunea de catalog ${new_catversion}. Nu veți putea să "
 "utilizați acest cluster până când nu a fost actualizat la noua versiune de "
 "catalog."
 
 #. Type: note
 #. Description
-#: ../postgresql-common.templates:3001
+#: ../postgresql-common.templates:2001
 msgid ""
-"The necessary subset of binaries from the old version was saved in "
-"${vartmpdir}. To upgrade the cluster, execute these commands:"
+"The necessary subset of binaries from the old version was saved in $"
+"{vartmpdir}. To upgrade the cluster, execute these commands:"
 msgstr ""
-"Subsetul necesar de binare din versiunea veche a fost salvat în „${vartmpdir}”. "
-"Pentru a actualiza clusterul, executați aceste comenzi:"
+"Subsetul necesar de binare din versiunea veche a fost salvat în „$"
+"{vartmpdir}”. Pentru a actualiza clusterul, executați aceste comenzi:"
