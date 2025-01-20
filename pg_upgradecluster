@@ -403,6 +403,7 @@ my $force_packages = 0;
 my $method = 'dump';
 my $link = 0;
 my $clone = 0;
+my $data_checksums; # default undef
 my $keep_port = 0;
 my $start = -1; # -1 = auto
 
@@ -423,6 +424,7 @@ GetOptions ('v|version=s' => \$newversion,
 	    'j|jobs=s', => \$jobs,
 	    'k|link' => \$link,
             'clone' => \$clone,
+            'data-checksums!' => \$data_checksums,
             'keep-port' => \$keep_port,
             'rename=s' => \$newcluster,
             'old-bindir=s' => \$old_bindir,
@@ -442,6 +444,9 @@ if ($method eq 'dump') {
     $clone = 1;
 } elsif ($method ne 'upgrade') {
     error 'method must be "dump", "upgrade", "link", or "clone"';
+}
+if (defined $data_checksums and $method ne 'dump') {
+    error "can only use --(no-)data-checksums with --method=dump";
 }
 
 # untaint
@@ -553,11 +558,11 @@ push @argv, ('--');
 push @argv, ('--locale-provider', $old_locale_provider) if $old_locale_provider;
 push @argv, ('--icu-locale', $old_icu_locale) if $old_icu_locale;
 push @argv, ('--icu-rules', $old_icu_rules) if $old_icu_rules;
-if ($oldcontrol->{'Data page checksum version'}) { # 0 = off
+if ($oldcontrol->{'Data page checksum version'} or (defined $data_checksums and $data_checksums == 1)) { # oldcontrol 0 = off
     # enable data checksums if the old cluster had them
     push @argv, ('--data-checksums');
 } else {
-    if ($newversion >= 18 and $method eq 'upgrade') {
+    if ($newversion >= 18 and ($method eq 'upgrade' or (defined $data_checksums and $data_checksums == 0))) {
         # disable data checksums when they would be enabled by default (18+), but the method uses doesn't allow transitioning
         push @argv, ('--no-data-checksums');
     }
@@ -866,8 +871,11 @@ B<pg_upgradecluster> upgrades an existing PostgreSQL server cluster (i. e. a
 collection of databases served by a B<postgres> instance) to a new version
 specified by I<newversion> (default: latest available version).  The
 configuration files of the old version are copied to the new cluster and
-adjusted for the new version.  The new cluster is set up to use data page
-checksums if the old cluster uses them.
+adjusted for the new version.
+
+By default, L<pg_dump(1)> is used to migrate data to the new cluster. Upgrade
+variants based on L<pg_upgrade(1)> can be selected using the B<--method>
+parameter.
 
 The cluster of the old version will be configured to use a previously unused
 port since the upgraded one will use the original port. The old cluster is not
@@ -948,6 +956,16 @@ In pg_upgrade mode, use efficient file cloning (also known as "reflinks"
 on some systems) instead of copying files to the new cluster. This option
 is merely passed on to pg_upgrade.  See L<pg_upgrade(1)> for details.
 
+=item B<--data-checksums>, B<--no-data-checksums>
+
+By default, the new cluster is set up to use data page checksums if the old
+cluster already uses them. Additionally, when using the B<dump> upgrade method,
+the new cluster will use data page checksums when upgrading to PostgreSQL 18 or
+later (which enables data page checksums by default).
+
+The B<--method=dump> behavior can explictly be controlled by the
+B<--data-checksums> and B<--no-data-checksums> options.
+
 =item B<-j>, B<--jobs>
 
 In pg_upgrade mode, number of simultaneous processes to use. This
@@ -1022,7 +1040,8 @@ The scripts are called as the user who owns the database.
 
 =head1 SEE ALSO
 
-L<pg_createcluster(8)>, L<pg_dropcluster(8)>, L<pg_lsclusters(1)>, L<pg_wrapper(1)>
+L<pg_createcluster(8)>, L<pg_dropcluster(8)>, L<pg_lsclusters(1)>, L<pg_wrapper(1)>,
+L<pg_dump(1)>, L<pg_upgrade(1)>
 
 =head1 AUTHORS
 
