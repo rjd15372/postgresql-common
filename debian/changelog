@@ -40,7 +40,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
 
   [ Michael Banck ]
   * pg_createcluster: Do not remove existing data directory on failure.
-    (Closes: #105630)
+    (Closes: #1056303)
 
  -- Christoph Berg <myon@debian.org>  Thu, 09 Jan 2025 14:25:18 +0100
 
