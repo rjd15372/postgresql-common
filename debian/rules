@@ -17,11 +17,12 @@ override_dh_auto_configure:
 	@echo "### Building postgresql-common flavor $(FLAVOR)"
 	@echo "### Supported PostgreSQL versions: $(SUPPORTED_VERSIONS) (default version: $(DEFAULT_VER))"
 	sed -i -e "s/^NEWVERSION=.*/NEWVERSION=$(DEFAULT_VER)/" debian/postgresql.config debian/postgresql.postinst
+	sed -e "s/NN/$(DEFAULT_VER)/g" -e "s/MM/$(shell echo $$(($(DEFAULT_VER) + 1)))/g" debian/README.Debian.in > debian/README.Debian
 
 ifeq ($(FLAVOR), pgdg)
 execute_after_dh_install:
 	mkdir -p debian/postgresql-common-dev/etc
-	echo "# See /usr/share/postgresql-common/supported-versions for documentation of this file" > supported_versions
+	echo "# See /usr/share/postgresql-common/supported-versions for documentation of this file" > debian/postgresql-common-dev/etc/supported_versions
 	echo "$(FLAVOR)" >> debian/postgresql-common-dev/etc/supported_versions
 endif
 

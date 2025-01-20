@@ -1,3 +1,4 @@
+debian/README.Debian
 tags
 t/bar/debian/control
 t/foo/foo-123/build-*/
