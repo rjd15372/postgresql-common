@@ -553,8 +553,15 @@ push @argv, ('--');
 push @argv, ('--locale-provider', $old_locale_provider) if $old_locale_provider;
 push @argv, ('--icu-locale', $old_icu_locale) if $old_icu_locale;
 push @argv, ('--icu-rules', $old_icu_rules) if $old_icu_rules;
-push @argv, ('--data-checksums') if $oldcontrol->{'Data page checksum version'}; # 0 = off
-push @argv, ('--no-data-checksums') if ($newversion >= 18 and not $oldcontrol->{'Data page checksum version'}); # 18+ defaults to on
+if ($oldcontrol->{'Data page checksum version'}) { # 0 = off
+    # enable data checksums if the old cluster had them
+    push @argv, ('--data-checksums');
+} else {
+    if ($newversion >= 18 and $method eq 'upgrade') {
+        # disable data checksums when they would be enabled by default (18+), but the method uses doesn't allow transitioning
+        push @argv, ('--no-data-checksums');
+    }
+}
 push @argv, ('--encryption-key-command', $info{config}->{encryption_key_command}) if $info{config}->{encryption_key_command}; # PostgreSQL TDE
 
 # call pg_createcluster

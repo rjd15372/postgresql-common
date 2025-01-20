@@ -15,12 +15,15 @@ use lib 't';
 use TestLib;
 use PgCommon;
 
-use Test::More tests => (@MAJORS == 1) ? 1 : 123 * 3;
+use Test::More tests => (@MAJORS == 1) ? 1 : 127 * 3;
 
 if (@MAJORS == 1) {
     pass 'only one major version installed, skipping upgrade tests';
     exit 0;
 }
+
+my $old_version = $MAJORS[0];
+my $new_version = $MAJORS[-1];
 
 foreach my $upgrade_options ('-m dump', '-m upgrade', '-m upgrade --link') {
 next if ($ENV{UPGRADE_METHOD} and $upgrade_options !~ /$ENV{UPGRADE_METHOD}$/); # hack to ease debugging individual methods
@@ -136,9 +139,12 @@ is_program_out 'postgres', "psql -qc \"CREATE TABLESPACE myts LOCATION '$tdir'\"
 is_program_out 'postgres', "psql -qc 'CREATE TABLE tstab (a int) TABLESPACE myts'",
     0, '', "creating table in tablespace";
 
-# Check clusters
+# check cluster properties
 like_program_out 'nobody', 'pg_lsclusters -h', 0,
     qr/^$MAJORS[0]\s+upgr\s+5432 online postgres/;
+my $old_has_checksums = $old_version >= 18 ? "on" : "off";
+is_program_out 'nobody', 'psql -Atc "show data_checksums" test', 0, "$old_has_checksums\n",
+    "old cluster checksums are $old_has_checksums";
 
 # Check SELECT in original cluster
 my $select_old;
@@ -257,6 +263,11 @@ is_program_out 'postgres', "psql -Atc 'SELECT spcname FROM pg_tablespace ORDER B
     0, "myts\npg_default\npg_global\n", "check tablespace of upgraded table";
 is_program_out 'postgres', "psql -Atc \"SELECT spcname FROM pg_class c LEFT JOIN pg_tablespace t ON (c.reltablespace = t.oid) WHERE c.relname = 'tstab'\"",
     0, "myts\n", "check tablespace of upgraded table";
+
+# check cluster properties
+my $new_has_checksums = ($old_version >= 18 or ($old_version < 18 and $new_version >= 18 and $upgrade_options =~ /dump/)) ? "on" : "off";
+is_program_out 'nobody', 'psql -Atc "show data_checksums" test', 0, "$new_has_checksums\n",
+    "new cluster checksums are $new_has_checksums";
 
 # stop servers, clean up
 is ((system "pg_dropcluster $MAJORS[0] upgr --stop"), 0, 'Dropping original cluster');
