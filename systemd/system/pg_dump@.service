@@ -10,5 +10,5 @@ Type=oneshot
 User=postgres
 Environment="KEEP=3"
 ExecStartPre=+/usr/bin/pg_backupcluster %i createdirectory
-ExecStart=/usr/bin/pg_backupcluster %i dump
-ExecStart=/usr/bin/pg_backupcluster %i expiredumps $KEEP
+ExecStart=/usr/bin/pg_backupcluster $DUMP_ARGS %i dump
+ExecStart=/usr/bin/pg_backupcluster $DUMP_ARGS %i expiredumps $KEEP

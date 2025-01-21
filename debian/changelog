@@ -7,6 +7,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
     for the new version as well. (Closes: #703850)
   * pg_upgradecluster: Enable checksums in "dump" upgrades to 18+; add
     --(no-)data-checksums option. (Closes: #959705)
+  * pg_backupcluster: Add -Z --compress option.
   * README.Debian: Update upgrade instructions and fill in major versions
     automatically. (Closes: #943788)
   * Move contents of postgresql-server-dev-all to new package
