@@ -114,9 +114,16 @@ sub switch_to_cluster_owner() {
 
 sub get_backupdir($$) {
     my ($starttime, $suffix) = @_;
+
     my $timestamp = strftime("%FT%H%M%SZ", gmtime($starttime));
     my $backupdir = "$clusterdir/$timestamp.$suffix";
     error "$backupdir already exists" if (-d $backupdir);
+    mkdir($backupdir, 0700) or error "mkdir $backupdir: $!";
+
+    open my $pidfh, '>', "$backupdir/.pid";
+    print $pidfh "$$\n";
+    close $pidfh;
+
     print "Creating $suffix in $backupdir\n" if ($verbose);
     return $backupdir;
 }
@@ -152,7 +159,6 @@ sub create_basebackup($) {
 
 sub create_dumpall($) {
     my $backupdir = shift;
-    mkdir($backupdir, 0750) or error "mkdir $backupdir: $!";
 
     my $icu = "";
     if ($version >= 15) {
@@ -249,6 +255,8 @@ sub create_status($$$$) {
     open F, '>', $statusfile or error "$statusfile: $!";
     print F $json->encode($statusjson) . "\n" or error "$statusfile: $!";
     close F or error "$$statusfile: $!";
+
+    unlink "$backupdir/.pid";
 }
 
 sub sync($) {
@@ -366,20 +374,35 @@ sub dirsize($) {
     return $size, $files;
 }
 
+sub get_status($) {
+    my ($dir) = @_;
+
+    return "" if (-f "$dir/status");
+
+    if (-f "$dir/.pid") {
+        open my $pidfh, "$dir/.pid";
+        my ($pid) = <$pidfh> =~ /(\d+)/;
+        chomp $pid;
+        return " RUNNING" if (kill 0, $pid);
+    }
+
+    return " BROKEN";
+}
+
 sub list() {
     print "Cluster $version $cluster backups in $clusterdir:\n";
     my $totalsize = 0;
     print "Dumps:\n";
     for my $dir (sort glob "$clusterdir/*.dump") {
         my ($size, $files) = dirsize($dir);
-        my $status = -f "$dir/status" ? '' : ' BROKEN';
+        my $status = get_status($dir);
         print "  $dir: $size Bytes$status\n";
         $totalsize += $size;
     }
     print "Basebackups:\n";
     for my $dir (sort glob "$clusterdir/*.backup") {
         my ($size, $files) = dirsize($dir);
-        my $status = -f "$dir/status" ? '' : ' BROKEN';
+        my $status = get_status($dir);
         print "  $dir: $size Bytes$status\n";
         $totalsize += $size;
     }

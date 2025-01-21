@@ -8,6 +8,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
   * pg_upgradecluster: Enable checksums in "dump" upgrades to 18+; add
     --(no-)data-checksums option. (Closes: #959705)
   * pg_backupcluster: Add -Z --compress option.
+  * pg_backupcluster: Mark RUNNING backups properly.
   * pg_dropcluster: Drop only tablespace dirs matching our catalog version.
   * README.Debian: Update upgrade instructions and fill in major versions
     automatically. (Closes: #943788)
