@@ -164,19 +164,20 @@ sub replace_v_c ($$$) {
 =head2 read_conf_file
 
  Read a 'var = value' style configuration file and return a hash with the
- values. Error out if the file cannot be read.
+ values. When missing_ok is not set, error out if the file is not present.
+ Syntax errors are fatal in any case.
 
  If the file name ends with '.conf', the keys will be normalized to
  lower case (suitable for e.g. postgresql.conf), otherwise kept intact
  (suitable for environment).
 
- Arguments: <path>
+ Arguments: <path> <missing_ok>
  Returns: hash (empty if file does not exist)
 
 =cut
 
 sub read_conf_file {
-    my ($config_path) = @_;
+    my ($config_path, $missing_ok) = @_;
     my %conf;
     local (*F);
 
@@ -202,17 +203,18 @@ sub read_conf_file {
                 opendir($dir, $absolute_path) or next;
                 foreach my $filename (sort readdir($dir) ) {
                     next if ($filename =~ m/^\./ or not $filename =~/\.conf$/ );
-                    my %include_conf = read_conf_file("$absolute_path/$filename");
+                    my %include_conf = read_conf_file("$absolute_path/$filename", 0);
                     while ( my ($k, $v) = each(%include_conf) ) {
                         $conf{$k} = $v;
                     }
                 }
                 closedir($dir);
-            } elsif (/^\s*include(?:_if_exists)?\s*=?\s*'([^']+)'\s*(?:#.*)?$/i) {
+            } elsif (/^\s*include(_if_exists)?\s*=?\s*'([^']+)'\s*(?:#.*)?$/i) {
                 # read included file and merge into %conf
-                my $path = $1;
+                my $missing_include_ok = $1 ? 1 : 0;
+                my $path = $2;
                 my $absolute_path = get_absolute_path($path, $config_path);
-                my %include_conf = read_conf_file($absolute_path);
+                my %include_conf = read_conf_file($absolute_path, $missing_include_ok);
                 while ( my ($k, $v) = each(%include_conf) ) {
                     $conf{$k} = $v;
                 }
@@ -236,6 +238,8 @@ sub read_conf_file {
             }
         }
         close F;
+    } else {
+        error "could not open $config_path" unless ($missing_ok);
     }
 
     return %conf;
@@ -269,19 +273,19 @@ sub cluster_conf_filename {
 
 Read a 'var = value' style configuration file from a cluster configuration
 
-Arguments: <version> <cluster> <config file name>
+Arguments: <version> <cluster> <config file name> <missing_ok>
 Returns: hash (empty if the file does not exist)
 
 =cut
 
 sub read_cluster_conf_file {
-    my ($version, $cluster, $configfile) = @_;
-    my %conf = read_conf_file(cluster_conf_filename($version, $cluster, $configfile));
+    my ($version, $cluster, $configfile, $missing_ok) = @_;
+    my %conf = read_conf_file(cluster_conf_filename($version, $cluster, $configfile), $missing_ok);
 
     if ($version >= 9.4 and $configfile eq 'postgresql.conf') { # merge settings changed by ALTER SYSTEM
         # data_directory cannot be changed by ALTER SYSTEM
         my $data_directory = cluster_data_directory($version, $cluster, \%conf);
-        my %auto_conf = read_conf_file "$data_directory/postgresql.auto.conf";
+        my %auto_conf = read_conf_file "$data_directory/postgresql.auto.conf", $missing_ok;
         foreach my $guc (keys %auto_conf) {
             next if ($guc eq 'data_directory'); # defend against pg_upgradecluster bug in 200..202
             $conf{$guc} = $auto_conf{$guc};
@@ -302,7 +306,7 @@ sub read_cluster_conf_file {
 =cut
 
 sub get_conf_value {
-    my %conf = (read_cluster_conf_file $_[0], $_[1], $_[2]);
+    my %conf = (read_cluster_conf_file $_[0], $_[1], $_[2], 1);
     return $conf{$_[3]};
 }
 
@@ -865,7 +869,7 @@ sub cluster_info {
     $result{'configdir'} = "$confroot/$v/$c";
     $result{'configuid'} = (stat "$result{configdir}/postgresql.conf")[4];
 
-    my %postgresql_conf = read_cluster_conf_file $v, $c, 'postgresql.conf';
+    my %postgresql_conf = read_cluster_conf_file $v, $c, 'postgresql.conf', 1;
     $result{'config'} = \%postgresql_conf;
     $result{'pgdata'} = cluster_data_directory $v, $c, \%postgresql_conf;
     return %result unless (keys %postgresql_conf);

@@ -175,7 +175,7 @@ my $cleanup_cruft = 0;
 
 my $startconf = '';
 my @pgoptions;
-my $createclusterconf = "$PgCommon::common_confdir/createcluster.conf";
+my $createclusterconf;
 my $environmentfile = "$PgCommon::common_confdir/environment";
 my ($owneruid, $ownergid, $socketdir, $datadir, $custom_logfile, $start, $port);
 my ($encoding, $locale, $lc_collate, $lc_ctype,  $lc_messages, $lc_monetary, $lc_numeric, $lc_time);
@@ -199,7 +199,7 @@ exit 1 unless GetOptions ('u|user=s' => \$owneruid, 'g|group=s' => \$ownergid,
     'lc-numeric=s' => \$lc_numeric, 'lc-time=s' => \$lc_time);
 
 # read defaults from /etc/postgresql-common/createcluster.conf
-%defaultconf = PgCommon::read_conf_file ($createclusterconf);
+%defaultconf = PgCommon::read_conf_file ($createclusterconf // "$PgCommon::common_confdir/createcluster.conf", not $createclusterconf);
 # process --pgoption parameters
 foreach my $guc (@pgoptions) {
     if ($guc->[1] eq '') {

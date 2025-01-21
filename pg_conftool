@@ -113,9 +113,9 @@ if ($ARGV[0] =~ /^(edit)$/) {
 if ($cmd eq 'show') {
     my %conf;
     if ($conffile =~ m!^/!) {
-        %conf = read_conf_file ($conffile);
+        %conf = read_conf_file ($conffile, 0);
     } else {
-        %conf = read_cluster_conf_file ($version, $cluster, $conffile);
+        %conf = read_cluster_conf_file ($version, $cluster, $conffile, 0);
     }
 
     if ($key eq 'all') {

@@ -33,7 +33,7 @@ sub do_upgrade {
 is_program_out 0, "pg_createcluster $MAJORS[0] main >/dev/null", 0, "";
 
 # generate configuration file with all settings and start cluster
-is_program_out 0, "sed -i -e 's/^#\\([a-z]\\)/\\1/' /etc/postgresql/$MAJORS[0]/main/postgresql.conf",
+is_program_out 0, "sed -i -e 's/^#\\([a-z]\\)/\\1/' -e \"s,include = '...',include = '/dev/null',\" /etc/postgresql/$MAJORS[0]/main/postgresql.conf",
     0, "", "Enabling all settings in /etc/postgresql/$MAJORS[0]/main/postgresql.conf";
 like PgCommon::get_conf_value($MAJORS[0], 'main', 'postgresql.conf', 'work_mem'), qr/MB/, "work_mem is set";
 

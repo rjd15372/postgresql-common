@@ -39,8 +39,7 @@ Options:
 ";
 }
 
-my $createclusterconf = "$PgCommon::common_confdir/createcluster.conf";
-my ($datadir, $port, $start, $recovery_target_time, $archive_recovery, $wal_archive);
+my ($datadir, $port, $start, $recovery_target_time, $archive_recovery, $wal_archive, $createclusterconf);
 
 exit 1 unless GetOptions (
     'd|datadir=s' => \$datadir,
@@ -72,7 +71,7 @@ if (@ARGV >= 2 and $ARGV[0] =~ m!^(\d+\.?\d)[-/]([^/]+)$!) {
 
 error "cluster $version $cluster already exists" if cluster_exists $version, $cluster;
 
-my %defaultconf = PgCommon::read_conf_file ($createclusterconf);
+my %defaultconf = PgCommon::read_conf_file ($createclusterconf // "$PgCommon::common_confdir/createcluster.conf", not $createclusterconf);
 
 # functions to be run as root
 
@@ -160,7 +159,7 @@ sub update_config($$$) {
     );
     $settings{cluster_name} = "$version/$cluster" if ($version >= 9.5);
     $settings{stats_temp_directory} = "/var/run/postgresql/$version-$cluster.pg_stat_tmp" if ($version < 15);
-    my %config = PgCommon::read_conf_file("$configdir/postgresql.conf");
+    my %config = PgCommon::read_conf_file("$configdir/postgresql.conf", 0);
     for my $guc (sort keys %settings) {
         if (not exists $config{$guc} or $config{$guc} ne $settings{$guc}) {
             print "Setting $guc = $settings{$guc}\n";

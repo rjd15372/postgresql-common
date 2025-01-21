@@ -89,7 +89,7 @@ foreach my $entry (@hba) {
 }
 
 # test read_conf_file()
-my %conf = PgCommon::read_conf_file '/nonexisting';
+my %conf = PgCommon::read_conf_file '/nonexisting', 1;
 is_deeply \%conf, {}, 'read_conf_file returns empty dict for nonexisting file';
 
 mkdir "$tdir/8.4";

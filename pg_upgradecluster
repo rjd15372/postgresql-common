@@ -72,7 +72,7 @@ sub pre_upgrade_check($$$) {
 # update the new cluster's conffiles
 sub adapt_conffiles {
     my ($newversion, $newcluster, $configfile) = @_;
-    my %c = read_cluster_conf_file $newversion, $newcluster, $configfile;
+    my %c = read_cluster_conf_file $newversion, $newcluster, $configfile, 0;
 
     # Arguments: <ref to conf hash> <name> <comment>
     my $deprecate = sub {

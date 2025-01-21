@@ -66,7 +66,7 @@ my $newdir = "$PgCommon::confroot/$version/$newcluster";
 rename $olddir, $newdir or error "Could not rename config directory $olddir: $!";
 
 # adapt paths to configuration files
-my %c = read_cluster_conf_file $version, $newcluster, 'postgresql.conf';
+my %c = read_cluster_conf_file $version, $newcluster, 'postgresql.conf', 0;
 if ($c{hba_file}) {
     PgCommon::set_conf_value $version, $newcluster, 'postgresql.conf', 'hba_file',
         strrepl($c{hba_file}, $oldcluster, $newcluster);

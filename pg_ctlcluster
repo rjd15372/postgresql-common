@@ -116,7 +116,7 @@ sub start {
     }
 
     # prepare environment (empty except for content of 'environment', and LANG)
-    %ENV = read_cluster_conf_file $version, $cluster, 'environment';
+    %ENV = read_cluster_conf_file $version, $cluster, 'environment', 1;
     # set LANG so non-ascii chars in the server log are not replaced by '?' (affected are non-session contexts)
     unless (exists $ENV{LANG}) {
 	my $lc_messages = PgCommon::get_conf_value $version, $cluster, 'postgresql.conf', 'lc_messages';
@@ -187,7 +187,7 @@ sub start {
 
     push @options, @pg_ctl_opts_from_cli if @pg_ctl_opts_from_cli;
 
-    my %pg_ctl_opts_from_file = read_cluster_conf_file $version, $cluster, 'pg_ctl.conf';
+    my %pg_ctl_opts_from_file = read_cluster_conf_file $version, $cluster, 'pg_ctl.conf', 1;
     push @options, split(' ', $pg_ctl_opts_from_file{'pg_ctl_options'})
 	if defined $pg_ctl_opts_from_file{'pg_ctl_options'} and $pg_ctl_opts_from_file{'pg_ctl_options'} ne '';
 
@@ -264,7 +264,7 @@ sub stop {
 
     push @options, @pg_ctl_opts_from_cli if @pg_ctl_opts_from_cli;
 
-    my %pg_ctl_opts_from_file = read_cluster_conf_file $version, $cluster, 'pg_ctl.conf';
+    my %pg_ctl_opts_from_file = read_cluster_conf_file $version, $cluster, 'pg_ctl.conf', 1;
     push @options, split(' ', $pg_ctl_opts_from_file{'pg_ctl_options'})
 	if defined $pg_ctl_opts_from_file{'pg_ctl_options'} and $pg_ctl_opts_from_file{'pg_ctl_options'} ne '';
 
