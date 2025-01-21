@@ -31,6 +31,8 @@ postgresql-common (269) UNRELEASED; urgency=medium
   * PgCommon.pm set_conffile_value: Fix replacing unquoted floats and negative
     values, thanks Allan Forsberg!
   * Remove obsolete /etc/sysctl.d/30-postgresql-shm.conf. (Closes: #1042927)
+  * Move apt.postgresql.org.{asc,gpg,sh} to postgresql-client-common.
+    Drop /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg compat code.
 
   [ Christopher Bock ]
   * pg_backupcluster: Fix backup directory in documentation.
