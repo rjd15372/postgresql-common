@@ -4,7 +4,7 @@
 # process attached.
 #
 # (C) 2005-2009 Martin Pitt <mpitt@debian.org>
-# (C) 2015-2021 Christoph Berg <myon@debian.org>
+# (C) 2015-2025 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -93,6 +93,14 @@ if ($info{'pgdata'} && -d $info{'pgdata'}) {
         }
     }
 
+    # get catalog version
+    my $catversion = "*"; # fall back to glob if pg_controldata is missing
+    my $pg_controldata = get_program_path 'pg_controldata', $version;
+    if (-e $pg_controldata) {
+        my $controldata = get_cluster_controldata $version, $cluster;
+        $catversion = $controldata->{'Catalog version number'};
+    }
+
     # remove tablespace subdirectories that belong to our version
     for my $link (glob "$info{pgdata}/pg_tblspc/*") {
         next unless (-l $link);
@@ -100,7 +108,7 @@ if ($info{'pgdata'} && -d $info{'pgdata'}) {
         my $tblspcowner = (stat($tblspc))[4];
         if (defined $tblspcowner and $tblspcowner == $info{owneruid}) {
             if ($version >= 9.0) {
-                for my $dir (glob "$tblspc/PG_${version}_*") {
+                for my $dir (glob "$tblspc/PG_${version}_$catversion") {
                     my $dirowner = (stat($dir))[4];
                     if (defined $dirowner and $dirowner == $info{owneruid}) {
                         my $result = system 'rm', '-r', '--', ($dir =~ /(.*)/); # untaint
