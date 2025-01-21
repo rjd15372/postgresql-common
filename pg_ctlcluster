@@ -208,7 +208,9 @@ sub start {
             exit $exit;
         }
     } else {
-        setsid or error "could not start session: $!";
+        if (setsid() < 0) {
+            error "could not start session: $!";
+        }
         if ($info{'logfile'}) {
             my $fd = POSIX::open($info{'logfile'}, POSIX::O_WRONLY|POSIX::O_APPEND|POSIX::O_CREAT) or error "Could not open logfile $info{'logfile'}";
             dup2($fd, 1);

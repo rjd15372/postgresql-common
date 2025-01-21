@@ -9,6 +9,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
     --(no-)data-checksums option. (Closes: #959705)
   * pg_backupcluster: Add -Z --compress option.
   * pg_backupcluster: Mark RUNNING backups properly.
+  * pg_ctlcluster: Fix setsid call, thanks Nam T. Nguyễn. (Closes: #1054782)
   * pg_dropcluster: Drop only tablespace dirs matching our catalog version.
   * README.Debian: Update upgrade instructions and fill in major versions
     automatically. (Closes: #943788)
