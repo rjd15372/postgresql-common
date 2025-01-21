@@ -275,6 +275,10 @@ versions() {
 # (not necessarily the same as listed in debian/control)
 installed_versions() {
     [ -e debian/control.in ] || die "debian/control.in not found"
+    if ! grep -q '^Package: .*PGVERSION' debian/control.in; then
+        die "No Package: PGVERSION pattern in debian/control.in found"
+    fi
+
     # extract package name template(s) from control.in, split into prefix and suffix
     perl -lne 'print "$1 $2" if /^Package: (.*)PGVERSION(.*)/' debian/control.in | \
         while read prefix suffix; do

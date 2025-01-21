@@ -28,6 +28,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
   * debian/maintscripts-functions: Create "main" cluster only when no other
     clusters exist yet.
   * pg_buildexit: Pass -j to `make` invocations. (Salsa: !23)
+  * pg_buildexit: Error out without a PGVERSION pattern in debian/control.in.
   * PgCommon.pm set_conffile_value: Fix replacing unquoted floats and negative
     values, thanks Allan Forsberg!
   * Remove obsolete /etc/sysctl.d/30-postgresql-shm.conf. (Closes: #1042927)
