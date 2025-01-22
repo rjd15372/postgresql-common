@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eu
+set -e
 
 # version information maintained by debian/rules
 NEWVERSION=17
