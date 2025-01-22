@@ -20,7 +20,7 @@ use strict;
 use warnings;
 my @srcdirs = ('/usr/share/hunspell', '/usr/share/myspell/dicts');
 my $cachedir = '/var/cache/postgresql/dicts';
-my $pgsharedir = '/usr/share/postgresql/';
+my $pgsharedir = '/usr/share/postgresql';
 
 use PgCommon;
 
