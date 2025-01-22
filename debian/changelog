@@ -1,4 +1,4 @@
-postgresql-common (269) UNRELEASED; urgency=medium
+postgresql-common (269) unstable; urgency=medium
 
   [ Christoph Berg ]
   * If the "postgresql" meta package is installed, offer automated upgrading
@@ -50,7 +50,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
   * pg_createcluster: Do not remove existing data directory on failure.
     (Closes: #1056303)
 
- -- Christoph Berg <myon@debian.org>  Thu, 09 Jan 2025 14:25:18 +0100
+ -- Christoph Berg <myon@debian.org>  Wed, 22 Jan 2025 20:05:11 +0100
 
 postgresql-common (267) unstable; urgency=medium
 
