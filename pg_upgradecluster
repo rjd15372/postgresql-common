@@ -873,9 +873,15 @@ specified by I<newversion> (default: latest available version).  The
 configuration files of the old version are copied to the new cluster and
 adjusted for the new version.
 
-By default, L<pg_dump(1)> is used to migrate data to the new cluster. Upgrade
-variants based on L<pg_upgrade(1)> can be selected using the B<--method>
-parameter.
+By default, L<pg_dump(1)> is used to migrate data and indexes to the new
+cluster. This is slow, but safe. Upgrade variants based on L<pg_upgrade(1)> can
+be selected using the B<--method=upgrade> parameter. This is faster, but care
+must be taken when using it in the context of an operating system upgrade. The
+sorting order ("collation") used in indexes is determined by B<libc> and
+B<libicu>, and new versions of these libraries might have a differ ordering,
+B<requiring index rebuilds after the upgrade>, or acknowledging that the
+ordering did not change using the B<ALTER COLLATION REFRESH VERSION> command.
+This step is not automated by B<pg_upgradecluster>.
 
 The cluster of the old version will be configured to use a previously unused
 port since the upgraded one will use the original port. The old cluster is not

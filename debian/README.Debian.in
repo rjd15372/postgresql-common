@@ -88,20 +88,13 @@ one will run on 5433.
 
 Use "pg_lsclusters" for displaying the cluster <-> port mapping.
 
-Default clusters and upgrading
+Upgrading
 ------------------------------
-When installing the first postgresql-NN package, a default
-cluster 'main' will automatically be created. This operation is
-equivalent to doing 'pg_createcluster NN main --start'.
-
 To upgrade a cluster to a newer PostgreSQL major version, install the
 postgresql-MM package (and any extension packages required), and run the
 command:
 
   pg_upgradecluster NN main -v MM
-
-See the pg_upgradecluster manpage for details, especially on upgrade methods
-(pg_dump vs pg_upgrade).
 
 If the "postgresql" meta package is installed, it automatically pulls in the
 postgresql-NN package for the latest supported PostgreSQL version in the
@@ -110,6 +103,13 @@ supported one, the "postgresql" meta package is switched to pull in
 postgresql-MM. On upgrading this meta package, you will be asked whether an
 attempt should be made to automatically upgrade the "main" cluster to the new
 version.
+
+By default, data is migrated to the new version using pg_dump. This rewrites
+data and indexes and is slow, but safe. A faster upgrade method can be selected
+with --method=upgrade which uses pg_upgrade under the hood. Make sure to
+understand the implications for index ordering on disk ("collation") when using
+this method across operating system upgrades. See the pg_upgradecluster manpage
+for details.
 
 Once the upgrade has been completed and the cluster has been verified to work,
 the old cluster

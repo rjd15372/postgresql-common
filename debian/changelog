@@ -12,7 +12,7 @@ postgresql-common (269) UNRELEASED; urgency=medium
   * pg_ctlcluster: Fix setsid call, thanks Nam T. Nguyễn. (Closes: #1054782)
   * pg_dropcluster: Drop only tablespace dirs matching our catalog version.
   * README.Debian: Update upgrade instructions and fill in major versions
-    automatically. (Closes: #943788)
+    automatically. (Closes: #943788, #971536)
   * Move contents of postgresql-server-dev-all to new package
     postgresql-common-dev so they can be used stand-alone without pulling in
     postgresql-common-dev-* and dependencies. postgresql-server-dev-all is now
@@ -269,7 +269,7 @@ postgresql-common (246) unstable; urgency=medium
 
   * pg_buildext: If PGVERSION appears outside the package name only, fill in
     the newest supported version.
-  * pg_wrapper: Select cluster based on port number as well.
+  * pg_wrapper: Select cluster based on port number as well. (Closes: #986186)
   * t/020_create_sql_remove.t: Fix pgwrapper+psql version test on pre-9.2.
   * pgdg: Include .asc and .gpg keys from pgdg-keyring; upgrade
     apt.postgresql.org.sh to write pgdg.sources instead of pgdg.list.
