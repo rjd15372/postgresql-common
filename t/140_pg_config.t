@@ -41,17 +41,14 @@ foreach $version (@MAJORS) {
     }
     SKIP: {
         skip 'build path not canonicalized on RedHat', 4 if ($PgCommon::rpm);
-        my $pkgversion = `dpkg-query -f '\${Version}' -W postgresql-server-dev-$version`;
         # check that we correctly canonicalized the build paths
         SKIP: {
             skip 'abs_top_builddir introduced in 9.5', 2 if ($version < 9.5);
-            skip 'abs_top_builddir not patched in Debian (old)stable', 2 if ($version < 10 and $pkgversion !~ /pgdg/);
             is_program_out 'postgres', "grep ^abs_top_builddir $PgCommon::binroot$version/lib/pgxs/src/Makefile.global", 0,
                 "abs_top_builddir = /build/postgresql-$version$ENV{PG_FLAVOR}/build\n";
         }
         SKIP: {
             skip 'abs_top_srcdir not patched before 9.3', 2 if ($version < 9.3);
-            skip 'abs_top_srcdir not patched in Debian (old)stable', 2 if ($version < 10 and $pkgversion !~ /pgdg/);
             is_program_out 'postgres', "grep ^abs_top_srcdir $PgCommon::binroot$version/lib/pgxs/src/Makefile.global", 0,
                 "abs_top_srcdir = /build/postgresql-$version$ENV{PG_FLAVOR}/build/..\n";
         }
@@ -63,7 +60,7 @@ for my $pg_config (@pg_configs) {
     if ($pg_config eq 'pg_config' or $PgCommon::rpm) { # pg_config should point at newest installed postgresql-server-dev-$version
         $version = $ALL_MAJORS[-1];
     } else { # pg_config.libpq-dev should point at postgresql-server-dev-$(version of libpq-dev)
-        my $libpqdev_version = `dpkg-query --showformat '\${Version}' --show libpq-dev`;
+        my $libpqdev_version = package_version "libpq-dev";
         $libpqdev_version =~ /^([89].\d|1.)/ or die "could not determine libpq-dev version";
         $version = $1;
     }

@@ -56,17 +56,10 @@ sub os_release {
 # Return whether a given deb is installed.
 # Arguments: <deb name>
 sub deb_installed {
-    open (DPKG, "dpkg -s $_[0] 2>/dev/null|") or die "call dpkg: $!";
-    my $result = 0;
-    while (<DPKG>) {
-	if (/^Status: install ok installed/) {
-	    $result = 1;
-	    last;
-	}
-    }
+    open (DPKG, "dpkg-query --showformat '\${db:Status-Status}' --show $_[0] 2>/dev/null|") or die "call dpkg-query: $!";
+    my $result = <DPKG>;
     close DPKG;
-
-    return $result;
+    return $result eq "installed";
 }
 
 # Return whether a given rpm is installed.
