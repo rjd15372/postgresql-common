@@ -14,8 +14,9 @@ if ($PgCommon::rpm) {
 }
 
 # when invoked from the postgresql-NN package tests, postgresql-server-dev-all is not installed
-if (! -x '/usr/bin/dh_make_pgxs') {
-    pass "Skipping pg_buildext tests, /usr/bin/dh_make_pgxs is not installed";
+my $server_dev_status = `dpkg-query --showformat '\${Status}' --show postgresql-server-dev-all 2> /dev/null`;
+unless ($server_dev_status =~ /installed/) {
+    pass "Skipping pg_buildext tests, postgresql-server-dev-all is not installed";
     done_testing();
     exit;
 }
