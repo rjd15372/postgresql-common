@@ -18,9 +18,9 @@ show_error () {
 
 try_upgrade () {
     # look for the newest "main" cluster
-    OLDVERSION=$(ls -dv /etc/postgresql/*/main/ | tail -n1)
-    OLDVERSION=${OLDVERSION#/etc/postgresql/}
-    OLDVERSION=${OLDVERSION%/main/}
+    OLDVERSION=$(pg_lsclusters -h | grep -E '^[0-9.]+ +main ' | tail -n1)
+    [ "$OLDVERSION" ] || return 0 # no cluster found
+    OLDVERSION=${OLDVERSION%% *}
 
     # check if that's older than the newest version
     dpkg --compare-versions $OLDVERSION lt $NEWVERSION || return 0

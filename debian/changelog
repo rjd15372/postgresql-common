@@ -1,5 +1,6 @@
 postgresql-common (270) UNRELEASED; urgency=medium
 
+  * postgresql-all.config: Handle systems without clusters.
   * t/190_pg_buildext.t: Check for postgresql-server-dev-all.
 
  -- Christoph Berg <myon@debian.org>  Thu, 23 Jan 2025 12:33:02 +0100
