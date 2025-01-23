@@ -142,9 +142,12 @@ is_program_out 'postgres', "psql -qc 'CREATE TABLE tstab (a int) TABLESPACE myts
 # check cluster properties
 like_program_out 'nobody', 'pg_lsclusters -h', 0,
     qr/^$MAJORS[0]\s+upgr\s+5432 online postgres/;
-my $old_has_checksums = $old_version >= 18 ? "on" : "off";
-is_program_out 'nobody', 'psql -Atc "show data_checksums" test', 0, "$old_has_checksums\n",
-    "old cluster checksums are $old_has_checksums";
+SKIP: {
+    skip "no data checksums before 9.3", 2 if ($old_version < 9.3);
+    my $old_has_checksums = $old_version >= 18 ? "on" : "off";
+    is_program_out 'nobody', 'psql -Atc "show data_checksums" test', 0, "$old_has_checksums\n",
+        "old cluster checksums are $old_has_checksums";
+}
 
 # Check SELECT in original cluster
 my $select_old;
@@ -265,9 +268,12 @@ is_program_out 'postgres', "psql -Atc \"SELECT spcname FROM pg_class c LEFT JOIN
     0, "myts\n", "check tablespace of upgraded table";
 
 # check cluster properties
-my $new_has_checksums = ($old_version >= 18 or ($old_version < 18 and $new_version >= 18 and $upgrade_options =~ /dump/)) ? "on" : "off";
-is_program_out 'nobody', 'psql -Atc "show data_checksums" test', 0, "$new_has_checksums\n",
-    "new cluster checksums are $new_has_checksums";
+SKIP: {
+    skip "no data checksums before 9.3", 2 if ($new_version < 9.3);
+    my $new_has_checksums = ($old_version >= 18 or ($old_version < 18 and $new_version >= 18 and $upgrade_options =~ /dump/)) ? "on" : "off";
+    is_program_out 'nobody', 'psql -Atc "show data_checksums" test', 0, "$new_has_checksums\n",
+        "new cluster checksums are $new_has_checksums";
+}
 
 # stop servers, clean up
 is ((system "pg_dropcluster $MAJORS[0] upgr --stop"), 0, 'Dropping original cluster');
