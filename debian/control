@@ -84,6 +84,7 @@ Description: manager for multiple PostgreSQL client versions
 
 Package: postgresql-common-dev
 Architecture: all
+Multi-Arch: foreign
 Depends:
  make:any,
  ${misc:Depends},
