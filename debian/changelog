@@ -1,6 +1,7 @@
 postgresql-common (271) UNRELEASED; urgency=medium
 
   * Mark postgresql-common-dev as M-A: foreign.
+  * pg_upgradecluster: Ignore missing postgresql-contrib-NN for 10+.
 
  -- Christoph Berg <myon@debian.org>  Sat, 25 Jan 2025 22:02:09 +0100
 

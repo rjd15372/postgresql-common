@@ -50,6 +50,9 @@ sub pre_upgrade_check($$$) {
         next if ($oldpkg =~ /-(dbgsym|doc)/);
         my $newpkg = $oldpkg;
         $newpkg =~ s/-$oldversion/-$newversion/;
+
+        next if ($newpkg =~ /^postgresql-contrib-/ and $newversion >= 10); # postgresql-contrib-NN merged into postgresql-NN in 10+
+
         if (not grep {$_ eq $newpkg} @new_packages) {
             print "$oldpkg is installed, but $newpkg is missing\n";
             $missing++;
