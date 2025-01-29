@@ -21,9 +21,9 @@ override_dh_auto_configure:
 
 ifeq ($(FLAVOR), pgdg)
 execute_after_dh_install:
-	mkdir -p debian/postgresql-common-dev/etc
-	echo "# See /usr/share/postgresql-common/supported-versions for documentation of this file" > debian/postgresql-common-dev/etc/supported_versions
-	echo "$(FLAVOR)" >> debian/postgresql-common-dev/etc/supported_versions
+	mkdir -p debian/postgresql-common-dev/etc/postgresql-common
+	echo "# See /usr/share/postgresql-common/supported-versions for documentation of this file" > debian/postgresql-common-dev/etc/postgresql-common/supported_versions
+	echo "$(FLAVOR)" >> debian/postgresql-common-dev/etc/postgresql-common/supported_versions
 endif
 
 # do not restart postgresql.service on postgresql-common upgrades
