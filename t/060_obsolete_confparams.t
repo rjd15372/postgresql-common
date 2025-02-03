@@ -45,7 +45,7 @@ PgCommon::disable_conf_value $MAJORS[0], 'main', 'postgresql.conf', 'include_if_
 PgCommon::disable_conf_value $MAJORS[0], 'main', 'postgresql.conf', 'include', "Disable placeholder value";
 # older versions (<= 9.1 as of 2019-03) do not support ssl anymore
 my $postgres = PgCommon::get_program_path('postgres', $MAJORS[0]);
-my $ldd = `ldd $postgres 2>/dev/null`;
+my $ldd = `objdump -p $postgres`;
 if ($ldd and $ldd !~ /libssl/) {
     is_program_out 0, "sed -i -e 's/^ssl/#ssl/' /etc/postgresql/$MAJORS[0]/main/postgresql.conf",
         0, "", "Disabling ssl settings on server that does not support SSL";

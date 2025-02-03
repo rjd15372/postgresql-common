@@ -1,6 +1,7 @@
 postgresql-common (271) UNRELEASED; urgency=medium
 
   * Mark postgresql-common-dev as M-A: foreign.
+  * pg_createcluster: Disable SSL on 9.1 and earlier.
   * pg_upgradecluster: Ignore missing postgresql-contrib-NN for 10+.
   * PgCommon read_cluster_conf_file: Allow postgresql.auto.conf to be missing.
 

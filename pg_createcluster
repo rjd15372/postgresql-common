@@ -451,9 +451,7 @@ if ($custom_logfile) {
 # SSL configuration
 my $want_ssl = PgCommon::config_bool($defaultconf{ssl} || 'on');
 # older versions (<= 9.1 as of 2019-03) do not support ssl anymore
-my $postgres = get_program_path('postgres', $version);
-my $ldd = `ldd $postgres 2>/dev/null`;
-$want_ssl = 0 if ($ldd and $ldd !~ /libssl/);
+$want_ssl = 0 if ($version <= 9.1);
 
 # Check whether we can access the SSL private key as the cluster owner
 my $ssl_key_file = '/etc/ssl/private/ssl-cert-snakeoil.key';

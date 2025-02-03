@@ -208,13 +208,12 @@ sub check_major {
     # verify that SSL is enabled (which should work for user postgres in a
     # default installation)
     my $ssl = config_bool (PgCommon::get_conf_value $v, 'main', 'postgresql.conf', 'ssl');
-    my $ssl_linked = `ldd $PgCommon::binroot$v/bin/postgres | grep libssl`;
+    my $ssl_linked = `objdump -p $PgCommon::binroot$v/bin/postgres | grep libssl`;
     my ($os, $osversion) = os_release();
     if ($PgCommon::rpm) {
         isnt $ssl_linked, '', 'Server is linked with SSL support';
         is $ssl, undef, 'SSL is disabled in postgresql.conf';
-    } elsif ($v <= 9.1 and (($os eq 'debian' and ($osversion eq 'unstable' or $osversion > 9)) or # stretch had 1.0 and 1.1
-                            ($os eq 'ubuntu' and $osversion > 18.04))) { # bionic had 1.0 and 1.1
+    } elsif ($v <= 9.1) {
         is $ssl_linked, '', 'Server is linked without SSL support (old version with only OpenSSL 1.0 support)';
         is $ssl, undef, 'SSL is disabled in postgresql.conf';
     } else {
