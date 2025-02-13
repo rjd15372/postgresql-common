@@ -1,3 +1,9 @@
+postgresql-common (272) unstable; urgency=medium
+
+  * Move libipc-run-perl dependency to postgresql-common-dev.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 13 Feb 2025 15:14:15 +0100
+
 postgresql-common (271) unstable; urgency=medium
 
   * Mark postgresql-common-dev as M-A: foreign.

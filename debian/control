@@ -59,7 +59,6 @@ Package: postgresql-client-common
 Architecture: all
 Multi-Arch: foreign
 Depends:
- libipc-run-perl,
  netbase,
  ${misc:Depends},
  ${perl:Depends},
@@ -86,6 +85,7 @@ Package: postgresql-common-dev
 Architecture: all
 Multi-Arch: foreign
 Depends:
+ libipc-run-perl,
  make:any,
  ${misc:Depends},
 Breaks:
