@@ -1,11 +1,11 @@
-postgresql-common (271) UNRELEASED; urgency=medium
+postgresql-common (271) unstable; urgency=medium
 
   * Mark postgresql-common-dev as M-A: foreign.
   * pg_createcluster: Disable SSL on 9.1 and earlier.
   * pg_upgradecluster: Ignore missing postgresql-contrib-NN for 10+.
   * PgCommon read_cluster_conf_file: Allow postgresql.auto.conf to be missing.
 
- -- Christoph Berg <myon@debian.org>  Sat, 25 Jan 2025 22:02:09 +0100
+ -- Christoph Berg <myon@debian.org>  Thu, 13 Feb 2025 15:01:44 +0100
 
 postgresql-common (270) unstable; urgency=medium
 
