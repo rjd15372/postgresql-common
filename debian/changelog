@@ -1,3 +1,11 @@
+postgresql-common (273) unstable; urgency=medium
+
+  * Temporarily remove dependency on "make" until the dependency from
+    postgresql-common on postgresql-common-dev is removed for the PG18
+    transititon.
+
+ -- Christoph Berg <myon@debian.org>  Fri, 14 Feb 2025 15:03:16 +0100
+
 postgresql-common (272) unstable; urgency=medium
 
   * Move libipc-run-perl dependency to postgresql-common-dev.

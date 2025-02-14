@@ -86,7 +86,8 @@ Architecture: all
 Multi-Arch: foreign
 Depends:
  libipc-run-perl,
- make:any,
+# TODO: re-add make dependency before the PG18 release
+# make:any,
  ${misc:Depends},
 Breaks:
  postgresql-client-common (<< 269),
