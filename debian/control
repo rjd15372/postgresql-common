@@ -33,12 +33,8 @@ Depends:
 Recommends:
  e2fsprogs,
  logrotate,
-Conflicts:
- pgdg-keyring,
 Breaks:
  postgresql-9.1 (<< 9.1.1-3~),
-Replaces:
- pgdg-keyring,
 Description: PostgreSQL database-cluster manager
  The postgresql-common package provides a structure under which
  multiple versions of PostgreSQL may be installed and/or multiple
@@ -63,8 +59,10 @@ Depends:
  ${misc:Depends},
  ${perl:Depends},
 Breaks:
+ pgdg-keyring,
  postgresql-common (<< 269),
 Replaces:
+ pgdg-keyring,
  postgresql-common (<< 269),
 Description: manager for multiple PostgreSQL client versions
  The postgresql-client-common package provides a structure under which

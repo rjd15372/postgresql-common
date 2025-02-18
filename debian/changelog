@@ -1,3 +1,10 @@
+postgresql-common (274) UNRELEASED; urgency=medium
+
+  * Move pgdg-keyring conflicts to postgresql-client-common where the files
+    are located now.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 18 Feb 2025 16:57:14 +0100
+
 postgresql-common (273) unstable; urgency=medium
 
   * Temporarily remove dependency on "make" until the dependency from
