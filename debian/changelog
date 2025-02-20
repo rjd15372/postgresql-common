@@ -1,9 +1,10 @@
-postgresql-common (274) UNRELEASED; urgency=medium
+postgresql-common (274) unstable; urgency=medium
 
+  * PgCommon.pm read_conf_file: Propagate missing_ok to included files.
   * Move pgdg-keyring conflicts to postgresql-client-common where the files
     are located now.
 
- -- Christoph Berg <myon@debian.org>  Tue, 18 Feb 2025 16:57:14 +0100
+ -- Christoph Berg <myon@debian.org>  Thu, 20 Feb 2025 11:52:38 +0100
 
 postgresql-common (273) unstable; urgency=medium
 

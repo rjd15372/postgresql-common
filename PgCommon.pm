@@ -203,7 +203,7 @@ sub read_conf_file {
                 opendir($dir, $absolute_path) or next;
                 foreach my $filename (sort readdir($dir) ) {
                     next if ($filename =~ m/^\./ or not $filename =~/\.conf$/ );
-                    my %include_conf = read_conf_file("$absolute_path/$filename", 0);
+                    my %include_conf = read_conf_file("$absolute_path/$filename", $missing_ok);
                     while ( my ($k, $v) = each(%include_conf) ) {
                         $conf{$k} = $v;
                     }
@@ -211,7 +211,7 @@ sub read_conf_file {
                 closedir($dir);
             } elsif (/^\s*include(_if_exists)?\s*=?\s*'([^']+)'\s*(?:#.*)?$/i) {
                 # read included file and merge into %conf
-                my $missing_include_ok = $1 ? 1 : 0;
+                my $missing_include_ok = $1 ? 1 : $missing_ok;
                 my $path = $2;
                 my $absolute_path = get_absolute_path($path, $config_path);
                 my %include_conf = read_conf_file($absolute_path, $missing_include_ok);
