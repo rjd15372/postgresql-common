@@ -117,6 +117,10 @@ ifeq ($(call version_ge,17),y)
   WITH_PG_BSD_INDENT = y
 endif
 
+ifeq ($(call version_ge,18),y)
+  CONFIGURE_FLAGS += --with-libcurl
+endif
+
 # Facilitate hierarchical profile generation on amd64 (#730134)
 ifeq ($(DEB_HOST_ARCH),amd64)
   CFLAGS += -fno-omit-frame-pointer
