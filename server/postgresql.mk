@@ -241,6 +241,10 @@ override_dh_install-arch:
 	bash -c "rm -v debian/postgresql-$(MAJOR_PKG)/usr/share/postgresql/$(MAJOR_VER)/extension/{plperl,plpython,pltcl,*_pl}*"
 	bash -c "rm -v debian/postgresql-$(MAJOR_PKG)/usr/lib/postgresql/$(MAJOR_VER)/lib/{plperl,plpython,pltcl,*_pl}*"
 	bash -c "rm -rfv debian/postgresql-$(MAJOR_PKG)/usr/lib/postgresql/$(MAJOR_VER)/lib/bitcode/*{plperl,plpython,pltcl}*"
+ifeq ($(call version_ge,18),y)
+	# shipped in the -jit package
+	rm -fv debian/postgresql-$(MAJOR_PKG)/usr/lib/postgresql/$(MAJOR_VER)/lib/llvmjit.so
+endif
 
 	# record catversion in a file
 	echo $(CATVERSION) > debian/postgresql-$(MAJOR_PKG)/usr/share/postgresql/$(MAJOR_VER)/catalog_version

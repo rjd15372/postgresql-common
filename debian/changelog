@@ -1,6 +1,7 @@
 postgresql-common (275) UNRELEASED; urgency=medium
 
-  * postgresql.mk: Enable --with-libcurl in PG18.
+  * postgresql.mk: Enable --with-libcurl in PG18; ship llvmjit.so in new -jit
+    package.
 
  -- Christoph Berg <myon@debian.org>  Thu, 20 Feb 2025 20:44:37 +0100
 
