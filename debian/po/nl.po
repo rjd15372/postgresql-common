@@ -4,14 +4,14 @@
 #
 # Vincent Zweije <zweije@xs4all.nl>, 2006.
 # Vincent Zweije <vincent@zweije.nl>, 2011.
-# Frans Spiesschaert <Frans.Spiesschaert@yucom.be>, 2014, 2016.
+# Frans Spiesschaert <Frans.Spiesschaert@yucom.be>, 2014, 2016, 2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: postgresql-common 172\n"
-"Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2025-01-20 11:27+0100\n"
-"PO-Revision-Date: 2016-01-12 16:00+0100\n"
+"Project-Id-Version: postgresql-common_270\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-05 16:45+0000\n"
+"PO-Revision-Date: 2025-02-07 17:40+0100\n"
 "Last-Translator: Frans Spiesschaert <Frans.Spiesschaert@yucom.be>\n"
 "Language-Team: Debian Dutch l10n Team <debian-l10n-dutch@lists.debian.org>\n"
 "Language: nl\n"
@@ -19,13 +19,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #. Type: boolean
 #. Description
 #: ../postgresql.templates:1001
 msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
+"De PostgreSQL-cluster ${oldversion}/main opwaarderen naar ${newversion}?"
 
 #. Type: boolean
 #. Description
@@ -35,6 +36,10 @@ msgid ""
 "version ${newversion}, this will be attempted now. (If no automated cluster "
 "upgrades are desired, uninstall the \"postgresql\" meta package.)"
 msgstr ""
+"De PostgreSQL-databasecluster ${oldversion}/main kan worden opgewaardeerd "
+"naar versie ${newversion}. Dit zal nu worden geprobeerd. (Als u geen "
+"automatische cluster-upgrades wenst, verwijder dan het meta-pakket "
+"\"postgresql\".)"
 
 #. Type: boolean
 #. Description
@@ -42,6 +47,7 @@ msgstr ""
 msgid ""
 "Alternatively, the cluster can later be upgraded by running the command:"
 msgstr ""
+"Een andere mogelijkheid is de cluster later op te waarderen met het commando:"
 
 #. Type: boolean
 #. Description
@@ -50,20 +56,27 @@ msgid ""
 "Once the upgraded cluster has been validated to work, drop the old cluster "
 "using the command:"
 msgstr ""
+"Zodra is gevalideerd dat de opgewaardeerde cluster werkt, verwijdert u de "
+"oude cluster met de volgende opdracht:"
 
 #. Type: note
 #. Description
 #: ../postgresql.templates:2001
 msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
 msgstr ""
+"De opwaardering van de PostgreSQL-cluster ${oldversion}/main is mislukt"
 
 #. Type: note
 #. Description
 #: ../postgresql.templates:2001
 msgid ""
-"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
-"{newversion} failed. Please investigate the situation and re-run the command:"
+"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version "
+"${newversion} failed. Please investigate the situation and re-run the "
+"command:"
 msgstr ""
+"De automatische upgrade van PostgreSQL-cluster ${oldversion}/main naar "
+"versie ${newversion} is mislukt. Onderzoek de situatie en voer de opdracht "
+"opnieuw uit:"
 
 #. Type: boolean
 #. Description
@@ -131,8 +144,8 @@ msgstr ""
 #. Description
 #: ../postgresql-common.templates:2001
 msgid ""
-"The necessary subset of binaries from the old version was saved in $"
-"{vartmpdir}. To upgrade the cluster, execute these commands:"
+"The necessary subset of binaries from the old version was saved in "
+"${vartmpdir}. To upgrade the cluster, execute these commands:"
 msgstr ""
 "Van de oude versie werd een subset binaire bestanden die u daarvoor nog "
 "nodig heeft, opgeslagen in ${vartmpdir}. Voer de volgende commando's uit om "
