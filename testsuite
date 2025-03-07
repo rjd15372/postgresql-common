@@ -3,7 +3,7 @@
 # Run integration tests (on the installed packages).
 #
 # (C) 2005-2012 Martin Pitt <mpitt@debian.org>
-# (C) 2012-2024 Christoph Berg <myon@debian.org>
+# (C) 2012-2025 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -76,11 +76,15 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
                         ;;
                     *) PYTHON3_PACKAGE=postgresql-plpython3-$v${PG_FLAVOR:-} ;;
                 esac
+                case $v in
+                    1[89]|2*) JIT_PACKAGE=postgresql-$v${PG_FLAVOR:-}-jit ;;
+                esac
                 apt-get install -y \
                     postgresql-contrib-$v${PG_FLAVOR:=} \
                     postgresql-plperl-$v$PG_FLAVOR \
                     ${PYTHON3_PACKAGE:-} \
                     postgresql-pltcl-$v$PG_FLAVOR \
+                    ${JIT_PACKAGE:-} \
                     postgresql-server-dev-$v$PG_FLAVOR \
                     postgresql-doc-$v$PG_FLAVOR
             done
