@@ -2,6 +2,7 @@ postgresql-common (275) UNRELEASED; urgency=medium
 
   * postgresql.mk: Enable --with-libcurl in PG18; ship llvmjit.so in new -jit
     package.
+  * t/TestLib.pm check_clean: Sleep and retry on failure. (Closes: #1099815)
   * Updated nl translation by Frans Spiesschaert, thanks! (Closes: #1099468)
   * Updated de translation by Hermann-Josef Beckers, thanks! (Closes: #1099529)
 

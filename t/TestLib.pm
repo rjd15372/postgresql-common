@@ -17,6 +17,7 @@ package TestLib;
 use strict;
 use Exporter;
 use Test::More;
+use Time::HiRes qw(usleep);
 use PgCommon qw/get_versions change_ugid next_free_port/;
 
 our $VERSION = 1.00;
@@ -234,7 +235,12 @@ sub unlike_program_out {
 sub check_clean {
     note "Cleanup";
     is (`pg_lsclusters -h`, '', 'Cleanup: No clusters left behind');
-    is ((ps 'postgres'), '', 'No postgres processes left behind');
+    my $ps = ps 'postgres';
+    if ($ps ne "") {
+        usleep $delay;
+        $ps = ps 'postgres';
+    }
+    is ($ps, '', 'No postgres processes left behind');
 
     my @check_dirs = ('/etc/postgresql', '/var/lib/postgresql',
         '/var/run/postgresql');
