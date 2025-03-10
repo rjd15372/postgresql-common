@@ -7,7 +7,7 @@ use lib 't';
 use TestLib;
 use POSIX qw/setlocale LC_ALL LC_MESSAGES/;
 
-use Test::More tests => $PgCommon::rpm ? (3 + 8*@MAJORS) : (16 + 6*@MAJORS);
+use Test::More tests => $PgCommon::rpm ? (3 + 8*@MAJORS) : (16 + 7*@MAJORS);
 
 ok (-f "/etc/os-release", "/etc/os-release exists");
 my ($os, $osversion) = os_release();
@@ -36,6 +36,7 @@ if ($PgCommon::rpm) {
 
 my $docpkgs = 0;
 foreach my $v (@MAJORS) {
+    note $v;
     ok ((deb_installed "postgresql-$v$f"), "postgresql-$v$f installed");
     SKIP: {
         skip "no Python 3 package for version $v", 1 if ($v < '9.1');
@@ -46,6 +47,10 @@ foreach my $v (@MAJORS) {
     }
     ok ((deb_installed "postgresql-plperl-$v$f"), "postgresql-plperl-$v$f installed");
     ok ((deb_installed "postgresql-pltcl-$v$f"), "postgresql-pltcl-$v$f installed");
+    SKIP: {
+        skip "No postgresql-$v$f-jit package for version $v", 1 if ($v < 18);
+        ok ((deb_installed "postgresql-$v$f-jit"), "postgresql-$v$f-jit installed");
+    }
     ok ((deb_installed "postgresql-server-dev-$v$f"), "postgresql-server-dev-$v$f installed");
   SKIP: {
     skip "No postgresql-contrib-$v$f package for version $v", 1 if ($v >= 10);
