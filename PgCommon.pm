@@ -282,7 +282,7 @@ sub read_cluster_conf_file {
     my ($version, $cluster, $configfile, $missing_ok) = @_;
     my %conf = read_conf_file(cluster_conf_filename($version, $cluster, $configfile), $missing_ok);
 
-    if ($version >= 9.4 and $configfile eq 'postgresql.conf') { # merge settings changed by ALTER SYSTEM
+    if (%conf and $version >= 9.4 and $configfile eq 'postgresql.conf') { # merge settings changed by ALTER SYSTEM
         # data_directory cannot be changed by ALTER SYSTEM
         my $data_directory = cluster_data_directory($version, $cluster, \%conf);
         # allow auto.conf to be missing; happens during early pg_upgradecluster when data_directory is still pointing to the old cluster
