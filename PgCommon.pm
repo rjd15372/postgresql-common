@@ -869,6 +869,7 @@ sub cluster_info {
     my %result;
     $result{'configdir'} = "$confroot/$v/$c";
     $result{'configuid'} = (stat "$result{configdir}/postgresql.conf")[4];
+    $result{'configfile'} = "$confroot/$v/$c/postgresql.conf";
 
     my %postgresql_conf = read_cluster_conf_file $v, $c, 'postgresql.conf', 1;
     $result{'config'} = \%postgresql_conf;

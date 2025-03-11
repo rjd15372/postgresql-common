@@ -72,6 +72,10 @@ foreach my $v (@versions) {
     foreach my $c (@clusters) {
         my %info = cluster_info $v, $c;
 
+        if (not -r $info{'configfile'}) {
+            print STDERR "Warning: configfile $info{'configfile'} not readable\n";
+        }
+
         my $status = $info{'running'} ? "online" : "down";
         $status .= ",recovery" if ($info{'recovery'});
         $status .= ",$info{supervisor}" if ($info{'supervisor'});
