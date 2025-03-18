@@ -1,12 +1,16 @@
-postgresql-common (275) UNRELEASED; urgency=medium
+postgresql-common (275) unstable; urgency=medium
 
+  [ Christoph Berg ]
   * postgresql.mk: Enable --with-libcurl in PG18; ship llvmjit.so in new -jit
     package.
   * t/TestLib.pm check_clean: Sleep and retry on failure. (Closes: #1099815)
   * Updated nl translation by Frans Spiesschaert, thanks! (Closes: #1099468)
   * Updated de translation by Hermann-Josef Beckers, thanks! (Closes: #1099529)
 
- -- Christoph Berg <myon@debian.org>  Thu, 20 Feb 2025 20:44:37 +0100
+  [ Michael Banck ]
+  * pg_lsclusters: Warn if postgresql.conf is not readable.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 18 Mar 2025 16:37:57 +0100
 
 postgresql-common (274) unstable; urgency=medium
 
