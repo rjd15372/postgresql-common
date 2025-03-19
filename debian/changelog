@@ -1,3 +1,10 @@
+postgresql-common (276) UNRELEASED; urgency=medium
+
+  * pg_virtualenv: Use PG18's extension_control_path to find extensions in
+    temporary build paths instead of our custom extension_destdir patch.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 19 Mar 2025 15:43:16 +0100
+
 postgresql-common (275) unstable; urgency=medium
 
   [ Christoph Berg ]

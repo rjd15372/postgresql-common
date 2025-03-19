@@ -189,12 +189,20 @@ fi
 for v in $PG_VERSIONS; do
     # create temporary cluster
     if [ "${PACKAGE:-}" ]; then
-        if ! grep -q 'extension_destdir' /usr/share/postgresql/$v/postgresql.conf.sample; then
-            echo "$0: This PostgreSQL $v installation does not support 'extension_destdir', skipping this version"
-            [ "$PG_VERSIONS" = "$v" ] && exit 0 # only one version requested
-            continue
-        fi
-        PKGARGS="--pgoption extension_destdir=$PWD/debian/$PACKAGE --pgoption dynamic_library_path=$PWD/debian/$PACKAGE/usr/lib/postgresql/$v/lib:/usr/lib/postgresql/$v/lib"
+        case $v in
+            18|19|[2-7]*) # find extension using extension_control_path
+                PKGARGS="--pgoption extension_control_path=$PWD/debian/$PACKAGE/usr/share/postgresql/$v/extension:\$system --pgoption dynamic_library_path=$PWD/debian/$PACKAGE/usr/lib/postgresql/$v/lib:/usr/lib/postgresql/$v/lib"
+                ;;
+            *) # older versions have a Debian-specific patch
+                if grep -q 'extension_destdir' /usr/share/postgresql/$v/postgresql.conf.sample; then
+                    PKGARGS="--pgoption extension_destdir=$PWD/debian/$PACKAGE --pgoption dynamic_library_path=$PWD/debian/$PACKAGE/usr/lib/postgresql/$v/lib:/usr/lib/postgresql/$v/lib"
+                else
+                    echo "$0: This PostgreSQL $v installation does not support 'extension_destdir', skipping this version"
+                    [ "$PG_VERSIONS" = "$v" ] && exit 0 # only one version requested
+                    continue
+                fi
+                ;;
+        esac
     fi
     # we chdir to / so programs don't throw "could not change directory to ..."
     (
