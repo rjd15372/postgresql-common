@@ -2,6 +2,7 @@ postgresql-common (276) UNRELEASED; urgency=medium
 
   * pg_virtualenv: Use PG18's extension_control_path to find extensions in
     temporary build paths instead of our custom extension_destdir patch.
+  * pg_buildext: Export $PG_CONFIG in all modes.
 
  -- Christoph Berg <myon@debian.org>  Wed, 19 Mar 2025 15:43:16 +0100
 

@@ -58,8 +58,8 @@ fi
 prepare_env() {
     local version=$1
     vtarget=`echo $target | sed -e "s:%v:$version:g"`
-    pgc="/usr/lib/postgresql/$version/bin/pg_config"
-    [ -e "$pgc" ] || die "$pgc does not exist"
+    export PG_CONFIG="/usr/lib/postgresql/$version/bin/pg_config"
+    [ -e "$PG_CONFIG" ] || die "$PG_CONFIG does not exist"
     if [ "${CFLAGS:-}" ]; then
         export COPT="$CFLAGS"
     fi
@@ -71,7 +71,7 @@ configure() {
 
     mkdir -p $vtarget
     ( echo "calling configure in $vtarget" &&
-      cd $vtarget && $srcdir/configure $confopts PG_CONFIG="$pgc" VPATH="$srcdir" ) || return $?
+      cd $vtarget && $srcdir/configure $confopts PG_CONFIG="$PG_CONFIG" VPATH="$srcdir" ) || return $?
 }
 
 build() {
@@ -84,7 +84,7 @@ build() {
     mkdir -p $vtarget
     # if a Makefile was created by configure, use it, else the top level Makefile
     [ -f $vtarget/Makefile ] || makefile="-f $srcdir/Makefile"
-    make -C $vtarget ${makefile:-} PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 ${MAKEVARS:-} || return $?
+    make -C $vtarget ${makefile:-} PG_CONFIG="$PG_CONFIG" VPATH="$srcdir" USE_PGXS=1 ${MAKEVARS:-} || return $?
 }
 
 substvars() {
@@ -117,7 +117,7 @@ install() {
     mkdir -p $vtarget
     # if a Makefile was created by configure, use it, else the top level Makefile
     [ -f $vtarget/Makefile ] || makefile="-f $srcdir/Makefile"
-    make -C $vtarget ${makefile:-} install DESTDIR="$PWD/debian/$package" PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 ${MAKEVARS:-} || return $?
+    make -C $vtarget ${makefile:-} install DESTDIR="$PWD/debian/$package" PG_CONFIG="$PG_CONFIG" VPATH="$srcdir" USE_PGXS=1 ${MAKEVARS:-} || return $?
     substvars "$1" "$package"
 }
 
@@ -133,12 +133,12 @@ loop() {
     package=$(echo $target | sed -e "s:%v:$1:g")
 
     echo "# $1: make"
-    make -C "$srcdir"         PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-} || return $?
+    make -C "$srcdir"         PG_CONFIG="$PG_CONFIG" USE_PGXS=1 ${MAKEVARS:-} || return $?
     echo "# $1: make install"
-    make -C "$srcdir" install DESTDIR="$PWD/debian/$package" PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-} || return $?
+    make -C "$srcdir" install DESTDIR="$PWD/debian/$package" PG_CONFIG="$PG_CONFIG" USE_PGXS=1 ${MAKEVARS:-} || return $?
     substvars "$1" "$package"
     echo "# $1: make clean"
-    make -C "$srcdir" clean   PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-} # clean errors are fatal
+    make -C "$srcdir" clean   PG_CONFIG="$PG_CONFIG" USE_PGXS=1 ${MAKEVARS:-} # clean errors are fatal
 }
 
 installcheck() {
@@ -164,7 +164,7 @@ installcheck() {
 	[ -f $vtarget/Makefile ] || makefile="-f $srcdir/Makefile"
         if ! pg_virtualenv ${PKGARGS:-} ${PG_VIRTUALENV_ARGS:-} -v $1 \
 	    make -C $vtarget ${makefile:-} installcheck ${DESTDIR:-} \
-                PG_CONFIG="$pgc" VPATH="$srcdir" USE_PGXS=1 \
+                PG_CONFIG="$PG_CONFIG" VPATH="$srcdir" USE_PGXS=1 \
                 PROVE_FLAGS=--verbose ${MAKEVARS:-}; then
 	    if [ -r $vtarget/regression.diffs ]; then
 		echo "**** $vtarget/regression.diffs ****"
@@ -174,7 +174,7 @@ installcheck() {
 	fi
     else
         if ! pg_virtualenv ${PKGARGS:-} ${PG_VIRTUALENV_ARGS:-} -v $1 \
-            make installcheck ${DESTDIR:-} PG_CONFIG="$pgc" USE_PGXS=1 \
+            make installcheck ${DESTDIR:-} PG_CONFIG="$PG_CONFIG" USE_PGXS=1 \
                 PROVE_FLAGS=--verbose ${MAKEVARS:-}; then
 	    if [ -r regression.diffs ]; then
 		echo "**** regression.diffs ****"
@@ -183,13 +183,14 @@ installcheck() {
 	    return 1
 	fi
         # since we are in the top-level directory, clean up behind us
-        make clean PG_CONFIG="$pgc" USE_PGXS=1 ${MAKEVARS:-}
+        make clean PG_CONFIG="$PG_CONFIG" USE_PGXS=1 ${MAKEVARS:-}
     fi
 }
 
 run_run () {
     local v=$1
     shift
+    prepare_env $v
 
     (
         echo + "${@//%v/$v}"
