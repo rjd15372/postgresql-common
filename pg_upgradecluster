@@ -242,6 +242,10 @@ sub adapt_conffiles {
         $deprecate->(\%c, 'db_user_namespace', 'does not exist anymore');
         $deprecate->(\%c, 'old_snapshot_threshold', 'does not exist anymore');
     }
+
+    if ($newversion >= '18') {
+        $deprecate->(\%c, 'extension_destdir', 'replaced by extension_control_path');
+    }
 }
 
 sub migrate_config_files() {
