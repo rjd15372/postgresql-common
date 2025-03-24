@@ -13,8 +13,11 @@ case $newversion in
     9.2|9.3)
         analyze="--analyze-only"
         ;;
-    *)
+    9.[4-6]|1[0-7])
         analyze="--analyze-in-stages"
+        ;;
+    *)
+        analyze="--analyze-in-stages --missing-stats-only"
         ;;
 esac
 
