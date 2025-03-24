@@ -1,29 +1,30 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Turkish translation of postgresql-common.
+# This file is distributed under the same license as the postgresql-common package.
 # Mert Dirik <mertdirik@gmail.com>, 2008.
-# Atila KOÇ <koc@artielektronik.com.tr>, 2015, 2018.
+# Atila KOÇ <koc@artielektronik.com.tr>, 2015, 2018, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: postgresql-common\n"
-"Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2025-01-20 11:27+0100\n"
-"PO-Revision-Date: 2018-10-22 13:54+0300\n"
+"Report-Msgid-Bugs-To: Debian PostgreSQL Maintainers "
+"<team+postgresql@tracker.debian.org>\n"
+"POT-Creation-Date: 2025-02-13 16:51+0000\n"
+"PO-Revision-Date: 2025-03-01 09:35+0300\n"
 "Last-Translator: Atila KOÇ <koc@artielektronik.com.tr>\n"
-"Language-Team: Debian L10n Turkish <debian-l10n-turkish@lists.debian.org>\n"
+"Language-Team: debian-l10n-turkish <debian-l10n-turkish@lists.debian.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.11\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.5\n"
 
 #. Type: boolean
 #. Description
 #: ../postgresql.templates:1001
 msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
+"${oldversion}/main PostgreSQL kümesi ${newversion} sürümüne yükseltilsin mi?"
 
 #. Type: boolean
 #. Description
@@ -33,6 +34,9 @@ msgid ""
 "version ${newversion}, this will be attempted now. (If no automated cluster "
 "upgrades are desired, uninstall the \"postgresql\" meta package.)"
 msgstr ""
+"${oldversion}/main sürümündeki PostgreSQL veritabanı kümesi ${newversion} "
+"sürümüne yükseltilebilir ve bu işlem şimdi denenecek. Eğer kendiliğnden küme "
+"yükseltme işlemlerini istemiyorsanız, \"postgresql\" meta paketini kaldırın."
 
 #. Type: boolean
 #. Description
@@ -40,6 +44,7 @@ msgstr ""
 msgid ""
 "Alternatively, the cluster can later be upgraded by running the command:"
 msgstr ""
+"Bunun yerine, kümeniz daha sonra şu komut çalıştırılarak yükseltilebilir:"
 
 #. Type: boolean
 #. Description
@@ -48,12 +53,15 @@ msgid ""
 "Once the upgraded cluster has been validated to work, drop the old cluster "
 "using the command:"
 msgstr ""
+"Yükseltilmiş kümenin sorunsuz çalıştığından emin olduktan sonra eski kümeyi "
+"şu komutu kullanarak ayırın:"
 
 #. Type: note
 #. Description
 #: ../postgresql.templates:2001
 msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
 msgstr ""
+"PostgreSQL kümesinin ${oldversion}/main sürümüne yükseltilmesi başarısız oldu"
 
 #. Type: note
 #. Description
@@ -62,6 +70,9 @@ msgid ""
 "The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
 "{newversion} failed. Please investigate the situation and re-run the command:"
 msgstr ""
+"${oldversion}/main sürümündeki PostgreSQL kümesinin ${newversion} yeni "
+"sürümüne yükseltilmesi başarısız oldu. Durumu gözden geçirin ve sonrasında "
+"şu komutu yeniden çalıştırın:"
 
 #. Type: boolean
 #. Description
@@ -77,9 +88,9 @@ msgid ""
 "However, if the database is solely accessed using TCP connections on "
 "localhost, SSL can be turned off without introducing security issues."
 msgstr ""
-"PostgreSQL SSL ile şifrelenmiş bağlantıları destekler. SSL kullanmak "
+"PostgreSQL SSL ile şifrelenmiş bağlantıları destekler. SSL ile bağlanmak "
 "genellikle iyidir. Bununla beraber, veritabanına yalnızca yerel makineden "
-"TCP bağlantıları ile erişiliyorsa, SSL'in devre dışı bırakılması güvenlik "
+"TCP bağlantıları ile erişiliyorsa, SSL'nin devre dışı bırakılması güvenlik "
 "açığına neden olmaz."
 
 #. Type: boolean
@@ -94,7 +105,7 @@ msgstr ""
 "UNIX bazlı soket bağlantıları (ph_hba.conf dosyasında \"local\" tipi ile "
 "listelenenler) bu ayardan etkilenmezler. Bu ayar paketin kurulumu sırasında "
 "ya da pg_createcluster komutu kullanılarak oluşturulan yeni PostgreSQL "
-"kümelerini ilgilendirir; varolan kümeleri etkilemez."
+"kümelerini ilgilendirir; varolan kümeleri yeniden yapılandırmaz."
 
 #. Type: boolean
 #. Description
@@ -119,9 +130,9 @@ msgid ""
 "version."
 msgstr ""
 "${version} ${cluster} PostgreSQL kümesi ${db_catversion} katalog sürümü ile "
-"oluşturulmuş, kullanmakta olduğunuz postgresql-${version} sürümü ise $"
-"{new_catversion} katalog sürümünü kullanıyor. Yeni katalog sürümüne "
-"yükseltmedikçe bu kümeyi kullanamayacaksınız."
+"oluşturulmuş, fakat kurmakta olduğunuz postgresql-${version} ise $"
+"{new_catversion} katalog sürümünü kullanıyor. Eski kümenizi yeni katalog "
+"sürümüne yükseltmedikçe, kullanamayacaksınız."
 
 #. Type: note
 #. Description
