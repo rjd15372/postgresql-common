@@ -82,23 +82,28 @@ ifeq ($(call version_ge,10),y)
   CONFIGURE_FLAGS += --with-icu
 endif
 
-ifeq ($(call version_ge,11)$(filter pkg.postgresql.nollvm,$(DEB_BUILD_PROFILES)),y)
-  # if package depends on LLVM, use it
-  LLVM_VERSIONED_DEP=$(shell grep 'llvm-[0-9]*-dev' debian/control | grep -v "!$(DEB_HOST_ARCH)" | grep -o '[0-9]*' | head -n1)
-  LLVM_DEP=$(shell grep 'llvm-dev' debian/control | grep -v "!$(DEB_HOST_ARCH)")
-  ifneq ($(LLVM_VERSIONED_DEP)$(LLVM_DEP),)
-    ifneq ($(LLVM_VERSIONED_DEP),)
-      LLVM_VERSION = $(LLVM_VERSIONED_DEP)
-      LLVM_CONFIG = /usr/bin/llvm-config-$(LLVM_VERSION)
-    else
-      LLVM_CONFIG = $(lastword $(shell ls -v /usr/bin/llvm-config-*))
-      LLVM_VERSION = $(subst /usr/bin/llvm-config-,,$(LLVM_CONFIG))
-    endif
-    CONFIGURE_FLAGS += --with-llvm LLVM_CONFIG=$(LLVM_CONFIG) CLANG=/usr/bin/clang-$(LLVM_VERSION)
-  else
-    LLVM_VERSION = 0.invalid # mute dpkg error on empty version fields in debian/control
+# LLVM support
+LLVM_VERSIONED_DEP=$(shell grep 'llvm-[0-9]*-dev' debian/control | grep -v "!$(DEB_HOST_ARCH)" | grep -o '[0-9]*' | head -n1)
+ifeq ($(call version_ge,18),y)
+  # PG 18+: check if postgresql-NN-jit is to be built
+  WITH_LLVM=$(shell dh_listpackages -p postgresql-18-jit)
+else
+  # PG 11..17: if package depends on LLVM, use it
+  ifeq ($(filter pkg.postgresql.nollvm,$(DEB_BUILD_PROFILES)),)
+    LLVM_DEP=$(shell grep 'llvm-dev' debian/control | grep -v "!$(DEB_HOST_ARCH)")
+    WITH_LLVM=$(LLVM_VERSIONED_DEP)$(LLVM_DEP)
   endif
-  TEMP_CONFIG = TEMP_CONFIG=$(AUX_MK_DIR)/test-with-jit.conf
+endif
+
+ifneq ($(WITH_LLVM),)
+  ifneq ($(LLVM_VERSIONED_DEP),)
+    LLVM_VERSION = $(LLVM_VERSIONED_DEP)
+    LLVM_CONFIG = /usr/bin/llvm-config-$(LLVM_VERSION)
+  else
+    LLVM_CONFIG = $(lastword $(shell ls -v /usr/bin/llvm-config-*))
+    LLVM_VERSION = $(subst /usr/bin/llvm-config-,,$(LLVM_CONFIG))
+  endif
+  CONFIGURE_FLAGS += --with-llvm LLVM_CONFIG=$(LLVM_CONFIG) CLANG=/usr/bin/clang-$(LLVM_VERSION)
 else
   LLVM_VERSION = 0.invalid # mute dpkg error on empty version fields in debian/control
 endif
@@ -268,7 +273,6 @@ ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
 	# tell pg_upgrade to create its sockets in /tmp to avoid too long paths
 	unset LANG LC_CTYPE MAKELEVEL; ulimit -c unlimited; \
 	if ! make -C build check-world \
-	  $(TEMP_CONFIG) \
 	  PGSOCKETDIR="/tmp" \
 	  PG_TEST_EXTRA='ssl' \
 	  PROVE_FLAGS="--verbose"; \

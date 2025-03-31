@@ -1,12 +1,14 @@
-postgresql-common (276) UNRELEASED; urgency=medium
+postgresql-common (276) unstable; urgency=medium
 
   * pg_upgradecluster: Use --missing-stats-only in analyze hook for PG18+.
   * pg_virtualenv: Use PG18's extension_control_path to find extensions in
     temporary build paths instead of our custom extension_destdir patch.
   * pg_buildext: Export $PG_CONFIG in all modes.
+  * Fix "should we build with LLVM support" detection on PG18+.
+  * Remove test-with-jit.conf, wasn't really exercised anyway.
   * Updated tr translation by Atila Koç, thanks! (Closes: #1101161)
 
- -- Christoph Berg <myon@debian.org>  Wed, 19 Mar 2025 15:43:16 +0100
+ -- Christoph Berg <myon@debian.org>  Mon, 31 Mar 2025 15:10:15 +0200
 
 postgresql-common (275) unstable; urgency=medium
 
