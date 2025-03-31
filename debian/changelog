@@ -6,6 +6,7 @@ postgresql-common (276) unstable; urgency=medium
   * pg_buildext: Export $PG_CONFIG in all modes.
   * Fix "should we build with LLVM support" detection on PG18+.
   * Remove test-with-jit.conf, wasn't really exercised anyway.
+  * Updated es translation by Camaleón, thanks! (Closes: #1098284)
   * Updated tr translation by Atila Koç, thanks! (Closes: #1101161)
 
  -- Christoph Berg <myon@debian.org>  Mon, 31 Mar 2025 15:10:15 +0200

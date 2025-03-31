@@ -1,6 +1,6 @@
 # postgresql-common po-debconf translation to Spanish
 # Copyright (C) 2010 Software in the Public Interest
-# This file is distributed under the same license as the ocsinventory-server package.
+# This file is distributed under the same license as the postgresql-common package.
 #
 # Changes:
 # - Initial translation
@@ -30,9 +30,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: postgresql-common\n"
-"Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2025-01-20 11:27+0100\n"
-"PO-Revision-Date: 2020-05-03 15:56+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-02-17 16:46+0000\n"
+"PO-Revision-Date: 2025-02-18 19:47+0100\n"
 "Last-Translator: Camaleón <noelamac@gmail.com>\n"
 "Language-Team: Debian Spanish <debian-l10n-spanish@lists.debian.org>\n"
 "Language: es\n"
@@ -40,84 +40,106 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #. Type: boolean
 #. Description
 #: ../postgresql.templates:1001
 msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
+"¿Actualizar el clúster de PostgreSQL ${oldversion}/main a "
+"${newversion}?"
 
 #. Type: boolean
 #. Description
 #: ../postgresql.templates:1001
 msgid ""
 "The PostgreSQL database cluster ${oldversion}/main can be upgraded to "
-"version ${newversion}, this will be attempted now. (If no automated cluster "
-"upgrades are desired, uninstall the \"postgresql\" meta package.)"
+"version ${newversion}, this will be attempted now. (If no automated "
+"cluster upgrades are desired, uninstall the \"postgresql\" meta "
+"package.)"
 msgstr ""
+"Puede actualizar el clúster de la base de datos PostgreSQL "
+"${oldversion}/main a la versión ${newversion}, operación de "
+"actualización que se intentará ejecutar ahora. Si no que clúster se "
+"actualice automáticamente, desinstale el metapaquete «postgresql»."
 
 #. Type: boolean
 #. Description
 #: ../postgresql.templates:1001
 msgid ""
-"Alternatively, the cluster can later be upgraded by running the command:"
+"Alternatively, the cluster can later be upgraded by running the "
+"command:"
 msgstr ""
+"Alternativamente, podrá actualizar posteriormente el clúster "
+"ejecutando la orden:"
 
 #. Type: boolean
 #. Description
 #: ../postgresql.templates:1001
 msgid ""
-"Once the upgraded cluster has been validated to work, drop the old cluster "
-"using the command:"
+"Once the upgraded cluster has been validated to work, drop the old "
+"cluster using the command:"
 msgstr ""
+"Una vez que el clúster actualizado se haya validado para trabajar, "
+"puede descartar el clúster antiguo con la siguiente orden:"
 
 #. Type: note
 #. Description
 #: ../postgresql.templates:2001
 msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
 msgstr ""
+"La actualización del clúster de PostgreSQL ${oldversion}/main ha "
+"fallado"
 
 #. Type: note
 #. Description
 #: ../postgresql.templates:2001
 msgid ""
-"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
-"{newversion} failed. Please investigate the situation and re-run the command:"
+"The automated upgrade of PostgreSQL cluster ${oldversion}/main to "
+"version ${newversion} failed. Please investigate the situation and re-"
+"run the command:"
 msgstr ""
+"No se ha podido actualizar automáticamente el clúster de PostgreSQL "
+"${oldversion}/main a la versión ${newversion}. Investigue la "
+"situación y vuelva a ejecutar la orden:"
 
 #. Type: boolean
 #. Description
 #: ../postgresql-common.templates:1001
 msgid "Enable SSL by default in new PostgreSQL clusters?"
 msgstr ""
-"¿Desea activar SSL como predeterminado en los nuevos clústers de PostgreSQL?"
+"¿Desea activar SSL como predeterminado en los nuevos clústers de "
+"PostgreSQL?"
 
 #. Type: boolean
 #. Description
 #: ../postgresql-common.templates:1001
 msgid ""
-"PostgreSQL supports SSL-encrypted connections. This is usually a good thing. "
-"However, if the database is solely accessed using TCP connections on "
-"localhost, SSL can be turned off without introducing security issues."
+"PostgreSQL supports SSL-encrypted connections. This is usually a good "
+"thing. However, if the database is solely accessed using TCP "
+"connections on localhost, SSL can be turned off without introducing "
+"security issues."
 msgstr ""
-"PostgreSQL admite conexiones cifradas SSL. Esto suele ser una buena idea. "
-"Aún así, si se accede a la base de datos exclusivamente usando conexiones "
-"TCP en «localhost», se puede desactivar el SSL sin provocar problemas de "
-"seguridad."
+"PostgreSQL admite conexiones cifradas SSL. Esto suele ser una buena "
+"idea. Aún así, si se accede a la base de datos exclusivamente usando "
+"conexiones TCP en «localhost», se puede desactivar el SSL sin "
+"provocar problemas de seguridad."
 
 #. Type: boolean
 #. Description
 #: ../postgresql-common.templates:1001
 msgid ""
-"UNIX domain socket connections (called \"local\" in pg_hba.conf) are not "
-"affected by this setting. This setting concerns new PostgreSQL clusters "
-"created during package install, or by using the pg_createcluster command. It "
-"does not reconfigure existing clusters."
+"UNIX domain socket connections (called \"local\" in pg_hba.conf) are "
+"not affected by this setting. This setting concerns new PostgreSQL "
+"clusters created during package install, or by using the "
+"pg_createcluster command. It does not reconfigure existing clusters."
 msgstr ""
-"Esta configuración no afecta a las conexiones a «socket» del dominio UNIX, "
-"llamados «local» en «pg_hba.conf». La configuración afecta a los clústers de "
-"PostgreSQL nuevos creados durante la instalación del paquete o utilizando la "
-"orden «pg_createcluster». No reconfigura ningún clúster ya existente."
+"Esta configuración no afecta a las conexiones a «socket» del dominio "
+"UNIX, llamados «local» en «pg_hba.conf». La configuración afecta a "
+"los clústers de PostgreSQL nuevos creados durante la instalación del "
+"paquete o utilizando la orden «pg_createcluster». No reconfigura "
+"ningún clúster ya existente."
 
 #. Type: boolean
 #. Description
@@ -135,24 +157,25 @@ msgstr "La versión del catálogo de PostgreSQL ${version} ha cambiado"
 #. Description
 #: ../postgresql-common.templates:2001
 msgid ""
-"The PostgreSQL cluster ${version} ${cluster} was created using catalog "
-"version ${db_catversion}, but the currently being installed package "
-"postgresql-${version} is using catalog version ${new_catversion}. You will "
-"not be able to use this cluster until it was upgraded to the new catalog "
-"version."
+"The PostgreSQL cluster ${version} ${cluster} was created using "
+"catalog version ${db_catversion}, but the currently being installed "
+"package postgresql-${version} is using catalog version "
+"${new_catversion}. You will not be able to use this cluster until it "
+"was upgraded to the new catalog version."
 msgstr ""
-"El clúster de PostgreSQL ${version} ${cluster} se creó utilizando la versión "
-"del catálogo ${db_catversion}, pero el paquete de  postgresql-${version} que "
-"se va instalar utiliza la versión del catálogo ${new_catversion}. No podrá "
-"utilizar este clúster si no lo actualiza a la nueva versión del catálogo."
+"El clúster de PostgreSQL ${version} ${cluster} se creó utilizando la "
+"versión del catálogo ${db_catversion}, pero el paquete de  postgresql-"
+"${version} que se va instalar utiliza la versión del catálogo "
+"${new_catversion}. No podrá utilizar este clúster si no lo actualiza "
+"a la nueva versión del catálogo."
 
 #. Type: note
 #. Description
 #: ../postgresql-common.templates:2001
 msgid ""
-"The necessary subset of binaries from the old version was saved in $"
-"{vartmpdir}. To upgrade the cluster, execute these commands:"
+"The necessary subset of binaries from the old version was saved in "
+"${vartmpdir}. To upgrade the cluster, execute these commands:"
 msgstr ""
-"El subconjunto de los archivos binarios necesarios de la versión antigua se "
-"han guardado en ${vartmpdir}. Para actualizar el clúster, ejecute las "
-"siguientes órdenes:"
+"El subconjunto de los archivos binarios necesarios de la versión "
+"antigua se han guardado en ${vartmpdir}. Para actualizar el clúster, "
+"ejecute las siguientes órdenes:"
