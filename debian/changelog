@@ -8,6 +8,8 @@ postgresql-common (276) unstable; urgency=medium
   * Remove test-with-jit.conf, wasn't really exercised anyway.
   * Updated es translation by Camaleón, thanks! (Closes: #1098284)
   * Updated tr translation by Atila Koç, thanks! (Closes: #1101161)
+  * Updated pt_BR translation by Paulo Henrique de Lima Santana, thanks!
+    (Closes: #1098442)
 
  -- Christoph Berg <myon@debian.org>  Mon, 31 Mar 2025 15:10:15 +0200
 
