@@ -1,3 +1,9 @@
+postgresql-common (277) UNRELEASED; urgency=medium
+
+  * Updated ro translation by Remus-Gabriel Chelu, thanks! (Closes: #1101817)
+
+ -- Christoph Berg <myon@debian.org>  Tue, 01 Apr 2025 12:50:44 +0200
+
 postgresql-common (276) unstable; urgency=medium
 
   * pg_upgradecluster: Use --missing-stats-only in analyze hook for PG18+.

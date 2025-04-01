@@ -1,10 +1,10 @@
 # Mesajele în limba română pentru pachetul postgresql-common.
 # translation of postgresql-common.po to Romanian
-# Copyright © 2008, 2023 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright © 2008, 2023, 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the postgresql-common package.
 #
 # Igor Stirbu <igor.stirbu@gmail.com>, 2008.
-# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2023.
+# Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>, 2023, 2025.
 # NOTĂ: la sugestia lui Daniel Șerbănescu, am vrut să traduc cluster(s) = grup(uri) de servere;
 # dar în textul mesajelor, nu rezultă foarte clar dacă cluster(s) = ca mai sus(grup de servere),
 # sau este vorba de baza/bazele de date ale acestora, sau decît directorul(ele) ce găzduiesc
@@ -12,10 +12,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: postgresql-common 246\n"
-"Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2025-01-20 11:27+0100\n"
-"PO-Revision-Date: 2023-02-12 18:02+0100\n"
+"Project-Id-Version: postgresql-common 275\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-31 17:08+0000\n"
+"PO-Revision-Date: 2025-04-01 12:22+0200\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
 "Language-Team: Romanian <debian-l10n-romanian@lists.debian.org>\n"
 "Language: ro\n"
@@ -24,13 +24,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #. Type: boolean
 #. Description
 #: ../postgresql.templates:1001
 msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
 msgstr ""
+"Doriți să actualizați clusterul PostgreSQL de la ${oldversion}/main la $"
+"{newversion}?"
 
 #. Type: boolean
 #. Description
@@ -40,6 +42,10 @@ msgid ""
 "version ${newversion}, this will be attempted now. (If no automated cluster "
 "upgrades are desired, uninstall the \"postgresql\" meta package.)"
 msgstr ""
+"Clusterul de baze de date PostgreSQL ${oldversion}/main poate fi actualizat "
+"la versiunea ${newversion}, acest lucru va fi încercat acum; (dacă nu se "
+"dorește actualizarea automată a clusterului, dezinstalați metapachetul "
+"„postgresql”)."
 
 #. Type: boolean
 #. Description
@@ -47,6 +53,7 @@ msgstr ""
 msgid ""
 "Alternatively, the cluster can later be upgraded by running the command:"
 msgstr ""
+"Alternativ, clusterul poate fi actualizat ulterior prin executarea comenzii:"
 
 #. Type: boolean
 #. Description
@@ -55,12 +62,14 @@ msgid ""
 "Once the upgraded cluster has been validated to work, drop the old cluster "
 "using the command:"
 msgstr ""
+"Odată ce clusterul actualizat a fost validat să funcționeze, renunțați la "
+"vechiul cluster folosind comanda:"
 
 #. Type: note
 #. Description
 #: ../postgresql.templates:2001
 msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
-msgstr ""
+msgstr "Actualizarea clusterului PostgreSQL ${oldversion}/main a eșuat"
 
 #. Type: note
 #. Description
@@ -69,6 +78,9 @@ msgid ""
 "The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
 "{newversion} failed. Please investigate the situation and re-run the command:"
 msgstr ""
+"Actualizarea automată a clusterului PostgreSQL ${oldversion}/main la "
+"versiunea ${newversion} a eșuat. Vă rugăm să investigați situația și să re-"
+"executați comanda:"
 
 #. Type: boolean
 #. Description
