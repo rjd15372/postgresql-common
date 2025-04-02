@@ -124,6 +124,9 @@ endif
 
 ifeq ($(call version_ge,18),y)
   CONFIGURE_FLAGS += --with-libcurl
+  ifeq ($(DEB_HOST_ARCH_OS),linux)
+    CONFIGURE_FLAGS += --with-liburing
+  endif
 endif
 
 # Facilitate hierarchical profile generation on amd64 (#730134)

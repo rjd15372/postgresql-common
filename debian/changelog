@@ -1,6 +1,7 @@
 postgresql-common (277) UNRELEASED; urgency=medium
 
   * Updated ro translation by Remus-Gabriel Chelu, thanks! (Closes: #1101817)
+  * server/postgresql.mk: Build PG18 with liburing.
 
  -- Christoph Berg <myon@debian.org>  Tue, 01 Apr 2025 12:50:44 +0200
 
