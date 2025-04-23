@@ -15,7 +15,7 @@ use lib 't';
 use TestLib;
 use PgCommon;
 
-use Test::More tests => (@MAJORS == 1) ? 1 : 127 * 3;
+use Test::More tests => (@MAJORS == 1) ? 1 : 130 * 3;
 
 if (@MAJORS == 1) {
     pass 'only one major version installed, skipping upgrade tests';
@@ -40,7 +40,7 @@ is ((exec_as 'postgres', 'createuser nobody -D -R -s && createdb -O nobody test 
 	0, 'Create nobody user and test databases');
 is ((exec_as 'nobody', 'psql test -c "CREATE TABLE phone (name varchar(255) PRIMARY KEY, tel int NOT NULL)"'), 
     0, 'create table');
-is ((exec_as 'nobody', 'psql test -c "INSERT INTO phone VALUES (\'Alice\', 2)"'), 0, 'insert Alice into phone table');
+is ((exec_as 'nobody', 'psql test -c "INSERT INTO phone VALUES (\'Alice\', 222)"'), 0, 'insert Alice into phone table');
 SKIP: {
     skip 'datallowconn = f not supported with pg_upgrade', 1 if $upgrade_options =~ /upgrade/;
     is ((exec_as 'postgres', 'psql template1 -c "UPDATE pg_database SET datallowconn = \'f\' WHERE datname = \'testnc\'"'),
@@ -113,8 +113,8 @@ is_program_out 'postgres', "psql -qc 'GRANT INSERT ON phone TO foo' test", 0, ''
 # exercise ACL on old database to ensure they are working
 is_program_out 'nobody', 'psql -U foo -qc "CREATE SCHEMA s_foo" test', 0, '',
     'CREATE SCHEMA on old cluster (ACL)';
-is_program_out 'nobody', 'psql -U foo -qc "INSERT INTO phone VALUES (\'Bob\', 1)" test', 
-    0, '', 'insert Bob into phone table (ACL)';
+is_program_out 'nobody', 'psql -U foo -qc "INSERT INTO phone VALUES (\'Bob\', 111), (\'Denise\', 222)" test',
+    0, '', 'insert Bob and Denise into phone table (ACL)';
 
 # set config parameters
 is_program_out 'postgres', "pg_conftool $MAJORS[0] upgr set log_statement all",
@@ -152,8 +152,9 @@ SKIP: {
 # Check SELECT in original cluster
 my $select_old;
 is ((exec_as 'nobody', 'psql -tAc "SELECT * FROM phone ORDER BY name" test', $select_old), 0, 'SELECT in original cluster succeeds');
-is ($$select_old, 'Alice|2
-Bob|1
+is ($$select_old, 'Alice|222
+Bob|111
+Denise|222
 ', 'check SELECT output in original cluster');
 
 # create inaccessible cwd, to check for confusing error messages
@@ -163,9 +164,12 @@ chmod 0100, '/tmp/pgtest/';
 chdir '/tmp/pgtest';
 
 # Upgrade to latest version
+note "Running pg_upgradecluster -v $MAJORS[-1] $upgrade_options $MAJORS[0] upgr";
 my $outref;
 is ((exec_as 0, "(env LC_MESSAGES=C pg_upgradecluster -v $MAJORS[-1] $upgrade_options $MAJORS[0] upgr | sed -e 's/^/STDOUT: /')", $outref, 0), 0, 'pg_upgradecluster succeeds');
+note $$outref;
 like $$outref, qr/Starting upgraded cluster/, 'pg_upgradecluster reported cluster startup';
+like $$outref, qr/Running finish phase upgrade hook scripts/, 'pg_upgradecluster reported running upgrade hook scripts';
 like $$outref, qr/Success. Please check/, 'pg_upgradecluster reported successful operation';
 my @err = grep (!/^STDOUT: /, split (/\n/, $$outref));
 if (@err) {
@@ -190,8 +194,10 @@ is_program_out 'nobody', 'psql -tAc "SELECT * FROM nums" testro', 0,
     "1\n", 'SELECT output is the same in original and upgraded testro';
 
 # Check that table was analyzed
-like_program_out 'nobody', "psql -XAtc \"select analyze_count from pg_stat_user_tables where relname = 'phone'\" test", 0, qr/^[1-3]$/,
-    'check analyze count'; # --analyze-in-stages does 3 passes
+like_program_out 'nobody', "psql -XAtc \"select most_common_vals from pg_stats where tablename = 'phone' and attname = 'tel'\" test", 0, qr/\{222\}/,
+    'phone table has optimizer stats';
+like_program_out 'nobody', "psql -XAtc \"select n_live_tup from pg_stat_user_tables where relname = 'phone'\" test", 0, qr/3/,
+    'phone table has row stats';
 
 # Check sequence value
 is_program_out 'nobody', 'psql -Atc "SELECT nextval(\'odd10\')" test', 0, "5\n",
@@ -231,7 +237,7 @@ testro|t
 # check ACLs
 is_program_out 'nobody', 'psql -U foo -qc "CREATE SCHEMA s_bar" test', 0, '',
     'CREATE SCHEMA on new cluster (ACL)';
-is_program_out 'nobody', 'psql -U foo -qc "INSERT INTO phone VALUES (\'Chris\', 5)" test', 
+is_program_out 'nobody', 'psql -U foo -qc "INSERT INTO phone VALUES (\'Chris\', 555)" test',
     0, '', 'insert Chris into phone table (ACL)';
 
 # check default transaction r/o
