@@ -1,3 +1,9 @@
+postgresql-common (278) UNRELEASED; urgency=medium
+
+  * pg_upgradecluster: Do two vacuumdb runs in analyze hook for PG18+.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 23 Apr 2025 19:48:59 +0200
+
 postgresql-common (277) unstable; urgency=medium
 
   * Updated ro translation by Remus-Gabriel Chelu, thanks! (Closes: #1101817)
