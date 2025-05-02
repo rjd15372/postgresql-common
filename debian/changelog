@@ -2,6 +2,7 @@ postgresql-common (278) UNRELEASED; urgency=medium
 
   * pg_upgradecluster: Do two vacuumdb runs in analyze hook for PG18+.
   * t/040_upgrade.t: Verify presence of stats after upgrade.
+  * pg_virtualenv: Adjust to extension_control_path change in PG18.
 
  -- Christoph Berg <myon@debian.org>  Wed, 23 Apr 2025 19:48:59 +0200
 
