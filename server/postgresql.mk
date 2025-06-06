@@ -125,6 +125,7 @@ endif
 ifeq ($(call version_ge,18),y)
   CONFIGURE_FLAGS += --with-libcurl
   ifeq ($(DEB_HOST_ARCH_OS),linux)
+    CONFIGURE_FLAGS += --with-libnuma
     CONFIGURE_FLAGS += --with-liburing
   endif
 endif
