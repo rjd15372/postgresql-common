@@ -125,7 +125,8 @@ endif
 ifeq ($(call version_ge,18),y)
   CONFIGURE_FLAGS += --with-libcurl
   ifeq ($(DEB_HOST_ARCH_OS),linux)
-    CONFIGURE_FLAGS += --with-libnuma
+    # bullseye: Set LIBNUMA_CFLAGS and LIBNUMA_LIBS (numa.pc missing)
+    CONFIGURE_FLAGS += --with-libnuma LIBNUMA_CFLAGS=" " LIBNUMA_LIBS=-lnuma
     CONFIGURE_FLAGS += --with-liburing
   endif
 endif
