@@ -1,2 +1,2 @@
 version=4
-@URL@/tags .*/(.*).tar.gz
+@URL@/tags .*/v?(.*).tar.gz
