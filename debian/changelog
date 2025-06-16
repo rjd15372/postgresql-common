@@ -1,5 +1,6 @@
 postgresql-common (280) UNRELEASED; urgency=medium
 
+  * Updated pt translation by Américo Monteiro, thanks! (Closes: #1107433)
   * Updated it translation by Luca Monducci, thanks! (Closes: #1107848)
 
  -- Christoph Berg <myon@debian.org>  Mon, 16 Jun 2025 11:54:09 +0200
