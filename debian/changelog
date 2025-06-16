@@ -1,3 +1,9 @@
+postgresql-common (280) UNRELEASED; urgency=medium
+
+  * Updated it translation by Luca Monducci, thanks! (Closes: #1107848)
+
+ -- Christoph Berg <myon@debian.org>  Mon, 16 Jun 2025 11:54:09 +0200
+
 postgresql-common (279) unstable; urgency=medium
 
   * server/postgresql.mk: Build PG18 with libnuma on Linux.

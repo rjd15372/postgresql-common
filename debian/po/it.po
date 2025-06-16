@@ -1,13 +1,13 @@
 # Italian (it) translation of debconf templates for postgresql-common
 # This file is distributed under the same license as the postgresql-common package.
-# Luca Monducci <luca.mo@tiscali.it>, 2006-2020.
+# Luca Monducci <luca.mo@tiscali.it>, 2006-2025.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: postgresql-common 216 italian debconf templates\n"
-"Report-Msgid-Bugs-To: postgresql-common@packages.debian.org\n"
-"POT-Creation-Date: 2025-01-20 11:27+0100\n"
-"PO-Revision-Date: 2020-08-29 14:43+0200\n"
+"Project-Id-Version: postgresql-common 278 italian debconf templates\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-01 17:25+0000\n"
+"PO-Revision-Date: 2025-06-15 20:10+0200\n"
 "Last-Translator: Luca Monducci <luca.mo@tiscali.it>\n"
 "Language-Team: Italian <debian-l10n-italian@lists.debian.org>\n"
 "Language: it\n"
@@ -19,7 +19,7 @@ msgstr ""
 #. Description
 #: ../postgresql.templates:1001
 msgid "Upgrade PostgreSQL cluster ${oldversion}/main to ${newversion}?"
-msgstr ""
+msgstr "Aggiornare il cluster PostgreSQL ${oldversion}/main a ${newversion}?"
 
 #. Type: boolean
 #. Description
@@ -29,6 +29,10 @@ msgid ""
 "version ${newversion}, this will be attempted now. (If no automated cluster "
 "upgrades are desired, uninstall the \"postgresql\" meta package.)"
 msgstr ""
+"È possibile aggiornare il cluster PostgreSQL ${oldversion}/main alla "
+"versione ${newversion}, questo aggiornamento verrà tentato ora. (Se non si "
+"desidera fare aggiornamenti automatici del cluster, disinstallare il "
+"metapacchetto \"postgresql\")."
 
 #. Type: boolean
 #. Description
@@ -36,6 +40,7 @@ msgstr ""
 msgid ""
 "Alternatively, the cluster can later be upgraded by running the command:"
 msgstr ""
+"L'aggiornamento può anche essere fatto in seguito usando il comando:"
 
 #. Type: boolean
 #. Description
@@ -44,20 +49,26 @@ msgid ""
 "Once the upgraded cluster has been validated to work, drop the old cluster "
 "using the command:"
 msgstr ""
+"Una volta convalidato il funzionamento del cluster aggiornato, eliminare il "
+"vecchio cluster utilizzando il comando:"
 
 #. Type: note
 #. Description
 #: ../postgresql.templates:2001
 msgid "PostgreSQL upgrade of cluster ${oldversion}/main failed"
-msgstr ""
+msgstr "Fallito l'aggiornamento del cluster ${oldversion}/main"
 
 #. Type: note
 #. Description
 #: ../postgresql.templates:2001
 msgid ""
-"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version $"
-"{newversion} failed. Please investigate the situation and re-run the command:"
+"The automated upgrade of PostgreSQL cluster ${oldversion}/main to version "
+"${newversion} failed. Please investigate the situation and re-run the "
+"command:"
 msgstr ""
+"L'aggiornamento automatico del cluster PostgreSQL ${oldversion}/main alla "
+"versione ${newversion} non è riuscito. Esaminare la situazione e rieseguire "
+"il comando:"
 
 #. Type: boolean
 #. Description
@@ -116,8 +127,8 @@ msgid ""
 "version."
 msgstr ""
 "Il cluster PostgreSQL ${version} ${cluster} è stato creato utilizzando un "
-"catalogo con versione ${db_catversion}, tuttavia il pacchetto postgresql-$"
-"{version} che si sta installando utilizza la versione ${new_catversion} del "
+"catalogo con versione ${db_catversion}, tuttavia il pacchetto postgresql-"
+"${version} che si sta installando utilizza la versione ${new_catversion} del "
 "catalogo. Non sarà possibile utilizzare questo cluster fino a quando non "
 "aggiornato alla nuova versione di catalogo."
 
@@ -125,8 +136,8 @@ msgstr ""
 #. Description
 #: ../postgresql-common.templates:2001
 msgid ""
-"The necessary subset of binaries from the old version was saved in $"
-"{vartmpdir}. To upgrade the cluster, execute these commands:"
+"The necessary subset of binaries from the old version was saved in "
+"${vartmpdir}. To upgrade the cluster, execute these commands:"
 msgstr ""
 "Un sottoinsieme dei comandi della versione precedente necessari è salvato in "
 "${vartmpdir}. Eseguire questi comandi per aggiornare il cluster:"
