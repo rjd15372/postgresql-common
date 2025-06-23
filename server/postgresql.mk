@@ -123,8 +123,9 @@ ifeq ($(call version_ge,17),y)
 endif
 
 ifeq ($(call version_ge,18),y)
-  CONFIGURE_FLAGS += --with-libcurl
   ifeq ($(DEB_HOST_ARCH_OS),linux)
+    # hurd: needs either $ac_cv_header_sys_event_h or $ac_cv_header_sys_epoll_h
+    CONFIGURE_FLAGS += --with-libcurl
     # bullseye: Set LIBNUMA_CFLAGS and LIBNUMA_LIBS (numa.pc missing)
     CONFIGURE_FLAGS += --with-libnuma LIBNUMA_CFLAGS=" " LIBNUMA_LIBS=-lnuma
     CONFIGURE_FLAGS += --with-liburing
