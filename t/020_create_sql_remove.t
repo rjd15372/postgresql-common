@@ -283,9 +283,6 @@ tel|2
     # Check PL/Python3 (untrusted)
     SKIP: {
         skip "Skipping PL/Python3 test for version $v...", 6 if ($v < 9.1);
-        my $pyver = `python3 --version 2>/dev/null`;
-        chomp $pyver;
-        skip "$pyver is too new for PL/Python3 on $v...", 6 if ($v < 10 and $pyver and $pyver =~ /3\.1[1-9]/); # distutils removed in Python 3.12
 	is_program_out 'postgres', create_extension($v, 'plpython3u'), 0, '', 'CREATE EXTENSION plpython3u succeeds for user postgres';
 	is_program_out 'postgres', 'psql nobodydb -qc "CREATE FUNCTION capitalize3(text) RETURNS text AS \'import sys; return args[0].capitalize() + sys.version[0]\' LANGUAGE plpython3u;"',
 	    0, '', 'creating PL/Python3 function as user postgres succeeds';

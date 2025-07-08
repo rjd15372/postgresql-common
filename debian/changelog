@@ -2,6 +2,7 @@ postgresql-common (281) UNRELEASED; urgency=medium
 
   * pgdg/apt.postgresql.org.sh: PG19 has been branched.
   * server/postgresql.mk: Fix building for PG19.
+  * t: Drop python3 exceptions for 9.x, not required.
 
  -- Christoph Berg <myon@debian.org>  Mon, 30 Jun 2025 12:13:40 +0200
 

@@ -40,9 +40,6 @@ foreach my $v (@MAJORS) {
     ok ((deb_installed "postgresql-$v$f"), "postgresql-$v$f installed");
     SKIP: {
         skip "no Python 3 package for version $v", 1 if ($v < '9.1');
-        my $pyver = `python3 --version 2>/dev/null`;
-        chomp $pyver;
-        skip "$pyver is too new for PL/Python3 on $v", 1 if ($v < 10 and $pyver and $pyver =~ /3\.1[2-9]/); # distutils removed in Python 3.12
 	ok ((deb_installed "postgresql-plpython3-$v$f"), "postgresql-plpython3-$v$f installed");
     }
     ok ((deb_installed "postgresql-plperl-$v$f"), "postgresql-plperl-$v$f installed");
