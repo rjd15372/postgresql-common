@@ -68,12 +68,6 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
             for v in $PG_VERSIONS; do
                 case $v in
                     8.*|9.0) ;;
-                    9.[1-6]) # plpython3 only for Python < 3.12
-                        py3ver=$(apt-cache policy python3)
-                        case $py3ver in
-                            *3.[0-9].*|*3.1[01].*) PYTHON3_PACKAGE=postgresql-plpython3-$v${PG_FLAVOR:-} ;;
-                        esac
-                        ;;
                     *) PYTHON3_PACKAGE=postgresql-plpython3-$v${PG_FLAVOR:-} ;;
                 esac
                 case $v in
