@@ -1,3 +1,9 @@
+postgresql-common (282) UNRELEASED; urgency=medium
+
+  * testsuite: Remove special case for plpython3 on 9.x and python 3.12.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 23 Jul 2025 11:07:09 +0200
+
 postgresql-common (281) unstable; urgency=medium
 
   * pgdg/apt.postgresql.org.sh: PG19 has been branched.
