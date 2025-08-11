@@ -613,6 +613,9 @@ if (!fork) {
     my $psql = get_program_path 'psql';
     my $newsocket = get_cluster_socketdir $newversion, $newcluster;
 
+    # ensure we can upgrade DBs with default read-only transactions
+    $ENV{PGOPTIONS} .= " -cdefault_transaction_read_only=off";
+
     if ($method eq 'dump') {
 	# get list of databases (value = datallowconn)
 	my %databases;
@@ -660,13 +663,7 @@ if (!fork) {
 	open SINK, '|-', $psql, '-h', $newsocket, '-p', $newinfo{'port'},
 	    '-qX', '-d', $maintenance_db or
 	    error 'Could not execute psql for new cluster';
-
-	# ensure that we can upgrade tables for DBs with default read-only
-	# transactions
-	print SINK "BEGIN READ WRITE; ALTER USER $owner SET default_transaction_read_only to off; COMMIT;\n";
-
 	print SINK $data;
-
 	close SINK;
 	($? == 0) or exit 1;
 
@@ -727,11 +724,6 @@ if (!fork) {
 		    error 'Could not disable access to database in new cluster';
 	    }
 	}
-
-	# reset owner specific override for default read-only transactions
-	(system $psql, '-h', $newsocket, '-p', $newinfo{'port'}, '-qX', $maintenance_db, '-c',
-	    "BEGIN READ WRITE; ALTER USER $owner RESET default_transaction_read_only; COMMIT;\n") == 0 or
-	    error 'Could not reset default_transaction_read_only value for superuser';
     } else {
 	# pg_upgrade
 

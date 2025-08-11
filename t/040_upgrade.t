@@ -48,7 +48,6 @@ SKIP: {
 }
 is ((exec_as 'nobody', 'psql testro -c "CREATE TABLE nums (num int NOT NULL); INSERT INTO nums VALUES (1)"'), 0, 'create table in testro');
 SKIP: {
-    skip 'read-only not supported with pg_upgrade', 2 if $upgrade_options =~ /upgrade/;
     is ((exec_as 'postgres', 'psql template1 -c "ALTER DATABASE testro SET default_transaction_read_only TO on"'), 
 	0, 'set testro transaction default to readonly');
     is ((exec_as 'nobody', 'psql testro -c "CREATE TABLE test(num int)"'), 
@@ -244,7 +243,6 @@ is_program_out 'nobody', 'psql -U foo -qc "INSERT INTO phone VALUES (\'Chris\', 
 is ((exec_as 'nobody', 'psql test -c "CREATE TABLE test(num int)"'), 
     0, 'creating table in test succeeds');
 SKIP: {
-    skip 'read-only not supported by pg_upgrade', 2 if $upgrade_options =~ /upgrade/;
     is ((exec_as 'nobody', 'psql testro -c "CREATE TABLE test(num int)"'), 
 	1, 'creating table in testro fails');
     is ((exec_as 'postgres', 'psql testro -c "CREATE TABLE test(num int)"'), 
