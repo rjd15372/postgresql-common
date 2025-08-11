@@ -15,7 +15,7 @@ use lib 't';
 use TestLib;
 use PgCommon;
 
-use Test::More tests => (@MAJORS == 1) ? 1 : 122 * 3;
+use Test::More tests => (@MAJORS == 1) ? 1 : 119 * 3;
 
 if (@MAJORS == 1) {
     pass 'only one major version installed, skipping upgrade tests';
@@ -41,11 +41,6 @@ is ((exec_as 'postgres', 'createuser nobody -D -R -s && createdb -O nobody test 
 is ((exec_as 'nobody', 'psql test -c "CREATE TABLE phone (name varchar(255) PRIMARY KEY, tel int NOT NULL)"'), 
     0, 'create table');
 is ((exec_as 'nobody', 'psql test -c "INSERT INTO phone VALUES (\'Alice\', 222)"'), 0, 'insert Alice into phone table');
-SKIP: {
-    skip 'datallowconn = f not supported with pg_upgrade', 1 if $upgrade_options =~ /upgrade/;
-    is ((exec_as 'postgres', 'psql template1 -c "UPDATE pg_database SET datallowconn = \'f\' WHERE datname = \'testnc\'"'),
-        0, 'disallow connection to testnc');
-}
 is ((exec_as 'nobody', 'psql testro -c "CREATE TABLE nums (num int NOT NULL); INSERT INTO nums VALUES (1)"'), 0, 'create table in testro');
 SKIP: {
     is ((exec_as 'postgres', 'psql template1 -c "ALTER DATABASE testro SET default_transaction_read_only TO on"'), 
@@ -206,21 +201,6 @@ is_program_out 'postgres', 'psql -Aqtc "SET bytea_output = \'escape\'; SELECT da
 # check stored procedures
 is_program_out 'nobody', 'psql -Atc "SELECT inc2(-3)" test', 0, "-1\n", 
     'call function inc2';
-
-SKIP: {
-    skip 'upgrading databases with datallowcon = false not supported by pg_upgrade', 2 if $upgrade_options =~ /upgrade/;
-
-    # Check connection permissions
-    my $testnc_conn = $upgrade_options =~ /upgrade/ ? 't' : 'f';
-    is_program_out 'nobody', 'psql -tAc "SELECT datname, datallowconn FROM pg_database ORDER BY datname" template1', 0,
-    "postgres|t
-template0|f
-template1|t
-test|t
-testnc|$testnc_conn
-testro|t
-", 'dataallowconn values';
-}
 
 # check ACLs
 is_program_out 'nobody', 'psql -U foo -qc "CREATE SCHEMA s_bar" test', 0, '',

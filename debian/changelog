@@ -1,10 +1,20 @@
 postgresql-common (282) UNRELEASED; urgency=medium
 
+  * pg_upgradecluster "dump" method improvements:
+    * Revert to using plain pg_dumpall for "dump" upgrades.
+      In 2005, version 33 had switched to using custom format dumps and
+      pg_restore to support large objects, but this has been supported in
+      pg_dumpall since 8.1. This enables better error detection during the
+      upgrade and abort instead of papering over problems. (The use of
+      --no-data-for-failed-tables is also dropped.)
+    * Output is now the queries instead of the command tags, should be more
+      pleasant to watch.
+    * Stop mangling pg_proc.probin, was introduced to work around problems
+      with upgrades from woody/7.4.
+    * Upgrading clusters with databases not accepting connections is no longer
+      supported. (An error is thrown instead.)
+    * Use PGOPTIONS to temporarily override default_transaction_read_only.
   * testsuite: Remove special case for plpython3 on 9.x and python 3.12.
-  * pg_upgradecluster: Use PGOPTIONS to temporarily override
-    default_transaction_read_only.
-  * pg_upgradecluster: Stop mangling pg_proc.probin, was introduced to work
-    around problems with upgrades from woody/7.4.
 
  -- Christoph Berg <myon@debian.org>  Wed, 23 Jul 2025 11:07:09 +0200
 
