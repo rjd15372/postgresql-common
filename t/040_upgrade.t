@@ -15,7 +15,7 @@ use lib 't';
 use TestLib;
 use PgCommon;
 
-use Test::More tests => (@MAJORS == 1) ? 1 : 130 * 3;
+use Test::More tests => (@MAJORS == 1) ? 1 : 122 * 3;
 
 if (@MAJORS == 1) {
     pass 'only one major version installed, skipping upgrade tests';
@@ -85,17 +85,8 @@ if ($MAJORS[0] < 9.0) {
 }
 is_program_out 'nobody', 'psql test -c "CREATE FUNCTION inc2(integer) RETURNS integer LANGUAGE plpgsql AS \'BEGIN RETURN \$1 + 2; END;\';"',
     0, "CREATE FUNCTION\n", 'CREATE FUNCTION inc2';
-SKIP: {
-    skip 'hardcoded library paths not supported by pg_upgrade', 2 if $upgrade_options =~ /upgrade/;
-    is_program_out 'postgres', "psql -c \"UPDATE pg_proc SET probin = '$PgCommon::binroot$MAJORS[0]/lib/plpgsql.so' where proname = 'plpgsql_call_handler';\" test",
-	0, "UPDATE 1\n", 'hardcoding plpgsql lib path';
-}
-is_program_out 'nobody', 'psql test -c "CREATE FUNCTION inc3(integer) RETURNS integer LANGUAGE plpgsql AS \'BEGIN RETURN \$1 + 3; END;\';"',
-    0, "CREATE FUNCTION\n", 'create function inc3';
 is_program_out 'nobody', 'psql -Atc "SELECT inc2(3)" test', 0, "5\n", 
     'call function inc2';
-is_program_out 'nobody', 'psql -Atc "SELECT inc3(3)" test', 0, "6\n", 
-    'call function inc3';
 
 # create user and group
 is_program_out 'postgres', "psql -qc 'CREATE USER foo' template1", 0, '',
@@ -215,8 +206,6 @@ is_program_out 'postgres', 'psql -Aqtc "SET bytea_output = \'escape\'; SELECT da
 # check stored procedures
 is_program_out 'nobody', 'psql -Atc "SELECT inc2(-3)" test', 0, "-1\n", 
     'call function inc2';
-is_program_out 'nobody', 'psql -Atc "SELECT inc3(1)" test', 0, "4\n", 
-    'call function inc3 (formerly hardcoded path)';
 
 SKIP: {
     skip 'upgrading databases with datallowcon = false not supported by pg_upgrade', 2 if $upgrade_options =~ /upgrade/;

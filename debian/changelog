@@ -3,6 +3,8 @@ postgresql-common (282) UNRELEASED; urgency=medium
   * testsuite: Remove special case for plpython3 on 9.x and python 3.12.
   * pg_upgradecluster: Use PGOPTIONS to temporarily override
     default_transaction_read_only.
+  * pg_upgradecluster: Stop mangling pg_proc.probin, was introduced to work
+    around problems with upgrades from woody/7.4.
 
  -- Christoph Berg <myon@debian.org>  Wed, 23 Jul 2025 11:07:09 +0200
 
