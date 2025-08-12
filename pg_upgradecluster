@@ -624,14 +624,13 @@ if (!fork) {
 
 	# Upgrade databases
         print "Upgrading databases ...\n";
-        my $sh = "set -o pipefail; export LC_ALL=C; \
-$pg_dumpall --quote-all-identifiers -h '$oldsocket' -p $info{port} | \
-    grep --text -vE '^CREATE ROLE \"$owner\";\$' | \
-    $psql --no-psqlrc --echo-queries --output /dev/null -vON_ERROR_STOP=on -h '$newsocket' -p $newinfo{port} postgres | \
-    cut -c 1-128";
-        print "$sh\n";
-        my $status = system $sh;
-
+        my @argv = (
+            '/usr/share/postgresql-common/pg_dumpcluster',
+            -A => $pg_dumpall, -h => $oldsocket, -p => $info{port},
+            -Q => $psql, -H => $newsocket, -P => $newinfo{port},
+            -U => $owner);
+        print "@argv\n";
+        my $status = system @argv;
         exit 1 if ($status != 0);
 
     } else {
@@ -852,9 +851,8 @@ Like B<--locale>, but only sets the locale in the specified category.
 
 =item B<-m>, B<--method=>B<dump>|B<upgrade>|B<link>|B<clone>
 
-Specify the upgrade method.  B<dump> uses L<pg_dump(1)> and
-L<pg_restore(1)>, B<upgrade> uses L<pg_upgrade(1)>.  The default is
-B<dump>.
+Specify the upgrade method.  B<dump> uses L<pg_dumpall(1)>, B<upgrade> uses
+L<pg_upgrade(1)>.  The default is B<dump>.
 
 B<link> and B<clone> are shorthands for B<-m upgrade --link> and B<-m upgrade --clone>,
 respectively.
@@ -945,7 +943,7 @@ the dump/restore or B<pg_upgrade> operation.
 
 =item B<finish>
 
-All data from the old version cluster has been dumped/reloaded into the new
+All data from the old version cluster has been restored into the new
 one. The old cluster still exists, but is not running.
 
 =back
@@ -956,7 +954,7 @@ The scripts are called as the user who owns the database.
 =head1 SEE ALSO
 
 L<pg_createcluster(8)>, L<pg_dropcluster(8)>, L<pg_lsclusters(1)>, L<pg_wrapper(1)>,
-L<pg_dump(1)>, L<pg_upgrade(1)>
+L<pg_dumpall(1)>, L<pg_upgrade(1)>
 
 =head1 AUTHORS
 

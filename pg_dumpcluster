@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# `pg_dumpall|psql` pipeline called from `pg_upgradecluster -m dump`
+
+set -eu
+set -o pipefail # needs dash >= 0.5.12-7
+
+# all these options are mandatory
+while getopts "A:h:H:p:P:Q:U:" opt ; do
+    case $opt in
+        A) PG_DUMPALL="$OPTARG" ;;
+        h) OLDHOST="$OPTARG" ;;
+        H) NEWHOST="$OPTARG" ;;
+        p) OLDPORT="$OPTARG" ;;
+        P) NEWPORT="$OPTARG" ;;
+        Q) PSQL="$OPTARG" ;;
+        U) NEWUSER="$OPTARG" ;;
+        *) exit 5 ;;
+    esac
+done
+
+"$PG_DUMPALL" --quote-all-identifiers -h "$OLDHOST" -p "$OLDPORT" |
+    LC_ALL=C grep --text -v "^CREATE ROLE \"$NEWUSER\";$" | # force text mode; avoid error on existing role
+    "$PSQL" --no-psqlrc --echo-queries --output /dev/null -vON_ERROR_STOP=on -h "$NEWHOST" -p "$NEWPORT" postgres |
+    cut -c 1-${COLUMNS:-80} # avoid overly long output (lowrite)
