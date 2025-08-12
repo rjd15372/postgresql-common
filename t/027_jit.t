@@ -5,10 +5,8 @@ use TestLib;
 
 use Test::More;
 
-my $arch = `dpkg --print-architecture`;
-chomp $arch;
-if (grep { $_ eq $arch} qw(alpha hppa hurd-i386 ia64 kfreebsd-amd64 kfreebsd-i386 loong64 m68k powerpc riscv64 sh4 sparc64 x32)) {
-    ok 1, "No JIT tests on $arch";
+if (! TestLib::have_jit()) {
+    ok 1, "No JIT tests on this architecture";
     done_testing();
     exit;
 }

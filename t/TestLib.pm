@@ -32,6 +32,9 @@ our @ALL_MAJORS = get_versions(); # not affected by PG_VERSIONS/-v
 our @MAJORS = $ENV{PG_VERSIONS} ? split (/\s+/, $ENV{PG_VERSIONS}) : @ALL_MAJORS;
 our $delay = 500_000; # 500ms
 
+# architectures where LLVM JIT is enabled and postgresql-NN-jit is built
+our @JIT_ARCHS = qw(amd64 arm64 mips64el ppc64 ppc64el s390x);
+
 # called if a test fails; spawn a shell if the environment variable
 # FAILURE=shell is set
 sub fail_debug { 
@@ -98,6 +101,14 @@ sub version_ge {
     my $v_ge = <CHLD_OUT>;
     chomp $v_ge;
     return $v_ge eq $v1;
+}
+
+# Return if LLVM JIT is enabled on this architecture
+sub have_jit ()
+{
+    my $arch = `dpkg --print-architecture`;
+    chomp $arch;
+    return grep {$arch eq $_} (@JIT_ARCHS);
 }
 
 # Return the user, group, and command line of running processes for the given

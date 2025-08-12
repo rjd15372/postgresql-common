@@ -71,7 +71,12 @@ if [ "${INSTALL:-}" ] && [ -z "${UNSHARED:-}" ]; then
                     *) PYTHON3_PACKAGE=postgresql-plpython3-$v${PG_FLAVOR:-} ;;
                 esac
                 case $v in
-                    1[89]|2*) JIT_PACKAGE=postgresql-$v${PG_FLAVOR:-}-jit ;;
+                    1[89]|2*)
+                        HAVE_JIT=$(perl -e 'use lib "t"; use TestLib; print TestLib::have_jit()')
+                        if [ "$HAVE_JIT" ]; then
+                            JIT_PACKAGE=postgresql-$v${PG_FLAVOR:-}-jit
+                        fi
+                        ;;
                 esac
                 apt-get install -y \
                     postgresql-contrib-$v${PG_FLAVOR:=} \

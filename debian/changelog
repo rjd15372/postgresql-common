@@ -16,6 +16,7 @@ postgresql-common (282) UNRELEASED; urgency=medium
     * Use PGOPTIONS to temporarily override default_transaction_read_only.
   * testsuite: Remove special case for plpython3 on 9.x and python 3.12.
   * t/TestLib.pm: Support catching stderr in exec_as().
+  * testsuite: Make tests aware on which archs postgresql-NN-jit is built.
 
  -- Christoph Berg <myon@debian.org>  Wed, 23 Jul 2025 11:07:09 +0200
 

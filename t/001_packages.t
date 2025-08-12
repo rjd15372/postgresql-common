@@ -46,6 +46,7 @@ foreach my $v (@MAJORS) {
     ok ((deb_installed "postgresql-pltcl-$v$f"), "postgresql-pltcl-$v$f installed");
     SKIP: {
         skip "No postgresql-$v$f-jit package for version $v", 1 if ($v < 18);
+        skip "No postgresql-$v$f-jit package on this architecture", 1 if (! TestLib::have_jit());
         ok ((deb_installed "postgresql-$v$f-jit"), "postgresql-$v$f-jit installed");
     }
     ok ((deb_installed "postgresql-server-dev-$v$f"), "postgresql-server-dev-$v$f installed");
