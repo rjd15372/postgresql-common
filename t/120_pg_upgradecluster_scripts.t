@@ -75,16 +75,15 @@ close F;
 chmod 0755, '/etc/postgresql-common/pg_upgradecluster.d/badscript' or die "chmod: $!";
 
 # upgrade cluster
-my $outref;
+my ($outref, $stderr);
 is ((exec_as 0, "pg_upgradecluster -v $MAJORS[-1] $MAJORS[0] main", $outref, 1), 1, 'pg_upgradecluster fails with bad script');
 note $$outref;
 like $$outref, qr/badscript exited with return code 1/i, 'server error messages during upgrade';
 unlink '/etc/postgresql-common/pg_upgradecluster.d/badscript';
 
-is ((exec_as 0, "(set -o pipefail; pg_upgradecluster -v $MAJORS[-1] $MAJORS[0] main | sed -e 's/^/STDOUT: /')", $outref, 0), 0, 'pg_upgradecluster succeeds');
+is ((exec_as 0, "pg_upgradecluster -v $MAJORS[-1] $MAJORS[0] main", $outref, 0, $stderr), 0, 'pg_upgradecluster succeeds');
 note $$outref;
-my @err = grep (!/^STDOUT: /, split (/\n/, $$outref));
-is "@err", "", 'no server error messages during upgrade';
+is $$stderr, "", 'no error messages during upgrade';
 like $$outref, qr/Starting upgraded cluster/, 'pg_upgradecluster reported cluster startup';
 like $$outref, qr/Success. Please check/, 'pg_upgradecluster reported successful operation';
 

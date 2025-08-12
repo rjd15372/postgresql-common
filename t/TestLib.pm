@@ -1,7 +1,7 @@
 # Common functionality for postgresql-common self tests
 #
 # (C) 2005-2009 Martin Pitt <mpitt@debian.org>
-# (C) 2013-2022 Christoph Berg <myon@debian.org>
+# (C) 2013-2025 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 package TestLib;
 use strict;
 use Exporter;
+use IPC::Run qw(run);
 use Test::More;
 use Time::HiRes qw(usleep);
 use PgCommon qw/get_versions change_ugid next_free_port/;
@@ -162,30 +163,38 @@ sub ok_dir {
 
 # Execute a command as a different user and return the output. Prints the
 # output of the command if exit code differs from expected one.
-# Arguments: <user> <system command> <ref to output> [<expected exit code>]
+# Arguments: <user> <system command> <ref to output> [<expected exit code>] [<ref to stderr>]
 # Returns: Program exit code
 sub exec_as {
+    my ($user, $cmd, $stdout_param, $status, $stderr_param) = @_;
     my $uid;
-    if ($_[0] =~ /\d+/) {
-	$uid = int($_[0]);
+    if ($user =~ /\d+/) {
+	$uid = int($user);
     } else {
-	$uid = getpwnam $_[0];
-        defined($uid) or die "TestLib::exec_as: target user '$_[0]' does not exist";
+	$uid = getpwnam $user;
+        defined($uid) or die "TestLib::exec_as: target user '$user' does not exist";
     }
     change_ugid ($uid, (getpwuid $uid)[3]);
     die "changing euid: $!" if $> != $uid;
-    my $out = `$_[1] 2>&1`;
+    if (not defined $stderr_param) {
+        $cmd .= " 2>&1";
+    }
+    my ($stdout, $stderr);
+    run(['/bin/sh', '-c', $cmd], \undef, \$stdout, \$stderr);
     my $result = $? >> 8;
     $< = $> = 0;
     $( = $) = 0;
     die "changing euid back to root: $!" if $> != 0;
-    $_[2] = \$out;
 
-    if (defined $_[3] && $_[3] != $result) {
-        print "command '$_[1]' did not exit with expected code $_[3] but with $result:\n";
-        print $out;
+    if (defined $status && $status != $result) {
+        print "command '$cmd' did not exit with expected code $status but with $result:\n";
+        print $$_[2];
+        print $$_[4];
         fail_debug;
     }
+    # copy stdout and stderr back to caller @_
+    $_[2] = \$stdout;
+    $_[4] = \$stderr;
     return $result;
 }
 

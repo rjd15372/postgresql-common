@@ -74,18 +74,12 @@ is $st[5], $loggid, 'log file is owned by user\'s primary group';
 if ($#MAJORS > 0) {
     my $newv = $MAJORS[-1];
 
-    my $outref;
-    is ((exec_as 0, "(pg_upgradecluster -v $newv $v main | sed -e 's/^/STDOUT: /')", $outref, 0), 0, 
+    my ($outref, $stderr);
+    is ((exec_as 0, "pg_upgradecluster -v $newv $v main", $outref, 0, $stderr), 0,
 	'pg_upgradecluster succeeds');
     like $$outref, qr/Starting upgraded cluster/, 'pg_upgradecluster reported cluster startup';
     like $$outref, qr/Success. Please check/, 'pg_upgradecluster reported successful operation';
-    my @err = grep (!/^STDOUT: /, split (/\n/, $$outref));
-    if (@err) {
-	fail 'no error messages during upgrade';
-	print (join ("\n", @err));
-    } else {
-	pass "no error messages during upgrade";
-    }
+    is $$stderr, "", 'no error messages during upgrade';
 
     # verify file permissions
     @st = stat "/etc/postgresql/$newv/main";
