@@ -624,10 +624,10 @@ if (!fork) {
 
 	# Upgrade databases
         print "Upgrading databases ...\n";
-        my $sh = "set -o pipefail; \
+        my $sh = "set -o pipefail; export LC_ALL=C; \
 $pg_dumpall --quote-all-identifiers -h '$oldsocket' -p $info{port} | \
-    grep -vE '^CREATE ROLE \"?$owner\"?;\$' | \
-    $psql --echo-queries --output /dev/null -vON_ERROR_STOP=on -h '$newsocket' -p $newinfo{port} postgres | \
+    grep --text -vE '^CREATE ROLE \"$owner\";\$' | \
+    $psql --no-psqlrc --echo-queries --output /dev/null -vON_ERROR_STOP=on -h '$newsocket' -p $newinfo{port} postgres | \
     cut -c 1-128";
         print "$sh\n";
         my $status = system $sh;
