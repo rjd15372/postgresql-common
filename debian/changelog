@@ -1,4 +1,4 @@
-postgresql-common (282) UNRELEASED; urgency=medium
+postgresql-common (282) unstable; urgency=medium
 
   * pg_upgradecluster "dump" method improvements:
     * Revert to using plain pg_dumpall for "dump" upgrades.
@@ -18,7 +18,7 @@ postgresql-common (282) UNRELEASED; urgency=medium
   * t/TestLib.pm: Support catching stderr in exec_as().
   * testsuite: Make tests aware on which archs postgresql-NN-jit is built.
 
- -- Christoph Berg <myon@debian.org>  Wed, 23 Jul 2025 11:07:09 +0200
+ -- Christoph Berg <myon@debian.org>  Sat, 16 Aug 2025 11:28:52 +0200
 
 postgresql-common (281) unstable; urgency=medium
 
