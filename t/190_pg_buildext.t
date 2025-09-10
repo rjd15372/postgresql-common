@@ -49,10 +49,20 @@ note "testing 'dh --with pgxs'";
 program_ok 'nobody', 'cd foo-123 && DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc -Ppkg.postgresql.32-bit';
 
 foreach my $ver (@versions) {
+    # check .deb properties
     my $deb = "postgresql-$ver-foo_123-1_$arch.deb";
     ok (-f $deb, "$deb was built");
+    my $info = `dpkg-deb --info $deb control`;
+    like $info, qr/^Depends: postgresql-$ver$/m, "correct postgresql dependency";
+    if (TestLib::have_jit() and $ver >= 12) {
+        like $info, qr/^Breaks: postgresql-$ver-jit-llvm \(<< \d+\)/m, "correct postgresql-jit-llvm breaks";
+    }
+    my $dbgsym = "postgresql-$ver-foo-dbgsym_123-1_$arch.deb";
+    ok (-f $dbgsym, "$dbgsym was built");
+
+    # test in-tree installcheck
     SKIP: {
-        my $have_extension_destdir = `grep extension_destdir /usr/share/postgresql/$ver/postgresql.conf.sample`;
+        my $have_extension_destdir = `grep -E 'extension_destdir|extension_control_path' /usr/share/postgresql/$ver/postgresql.conf.sample`;
         skip "No in-tree installcheck on PG $ver (missing extension_destdir)", 2 unless ($have_extension_destdir);
         like_program_out 'nobody', "cd foo-123 && PG_SUPPORTED_VERSIONS=$ver dh_pgxs_test",
             0, qr/PostgreSQL $ver installcheck.*(test foo * \.\.\. ok|ok 1 * - foo)/s; # old/new PG 16 syntax
@@ -60,6 +70,8 @@ foreach my $ver (@versions) {
     program_ok 0, "dpkg -i $deb";
     like_program_out 'nobody', "cd foo-123 && pg_buildext installcheck",
         0, qr/PostgreSQL $ver installcheck.*(test foo * \.\.\. ok|ok 1 * - foo)/s;
+
+    # while we are at it, test some pg_buildext operations
     like_program_out 'nobody', "cd foo-123 && echo 'SELECT 3*41, version()' | pg_buildext psql", 0, qr/123.*PostgreSQL $ver/;
     like_program_out 'nobody', "cd foo-123 && echo 'echo --\$PGVERSION--' | pg_buildext virtualenv", 0, qr/--$ver--/;
     like_program_out 'nobody', "cd foo-123 && pg_buildext run echo --%v--", 0, qr/--$ver--/;

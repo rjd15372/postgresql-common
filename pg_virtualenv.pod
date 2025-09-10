@@ -62,7 +62,7 @@ B<pg_createcluster>.
 
 =item B<-p> I<package>
 
-Set B<extension_destdir> and B<dynamic_library_path> in cluster to enable
+Set B<extension_control_path> (B<extension_destdir> on older versions) and B<dynamic_library_path> in cluster to enable
 loading and testing extensions at build-time from B<debian/>I<package>B</>.
 
 This is a Debian-specific PostgreSQL patch.

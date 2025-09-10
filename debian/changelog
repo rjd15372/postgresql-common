@@ -2,6 +2,9 @@ postgresql-common (283) UNRELEASED; urgency=medium
 
   * Remove postgresql-common -> postgresql-common-dev dependency; add 'make'
     to postgresql-common-dev dependencies.
+  * Instead of having extensions depend on postgresql-NN-jit-llvm (>= X),
+    use Breaks: postgresql-NN-jit-llvm (<< X) so postgresql-NN-jit does not
+    have to be installed.
 
  -- Christoph Berg <myon@debian.org>  Wed, 10 Sep 2025 14:23:07 +0200
 
