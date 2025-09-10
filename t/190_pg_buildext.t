@@ -57,8 +57,9 @@ foreach my $ver (@versions) {
     if (TestLib::have_jit() and $ver >= 12) {
         like $info, qr/^Breaks: postgresql-$ver-jit-llvm \(<< \d+\)/m, "correct postgresql-jit-llvm breaks";
     }
-    my $dbgsym = "postgresql-$ver-foo-dbgsym_123-1_$arch.deb";
-    ok (-f $dbgsym, "$dbgsym was built");
+    my $dbgsym = "postgresql-$ver-foo-dbgsym_123-1_$arch.deb"; # Debian
+    my $ddbgsym = "postgresql-$ver-foo-dbgsym_123-1_$arch.ddeb"; # Ubuntu
+    ok (-f $dbgsym or -f $ddbgsym, "$dbgsym was built");
 
     # test in-tree installcheck
     SKIP: {
