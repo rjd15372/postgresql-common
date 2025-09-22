@@ -1,5 +1,6 @@
-postgresql-common (283) UNRELEASED; urgency=medium
+postgresql-common (283) unstable; urgency=medium
 
+  * Build extensions for PostgreSQL 18; set 18 as default version.
   * Remove postgresql-common -> postgresql-common-dev dependency; add 'make'
     to postgresql-common-dev dependencies.
   * Instead of having extensions depend on postgresql-NN-jit-llvm (>= X),

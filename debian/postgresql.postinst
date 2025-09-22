@@ -3,7 +3,7 @@
 set -e
 
 # version information maintained by debian/rules
-NEWVERSION=17
+NEWVERSION=18
 
 . /usr/share/debconf/confmodule
 

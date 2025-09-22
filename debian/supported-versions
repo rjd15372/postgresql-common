@@ -41,7 +41,7 @@
 
 set -eu
 
-DEFAULT="17"
+DEFAULT="18"
 
 # functions
 
@@ -59,6 +59,7 @@ pgdg() {
 	15
 	16
 	17
+	18
 	EOF
 }
 
