@@ -2,6 +2,7 @@ postgresql-common (284) unstable; urgency=medium
 
   * Restore postgresql-common -> postgresql-common-dev dependency until
     all extensions have been updated to test-depend on it.
+  * Skip JIT tests if postgresql-18-jit is not installed.
 
  -- Christoph Berg <myon@debian.org>  Fri, 26 Sep 2025 17:58:33 +0200
 

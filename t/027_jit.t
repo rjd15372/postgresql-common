@@ -27,8 +27,22 @@ foreach my $v (@MAJORS) {
     unlike_program_out 'postgres', "psql -c 'explain (analyze) select count(*) from pg_class'", 0, qr/JIT/,
         "No JIT on cheap query";
 
-    if ($v > 11 and # skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)
-            not ($v >= 18 and $os eq 'ubuntu' and $osversion <= 20.04)) { # PG18 needs llvm 13+, but focal has only 10 and 12
+    my $run_jit_test = 1;
+    if ($v == 11) { # skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)
+        note "skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)";
+        $run_jit_test = 0;
+    } elsif ($v >= 18) {
+        my $f = $ENV{'PG_FLAVOR'} // '';
+        my $jit_deb = "postgresql-$v$f-jit";
+        if (deb_installed($jit_deb)) {
+            note "$jit_deb is installed";
+        } else {
+            note "$jit_deb is not installed, skipping JIT tests";
+            $run_jit_test = 0;
+        }
+    }
+
+    if ($run_jit_test) {
         program_ok 'root', "pg_conftool $v main set seq_page_cost 100000", 0;
         program_ok 'root', "pg_conftool $v main set random_page_cost 100000", 0;
         program_ok 'root', "pg_ctlcluster $v main reload", 0;
