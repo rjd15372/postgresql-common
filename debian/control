@@ -24,7 +24,6 @@ Depends:
  libjson-perl,
  sysvinit-utils (>= 3.05-4~) | lsb-base,
  postgresql-client-common (= ${source:Version}),
- postgresql-common-dev (= ${source:Version}),
  ssl-cert (>= 1.0.11),
  ucf,
  ${misc:Depends},

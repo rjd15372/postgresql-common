@@ -1,3 +1,9 @@
+postgresql-common (285) unstable; urgency=medium
+
+  * Drop postgresql-common -> postgresql-common-dev dependency.
+
+ -- Christoph Berg <myon@debian.org>  Thu, 09 Oct 2025 16:12:32 +0200
+
 postgresql-common (284) unstable; urgency=medium
 
   * Restore postgresql-common -> postgresql-common-dev dependency until
