@@ -1,3 +1,9 @@
+postgresql-common (286) unstable; urgency=medium
+
+  * pg_buildext: run_installed always uses the installed versions.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 11 Oct 2025 12:36:47 +0200
+
 postgresql-common (284) unstable; urgency=medium
 
   * Restore postgresql-common -> postgresql-common-dev dependency until
