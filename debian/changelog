@@ -1,8 +1,14 @@
-postgresql-common (285) unstable; urgency=medium
+postgresql-common (287) UNRELEASED; urgency=medium
 
   * Drop postgresql-common -> postgresql-common-dev dependency.
 
  -- Christoph Berg <myon@debian.org>  Thu, 09 Oct 2025 16:12:32 +0200
+
+postgresql-common (286) unstable; urgency=medium
+
+  * pg_buildext: run_installed always uses the installed versions.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 11 Oct 2025 12:36:47 +0200
 
 postgresql-common (284) unstable; urgency=medium
 

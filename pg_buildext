@@ -468,7 +468,9 @@ case $action in
 
         # prefer testing installed versions over supported versions as the set
         # of versions might have changed (unless a package-pattern is provided)
-        if [ "$action" != "run" ] && [ -f debian/control.in ] && [ -z "$opt" ]; then
+        if [ "$action" = "run_installed" ]; then
+            versions=$(installed_versions)
+        elif [ "$action" != "run" ] && [ -f debian/control.in ] && [ -z "$opt" ]; then
             versions=$(installed_versions)
         else
             versions=$(versions)
