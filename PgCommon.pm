@@ -1682,7 +1682,7 @@ sub package_list($) {
 
     open (my $fh, '-|', 'dpkg', '-l', $pattern) or error "could not read list of packages";
     while (<$fh>) {
-        next unless (/^ii\s+(\S+)/);
+        next unless (/^[ih]i\s+(\S+)/);
         push @packages, $1;
     }
     close $fh;
