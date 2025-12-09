@@ -2,7 +2,7 @@
 
 # script to add apt.postgresql.org to sources.list.d
 
-# Copyright (C) 2013-2023 Christoph Berg <myon@debian.org>
+# Copyright (C) 2013-2025 Christoph Berg <myon@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,17 +15,19 @@
 SOURCESLIST="/etc/apt/sources.list.d/pgdg.sources"
 TYPES="deb"
 COMPONENTS="main"
+ARCHITECTURES="$(dpkg --print-architecture)" # default to the native architecture (excludes foreign ones)
 PGDG="pgdg"
 
 # variables imported from https://git.postgresql.org/gitweb/?p=pgapt.git;a=blob;f=pgapt.conf
 # checked out in $HOME/apt.postgresql.org/; run "make" to update
-PG_BETA_VERSION="18"
+PG_BETA_VERSION=""
 PG_DEVEL_VERSION="19"
-PG_REPOSITORY_DISTS="sid trixie bookworm bullseye plucky oracular noble jammy focal"
-PG_ARCHIVE_DISTS="sid trixie bookworm bullseye buster stretch jessie wheezy squeeze lenny etch plucky oracular noble mantic lunar kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
+PG_REPOSITORY_DISTS="sid forky trixie bookworm bullseye questing plucky noble jammy"
+PG_ARCHIVE_DISTS="sid forky trixie bookworm bullseye buster stretch jessie wheezy squeeze lenny etch questing plucky oracular noble mantic lunar kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
 
-while getopts "c:f:h:ipstv:y" opt ; do
+while getopts "a:c:f:h:ipstv:y" opt ; do
     case $opt in
+        a) ARCHITECTURES="$OPTARG" ;;
         c) COMPONENTS="main $OPTARG" ;; # make these extra components available
         f) SOURCESLIST=$OPTARG ;; # sources.list filename to write to
         h) HOST="$OPTARG" ;; # hostname to use in sources.list
@@ -244,6 +246,7 @@ Types: $TYPES
 URIs: https://$HOST/pub/repos/apt
 Suites: $CODENAME-$PGDG
 Components: $COMPONENTS
+Architectures: $ARCHITECTURES
 Signed-By: $KEYRING
 EOF
 
@@ -255,6 +258,7 @@ Types: $TYPES
 URIs: https://$HOST/pub/repos/apt
 Suites: $CODENAME-pgdg-snapshot
 Components: ${DEVEL_COMPONENT# }
+Architectures: $ARCHITECTURES
 Signed-By: $KEYRING
 EOF
 fi

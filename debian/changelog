@@ -3,6 +3,8 @@ postgresql-common (288) UNRELEASED; urgency=medium
   [ Christoph Berg ]
   * Remove obsolete /etc/sysctl.d/30-postgresql-shm.conf, take 2.
     (Closes: #1120606)
+  * apt.postgresql.org.sh: Add -a architecture option; default to the local
+    native architecture.
 
   [ Magnus Hagander ]
   * PgCommon.pm package_list: Accept held packages as installed.
