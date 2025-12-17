@@ -5,6 +5,7 @@ postgresql-common (288) UNRELEASED; urgency=medium
     (Closes: #1120606)
   * apt.postgresql.org.sh: Add -a architecture option; default to the local
     native architecture.
+  * server/postgresql.mk: Build regress.so and install into server-dev package.
 
   [ Magnus Hagander ]
   * PgCommon.pm package_list: Accept held packages as installed.
