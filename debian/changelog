@@ -10,6 +10,9 @@ postgresql-common (288) UNRELEASED; urgency=medium
   [ Magnus Hagander ]
   * PgCommon.pm package_list: Accept held packages as installed.
 
+  [ Laurenz Albe ]
+  * pg_upgradecluster.d/analyze: Prevent waiting for synchronous standbys.
+
  -- Christoph Berg <myon@debian.org>  Thu, 13 Nov 2025 15:22:59 +0100
 
 postgresql-common (287) unstable; urgency=medium

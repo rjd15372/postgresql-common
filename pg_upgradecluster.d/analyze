@@ -19,6 +19,9 @@ case $newversion in
         ;;
 esac
 
+# don't hang waiting for a synchronous standby server
+export PGOPTIONS="${PGOPTIONS:-} -csynchronous_commit=local"
+
 case $newversion in
     9.2|9.3)
         vacuumdb $flags --analyze-only
