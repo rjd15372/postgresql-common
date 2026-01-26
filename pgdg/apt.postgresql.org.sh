@@ -22,8 +22,8 @@ PGDG="pgdg"
 # checked out in $HOME/apt.postgresql.org/; run "make" to update
 PG_BETA_VERSION=""
 PG_DEVEL_VERSION="19"
-PG_REPOSITORY_DISTS="sid forky trixie bookworm bullseye questing plucky noble jammy"
-PG_ARCHIVE_DISTS="sid forky trixie bookworm bullseye buster stretch jessie wheezy squeeze lenny etch questing plucky oracular noble mantic lunar kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
+PG_REPOSITORY_DISTS="sid forky trixie bookworm bullseye resolute questing plucky noble jammy"
+PG_ARCHIVE_DISTS="sid forky trixie bookworm bullseye buster stretch jessie wheezy squeeze lenny etch resolute questing plucky oracular noble mantic lunar kinetic jammy impish hirsute groovy focal eoan disco cosmic bionic zesty xenial wily utopic saucy precise lucid"
 
 while getopts "a:c:f:h:ipstv:y" opt ; do
     case $opt in

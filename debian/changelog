@@ -1,4 +1,4 @@
-postgresql-common (288) UNRELEASED; urgency=medium
+postgresql-common (288) unstable; urgency=medium
 
   [ Christoph Berg ]
   * Remove obsolete /etc/sysctl.d/30-postgresql-shm.conf, take 2.
@@ -13,7 +13,7 @@ postgresql-common (288) UNRELEASED; urgency=medium
   [ Laurenz Albe ]
   * pg_upgradecluster.d/analyze: Prevent waiting for synchronous standbys.
 
- -- Christoph Berg <myon@debian.org>  Thu, 13 Nov 2025 15:22:59 +0100
+ -- Christoph Berg <myon@debian.org>  Mon, 26 Jan 2026 19:42:15 +0100
 
 postgresql-common (287) unstable; urgency=medium
 
