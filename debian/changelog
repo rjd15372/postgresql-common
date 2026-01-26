@@ -1,3 +1,9 @@
+postgresql-common (289) UNRELEASED; urgency=medium
+
+  * t/027_jit.t: skip on EOL versions that are incompatible with newer LLVM.
+
+ -- Christoph Berg <myon@debian.org>  Mon, 26 Jan 2026 19:57:56 +0100
+
 postgresql-common (288) unstable; urgency=medium
 
   [ Christoph Berg ]

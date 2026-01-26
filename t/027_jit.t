@@ -1,4 +1,4 @@
-use strict; 
+use strict;
 
 use lib 't';
 use TestLib;
@@ -28,9 +28,12 @@ foreach my $v (@MAJORS) {
         "No JIT on cheap query";
 
     my $run_jit_test = 1;
-    if ($v == 11) { # skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)
-        note "skip JIT tests on 11, it supports only up to LLVM 15 (removed in trixie)";
-        $run_jit_test = 0;
+    if ($v <= 13) {
+        my $deps = `dpkg-query --showformat '\${Depends}' --show postgresql-$v`;
+        if ($deps !~ /libllvm/) {
+            note "skip JIT tests on EOL versions that are incompatible with newer LLVM";
+            $run_jit_test = 0;
+        }
     } elsif ($v >= 18) {
         my $f = $ENV{'PG_FLAVOR'} // '';
         my $jit_deb = "postgresql-$v$f-jit";
