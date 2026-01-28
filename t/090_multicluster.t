@@ -244,8 +244,8 @@ unlink '/etc/postgresql-common/pg_service.conf';
 is ((system "pg_ctlcluster $MAJORS[0] old stop >/dev/null"), 0, "stopping cluster $old");
 PgCommon::set_conf_value $MAJORS[0], 'old', 'postgresql.conf', 'port', '5435';
 is ((system "pg_ctlcluster $MAJORS[0] old start >/dev/null"), 0, "restarting cluster $old");
-like_program_out 'postgres', 'pg_lsclusters -h | sort -k3', 0, qr/.*5434.*5435.*5440.*/s,
-    'port of first cluster was successfully changed';
+like_program_out 'postgres', 'pg_lsclusters -h', 0, qr/old.*5435/,
+    'port of old cluster was successfully changed';
 like_program_out 'postgres', "psql -l", 2,
     qr/no.*default.*man pg_wrapper.*psql:.*\.s\.PGSQL.5432/is,
     'proper pg_wrapper warning and psql error if no cluster is suitable as default target';

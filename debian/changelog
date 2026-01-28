@@ -1,6 +1,7 @@
 postgresql-common (289) UNRELEASED; urgency=medium
 
   * t/027_jit.t: skip on EOL versions that are incompatible with newer LLVM.
+  * t/090_multicluster.t: Don't rely on `sort -k3` to do the right thing.
   * pg_wrapper: Remove readline LD_PRELOAD hack.
 
  -- Christoph Berg <myon@debian.org>  Mon, 26 Jan 2026 19:57:56 +0100
