@@ -46,6 +46,7 @@ foreach my $v (@MAJORS) {
     }
 
     if ($run_jit_test) {
+        program_ok 'root', "pg_conftool $v main set jit on", 0; # turn it on for PG11
         program_ok 'root', "pg_conftool $v main set seq_page_cost 100000", 0;
         program_ok 'root', "pg_conftool $v main set random_page_cost 100000", 0;
         program_ok 'root', "pg_ctlcluster $v main reload", 0;
