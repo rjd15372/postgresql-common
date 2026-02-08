@@ -4,7 +4,7 @@
 #
 # (C) 2005-2009 Martin Pitt <mpitt@debian.org>
 # (C) 2013 Peter Eisentraut <petere@debian.org>
-# (C) 2013-2025 Christoph Berg <myon@debian.org>
+# (C) 2013-2026 Christoph Berg <myon@debian.org>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -245,6 +245,10 @@ sub adapt_conffiles {
 
     if ($newversion >= '18') {
         $deprecate->(\%c, 'extension_destdir', 'replaced by extension_control_path');
+    }
+
+    if ($newversion >= '19') {
+        $deprecate->(\%c, 'escape_string_warning', 'standard_conforming_strings now always on');
     }
 }
 

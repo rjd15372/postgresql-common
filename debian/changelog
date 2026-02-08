@@ -1,5 +1,6 @@
 postgresql-common (289) UNRELEASED; urgency=medium
 
+  * pg_upgradecluster: PG 19 removes escape_string_warning.
   * t/027_jit.t: skip on EOL versions that are incompatible with newer LLVM.
   * t/090_multicluster.t: Don't rely on `sort -k3` to do the right thing.
   * pg_wrapper: Remove readline LD_PRELOAD hack.
