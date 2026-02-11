@@ -1,4 +1,4 @@
-postgresql-common (289) UNRELEASED; urgency=medium
+postgresql-common (289) unstable; urgency=medium
 
   * pg_upgradecluster: PG 19 removes escape_string_warning.
   * t/027_jit.t: skip on EOL versions that are incompatible with newer LLVM.
@@ -6,7 +6,7 @@ postgresql-common (289) UNRELEASED; urgency=medium
   * pg_wrapper: Remove readline LD_PRELOAD hack.
   * Updated ca translation. (Closes: #1126654)
 
- -- Christoph Berg <myon@debian.org>  Mon, 26 Jan 2026 19:57:56 +0100
+ -- Christoph Berg <myon@debian.org>  Wed, 11 Feb 2026 11:10:30 +0100
 
 postgresql-common (288) unstable; urgency=medium
 
