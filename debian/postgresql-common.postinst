@@ -22,7 +22,7 @@ setup_createclusterconf ()
     chmod 644 $CCTMP
     CCCONFIG="/etc/postgresql-common/createcluster.conf"
     ucf --debconf-ok $CCTMP $CCCONFIG
-    ucfr postgresql-common $CCCONFIG
+    ucfr --force postgresql-common $CCCONFIG
     rm -f $CCTMP
 }
 
@@ -108,7 +108,7 @@ EOF
     if dpkg --compare-versions "$2" lt 183~; then
         LRCONFIG="/etc/logrotate.d/postgresql-common"
         ucf --purge $LRCONFIG
-        ucfr --purge postgresql-common $LRCONFIG
+        ucfr --force --purge postgresql-common $LRCONFIG
     fi
 
     # Drop auto-generated conffile dropped in 215/229 + backups

@@ -1,48 +1,50 @@
 #!/usr/bin/make -f
 
 include /usr/share/dpkg/pkg-info.mk
-
-ifneq ($(findstring pgdg,$(DEB_VERSION)),)
+VERSION := $(shell dpkg-parsechangelog | awk '/^Version:/ { print $$2 }')
+ifneq ($(findstring bpo,$(DEB_VERSION)),)
+	FLAVOR := debian-backports
+else ifneq ($(findstring pgdg,$(DEB_VERSION)),)
 	FLAVOR := pgdg
+	# for apt.postgresql.org builds, pull in the repository key package
+	PGDG_DEPENDS := pgdg-keyring
 else
 	FLAVOR := default
 endif
-SUPPORTED_VERSIONS := $(shell PG_SUPPORTED_VERSIONS="$(FLAVOR)" debian/supported-versions)
-DEFAULT_VER := $(lastword $(SUPPORTED_VERSIONS))
+SUPPORTED_VERSIONS := 17
+DEFAULT_VER := 17
+
+#py2#PYTHON2_PACKAGE=postgresql-plpython-$v
 
 %:
 	dh $@
 
+override_dh_builddeb:
+	dh_builddeb -- -Zgzip
+
 override_dh_auto_configure:
-	@echo "### Building postgresql-common flavor $(FLAVOR)"
+	@echo "### Building percona-postgresql-common flavor $(FLAVOR)"
 	@echo "### Supported PostgreSQL versions: $(SUPPORTED_VERSIONS) (default version: $(DEFAULT_VER))"
-	sed -i -e "s/^NEWVERSION=.*/NEWVERSION=$(DEFAULT_VER)/" debian/postgresql.config debian/postgresql.postinst
-	sed -e "s/NN/$(DEFAULT_VER)/g" -e "s/MM/$(shell echo $$(($(DEFAULT_VER) + 1)))/g" debian/README.Debian.in > debian/README.Debian
 
-ifeq ($(FLAVOR), pgdg)
-execute_after_dh_install:
-	mkdir -p debian/postgresql-common-dev/etc/postgresql-common
-	echo "# See /usr/share/postgresql-common/supported-versions for documentation of this file" > debian/postgresql-common-dev/etc/postgresql-common/supported_versions
-	echo "$(FLAVOR)" >> debian/postgresql-common-dev/etc/postgresql-common/supported_versions
-endif
-
-# do not restart postgresql.service on postgresql-common upgrades
+# do not (re)start postgresql.service on postgresql-common install/upgrades
 override_dh_installinit:
-	dh_installinit -ppostgresql-common --name=postgresql -u'defaults 19 21' --no-stop-on-upgrade
+	dh_installinit -ppostgresql-common --name=postgresql -u'defaults 19 21' --no-start
 override_dh_installsystemd:
-	dh_installsystemd --no-stop-on-upgrade
-	# move unit files to /usr on systems that support it
-	if test -x /usr/bin/dh_movetousr; then dh_movetousr; fi
+	dh_installsystemd --no-start
 
 override_dh_gencontrol:
-	dh_gencontrol -ppostgresql-server-dev-all -- -Vserver-dev-all-depends="$(foreach v,$(SUPPORTED_VERSIONS),postgresql-server-dev-$v,)"
+	dh_gencontrol -ppercona-postgresql-server-dev-all -- -Vserver-dev-all-depends="$(foreach v,$(SUPPORTED_VERSIONS),percona-postgresql-server-dev-$v,)"
 
 	# the versionless metapackages need to have version numbers which match
 	# the server version, not the p-common version
-	dh_gencontrol -ppostgresql -ppostgresql-client -ppostgresql-doc -- \
-		-Vdefault-version="$(DEFAULT_VER)" -v'$(DEFAULT_VER)+$${source:Version}'
+	dh_gencontrol -ppercona-postgresql -ppercona-postgresql-client -ppercona-postgresql-doc -ppercona-postgresql-contrib -ppercona-postgresql-all -- \
+		-Vdefault-version="$(DEFAULT_VER)" -v'$${source:Version}' \
+		-Vpostgresql-all-depends="$(foreach v,$(SUPPORTED_VERSIONS),percona-postgresql-contrib-$v,percona-postgresql-plperl-$v,$(if $(filter 8.% 9.% 10 11, $v), $(PYTHON2_PACKAGE)),percona-postgresql-plpython3-$v,percona-postgresql-pltcl-$v,)"
 
-	dh_gencontrol -ppostgresql-all -- \
-		-Vpostgresql-all-depends="$(foreach v,$(SUPPORTED_VERSIONS),postgresql-$v,postgresql-plperl-$v,postgresql-plpython3-$v,postgresql-pltcl-$v,)"
+	dh_gencontrol -ppostgresql-client-common -- \
+		-Vpgdg:Depends="$(PGDG_DEPENDS)"
+
+	dh_gencontrol -ppercona-postgresql-all -- \
+		-Vpostgresql-all-depends="$(foreach v,$(SUPPORTED_VERSIONS),percona-postgresql-contrib-$v,percona-postgresql-plperl-$v,$(if $(filter 8.% 9.% 10 11, $v), $(PYTHON2_PACKAGE)),percona-postgresql-plpython3-$v,percona-postgresql-pltcl-$v,)"
 
 	dh_gencontrol --remaining-packages

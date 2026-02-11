@@ -22,8 +22,8 @@ if [ "$1" = purge ]; then
     if command -v ucf >/dev/null; then
 	ucf --purge $CCCONFIG
     fi
-    if command -v ucfr >/dev/null; then
-	ucfr --purge postgresql-common $CCCONFIG
+    if command -v ucfr --force >/dev/null; then
+	ucfr --force --purge postgresql-common $CCCONFIG
     fi
     rm -f $CCCONFIG $CCCONFIG.ucf-*
 
